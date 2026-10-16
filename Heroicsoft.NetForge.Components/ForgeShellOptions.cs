@@ -1,10 +1,11 @@
 using Heroicsoft.NetForge.Abstractions.Navigation;
 
-namespace Heroicsoft.NetForge.Components;
+namespace Heroicsoft.NetForge.Components.Shell;
 
 /// <summary>
-/// Static shell content. Dynamic sidebars implement <see cref="IShellNavigation"/> instead;
-/// when that service is registered it replaces <see cref="Sections"/>.
+/// Static shell content, shared by the nf and Bootstrap component sets. Dynamic sidebars
+/// implement <see cref="IShellNavigation"/> instead; when that service is registered it replaces
+/// <see cref="Sections"/>.
 /// </summary>
 public sealed class ForgeShellOptions
 {
@@ -29,6 +30,9 @@ public sealed class ForgeShellOptions
     public bool ShowThemePicker { get; set; } = true;
 
     public bool ShowUserMenu { get; set; } = true;
+
+    /// <summary>Extra entries at the top of the user menu, for example Profile. Roles are honoured.</summary>
+    public List<ForgeNavItem> UserMenuItems { get; set; } = [];
 
     public bool ShowVersion { get; set; } = true;
 

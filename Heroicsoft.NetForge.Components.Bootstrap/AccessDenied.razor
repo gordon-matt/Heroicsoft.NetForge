@@ -1,0 +1,46 @@
+@namespace Heroicsoft.NetForge.Components.Bootstrap
+@inject IOptions<ForgeShellOptions> ShellOptions
+
+@* Shown in place of a page's content when the signed-in user lacks the role. A redirect back
+   to sign-in for someone already signed in reads as a bug. *@
+<PageTitle>@PageTitleText</PageTitle>
+
+<Heroicsoft.NetForge.Components.Bootstrap.EmptyState Icon="@Icon" Title="@Title" Description="@Description">
+    @if (ChildContent is not null)
+    {
+        @ChildContent
+    }
+    else
+    {
+        <a class="btn btn-sm btn-outline-secondary" href="@HomeHref">@HomeLabel</a>
+    }
+</Heroicsoft.NetForge.Components.Bootstrap.EmptyState>
+
+@code {
+    [Parameter]
+    public string Icon { get; set; } = "bi-shield-lock";
+
+    [Parameter]
+    public string Title { get; set; } = "You don't have access to this";
+
+    [Parameter]
+    public string Description { get; set; } = "Ask an administrator if you think you should.";
+
+    [Parameter]
+    public string HomeHref { get; set; } = "/";
+
+    [Parameter]
+    public string HomeLabel { get; set; } = "Back home";
+
+    /// <summary>Overrides the browser tab title. Defaults to "Access denied - {Brand}".</summary>
+    [Parameter]
+    public string? PageTitleText { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    protected override void OnParametersSet() =>
+        PageTitleText ??= string.IsNullOrWhiteSpace(ShellOptions.Value.Brand)
+            ? "Access denied"
+            : $"Access denied - {ShellOptions.Value.Brand}";
+}

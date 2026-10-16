@@ -1,19 +1,19 @@
-@namespace Heroicsoft.NetForge.Components
+@inject IOptions<ForgeShellOptions> ShellOptions
 
-<div class="container py-5">
-    <div class="text-center">
-        <i class="bi @Icon display-1 text-body-tertiary"></i>
-        <h1 class="h3 mt-3">@Title</h1>
-        <p class="text-body-secondary">@Message</p>
-        <a class="btn btn-primary" href="@HomeHref">
-            <i class="bi bi-house-door me-1"></i> @HomeLabel
-        </a>
-    </div>
+<PageTitle>@PageTitleText</PageTitle>
+
+<div class="nf-status">
+    <Icon Name="@Icon" Size="56" Class="nf-status-icon" />
+    <h1 class="nf-status-title">@Title</h1>
+    <p class="nf-status-message">@Message</p>
+    <a class="nf-button nf-button-primary" href="@HomeHref">
+        <Icon Name="@HomeIcon" /> @HomeLabel
+    </a>
 </div>
 
 @code {
     [Parameter]
-    public string Icon { get; set; } = "bi-signpost-2";
+    public string Icon { get; set; } = "signpost";
 
     [Parameter]
     public string Title { get; set; } = "That page isn't here";
@@ -26,4 +26,16 @@
 
     [Parameter]
     public string HomeLabel { get; set; } = "Back home";
+
+    [Parameter]
+    public string HomeIcon { get; set; } = "home";
+
+    /// <summary>Overrides the browser tab title. Defaults to "Not found - {Brand}".</summary>
+    [Parameter]
+    public string? PageTitleText { get; set; }
+
+    protected override void OnParametersSet() =>
+        PageTitleText ??= string.IsNullOrWhiteSpace(ShellOptions.Value.Brand)
+            ? "Not found"
+            : $"Not found - {ShellOptions.Value.Brand}";
 }

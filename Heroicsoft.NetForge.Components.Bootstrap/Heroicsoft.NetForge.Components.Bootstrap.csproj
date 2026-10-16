@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<RootNamespace>Heroicsoft.NetForge.Components.Bootstrap</RootNamespace>
+		<Description>Bootstrap and Bootswatch implementation of the NetForge Blazor shell, theme picker, toasts, dialogs, paging, and status pages. For apps that already use Bootstrap; apps with their own styling use Heroicsoft.NetForge.Components.</Description>
+		<Version>1.0.1</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Heroicsoft.NetForge.Abstractions\Heroicsoft.NetForge.Abstractions.csproj" />
+		<ProjectReference Include="..\Heroicsoft.NetForge.Results\Heroicsoft.NetForge.Results.csproj" />
+		<ProjectReference Include="..\Heroicsoft.NetForge.Components\Heroicsoft.NetForge.Components.csproj" />
+	</ItemGroup>
+
+</Project>

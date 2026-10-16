@@ -1,0 +1,66 @@
+@namespace Heroicsoft.NetForge.Components.Bootstrap
+<nav class="bf-sidebar" aria-label="Navigation">
+    <div class="bf-sidebar-brand">
+        <a href="@BrandHref" class="bf-sidebar-brand-link">
+            @if (BrandContent is not null)
+            {
+                @BrandContent
+            }
+            else if (LogoUrl is not null)
+            {
+                <img class="bf-brand-logo" src="@LogoUrl" alt="@Brand" />
+                @if (LogoDarkUrl is not null)
+                {
+                    <img class="bf-brand-logo-dark" src="@LogoDarkUrl" alt="" />
+                }
+                @if (MarkUrl is not null)
+                {
+                    <img class="bf-brand-mark" src="@MarkUrl" alt="" />
+                }
+            }
+            else if (!string.IsNullOrWhiteSpace(Brand))
+            {
+                <span class="bf-brand-text">@Brand</span>
+            }
+        </a>
+    </div>
+
+    <div class="bf-sidebar-scroll">
+        @foreach (var section in Sections)
+        {
+            @if (string.IsNullOrEmpty(section.Roles))
+            {
+                <Heroicsoft.NetForge.Components.Bootstrap.ForgeNavSectionView Section="section" />
+            }
+            else
+            {
+                <AuthorizeView Roles="@section.Roles">
+                    <Heroicsoft.NetForge.Components.Bootstrap.ForgeNavSectionView Section="section" />
+                </AuthorizeView>
+            }
+        }
+    </div>
+</nav>
+
+@code {
+    [Parameter]
+    public string? Brand { get; set; }
+
+    [Parameter]
+    public string BrandHref { get; set; } = "/";
+
+    [Parameter]
+    public string? LogoUrl { get; set; }
+
+    [Parameter]
+    public string? LogoDarkUrl { get; set; }
+
+    [Parameter]
+    public string? MarkUrl { get; set; }
+
+    [Parameter]
+    public IReadOnlyList<ForgeNavSection> Sections { get; set; } = [];
+
+    [Parameter]
+    public RenderFragment? BrandContent { get; set; }
+}

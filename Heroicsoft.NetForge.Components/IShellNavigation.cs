@@ -1,11 +1,11 @@
 using Heroicsoft.NetForge.Abstractions.Navigation;
 
-namespace Heroicsoft.NetForge.Components;
+namespace Heroicsoft.NetForge.Components.Shell;
 
 /// <summary>
 /// Supplies sidebar sections that change after startup. Register it scoped when counts and
 /// lists are loaded from the database, and call <see cref="Services.SidebarRefresh.NotifyChanged"/>
-/// after a write so <c>ShellLayout</c> re-reads <see cref="Sections"/>.
+/// after a write so the shell layout re-reads <see cref="Sections"/>.
 /// </summary>
 public interface IShellNavigation
 {

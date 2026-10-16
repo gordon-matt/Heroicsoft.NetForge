@@ -1,33 +1,28 @@
 /**
- * Runs in <head> before paint so the stored theme applies without a flash of the default.
- * The script tag supplies data-theme-key and data-default-theme.
- * ALLOWED and DARK stay in lock-step with BootswatchThemes.
+ * Runs in <head> before first paint, so the stored scheme is applied without a flash of the
+ * default. ForgeHostPage supplies the script tag's data attributes:
+ *   data-theme-key      localStorage key (ForgeUiOptions.ThemeStorageKey)
+ *   data-default-theme  light | dark | system, used when nothing is stored yet
  */
 (function () {
     var script = document.currentScript;
-    var KEY = (script && script.dataset.themeKey) || 'netforge.theme';
-    var ALLOWED = [
-        'brite', 'cerulean', 'cosmo', 'cyborg', 'darkly', 'flatly', 'journal', 'litera', 'lumen',
-        'lux', 'materia', 'minty', 'morph', 'pulse', 'quartz', 'sandstone', 'simplex', 'sketchy',
-        'slate', 'solar', 'spacelab', 'superhero', 'united', 'vapor', 'yeti', 'zephyr'
-    ];
-    var DARK = { cyborg: 1, darkly: 1, slate: 1, solar: 1, superhero: 1, vapor: 1 };
+    var key = (script && script.dataset.themeKey) || 'netforge.theme';
+    var fallback = (script && script.dataset.defaultTheme) || 'light';
+    var theme = null;
 
     try {
-        var raw = localStorage.getItem(KEY);
-        if (!raw) return;
-
-        var theme = String(raw).toLowerCase();
-        if (ALLOWED.indexOf(theme) < 0) return;
-
-        var format = (script && script.dataset.stylesheetFormat) || 'lib/bootswatch/dist/{0}/bootstrap.min.css';
-        var link = document.getElementById('theme-stylesheet');
-        if (link) {
-            link.setAttribute('href', format.replace('{0}', theme));
-        }
-
-        document.documentElement.setAttribute('data-bs-theme', DARK[theme] ? 'dark' : 'light');
+        theme = localStorage.getItem(key);
     } catch (e) {
         /* private mode or blocked storage */
     }
+
+    if (theme !== 'light' && theme !== 'dark') {
+        if (fallback === 'system') {
+            theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        } else {
+            theme = fallback === 'dark' ? 'dark' : 'light';
+        }
+    }
+
+    document.documentElement.setAttribute('data-theme', theme);
 })();

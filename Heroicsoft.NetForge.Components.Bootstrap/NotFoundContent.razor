@@ -1,0 +1,44 @@
+@namespace Heroicsoft.NetForge.Components.Bootstrap
+@inject IOptions<ForgeShellOptions> ShellOptions
+
+<PageTitle>@PageTitleText</PageTitle>
+
+<div class="container py-5">
+    <div class="text-center">
+        <i class="bi @Icon display-1 text-body-tertiary"></i>
+        <h1 class="h3 mt-3">@Title</h1>
+        <p class="text-body-secondary">@Message</p>
+        <a class="btn btn-primary" href="@HomeHref">
+            <i class="bi @HomeIcon me-1"></i> @HomeLabel
+        </a>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Icon { get; set; } = "bi-signpost-2";
+
+    [Parameter]
+    public string Title { get; set; } = "That page isn't here";
+
+    [Parameter]
+    public string Message { get; set; } = "The link may be out of date, or the thing it pointed at may have been removed.";
+
+    [Parameter]
+    public string HomeHref { get; set; } = "/";
+
+    [Parameter]
+    public string HomeLabel { get; set; } = "Back home";
+
+    [Parameter]
+    public string HomeIcon { get; set; } = "bi-house-door";
+
+    /// <summary>Overrides the browser tab title. Defaults to "Not found - {Brand}".</summary>
+    [Parameter]
+    public string? PageTitleText { get; set; }
+
+    protected override void OnParametersSet() =>
+        PageTitleText ??= string.IsNullOrWhiteSpace(ShellOptions.Value.Brand)
+            ? "Not found"
+            : $"Not found - {ShellOptions.Value.Brand}";
+}

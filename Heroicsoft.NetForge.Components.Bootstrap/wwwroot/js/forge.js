@@ -17,6 +17,7 @@ window.netForge = {
         if (dataBsTheme === 'dark' || dataBsTheme === 'light') {
             document.documentElement.setAttribute('data-bs-theme', dataBsTheme);
         }
+        document.dispatchEvent(new CustomEvent('netforge:themechange', { detail: { href: href, colorScheme: dataBsTheme } }));
     },
 
     /** Raw value from localStorage; may be empty or invalid, so validate in .NET. */

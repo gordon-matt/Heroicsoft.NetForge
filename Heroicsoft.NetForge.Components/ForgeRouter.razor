@@ -1,5 +1,3 @@
-@namespace Heroicsoft.NetForge.Components
-
 <Router AppAssembly="AppAssembly"
         AdditionalAssemblies="@(AdditionalAssemblies ?? Array.Empty<Assembly>())"
         NotFoundPage="NotFoundPage">
@@ -9,6 +7,11 @@
                 @if (NotAuthorized is not null)
                 {
                     @NotAuthorized
+                }
+                else if (context.User.Identity?.IsAuthenticated == true)
+                {
+                    @* Signed in but missing a role: another sign-in would loop. *@
+                    <AccessDenied />
                 }
                 else
                 {
@@ -40,8 +43,9 @@
     public string FocusSelector { get; set; } = "h1";
 
     [Parameter]
-    public string AuthorizingText { get; set; } = "Checking your access…";
+    public string AuthorizingText { get; set; } = "Checking your access.";
 
+    /// <summary>Replaces the default: sign-in for anonymous users, <c>AccessDenied</c> for signed-in ones.</summary>
     [Parameter]
     public RenderFragment? NotAuthorized { get; set; }
 }

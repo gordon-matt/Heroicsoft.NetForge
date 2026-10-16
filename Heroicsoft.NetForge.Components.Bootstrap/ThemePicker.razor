@@ -1,7 +1,7 @@
-@namespace Heroicsoft.NetForge.Components
+@namespace Heroicsoft.NetForge.Components.Bootstrap
 @implements IAsyncDisposable
 @inject IJSRuntime JS
-@inject IOptions<ForgeUiOptions> UiOptions
+@inject IOptions<ForgeBootstrapOptions> UiOptions
 
 @* Per-browser theme in localStorage. The opener lives in the topbar as ThemePickerOpener. *@
 <div class="modal fade" id="bf-theme-picker" tabindex="-1" aria-labelledby="bf-theme-picker-label"
@@ -72,7 +72,7 @@
     private bool closedWithOk;
     private bool showDarkTab = BootswatchThemes.IsDarkColorScheme(BootswatchThemes.Default);
 
-    private ForgeUiOptions Ui => UiOptions.Value;
+    private ForgeBootstrapOptions Ui => UiOptions.Value;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

@@ -4,6 +4,7 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<RootNamespace>Heroicsoft.NetForge.Results</RootNamespace>
 		<Description>Ardalis.Result helpers shared by Heroicsoft services: failure propagation and user-facing messages.</Description>
+		<Version>1.0.1</Version>
 	</PropertyGroup>
 
 	<ItemGroup>

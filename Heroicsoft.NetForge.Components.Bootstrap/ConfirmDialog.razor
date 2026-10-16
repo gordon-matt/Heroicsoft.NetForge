@@ -1,0 +1,75 @@
+@namespace Heroicsoft.NetForge.Components.Bootstrap
+@implements IConfirmDialog
+@* Bootstrap modal driven from C#, so callers can await a decision instead of wiring callbacks. *@
+@if (isVisible)
+{
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">@title</h2>
+                    <button type="button" class="btn-close" aria-label="Close"
+                            @onclick="() => Close(false)"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0">@message</p>
+                    @if (detail is not null)
+                    {
+                        <p class="small text-body-secondary mt-2 mb-0">@detail</p>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" @onclick="() => Close(false)">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn @confirmButtonClass" @onclick="() => Close(true)">
+                        @confirmLabel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    private bool isVisible;
+    private string title = string.Empty;
+    private string message = string.Empty;
+    private string? detail;
+    private string confirmLabel = "OK";
+    private string confirmButtonClass = "btn-primary";
+    private TaskCompletionSource<bool>? completion;
+
+    /// <summary>
+    /// Shows the dialog and completes when the user answers. Awaiting the answer keeps the
+    /// caller's logic in one place rather than split across an event handler.
+    /// </summary>
+    public Task<bool> ShowAsync(
+        string title,
+        string message,
+        string confirmLabel = "OK",
+        bool isDestructive = false,
+        string? detail = null)
+    {
+        this.title = title;
+        this.message = message;
+        this.detail = detail;
+        this.confirmLabel = confirmLabel;
+        confirmButtonClass = isDestructive ? "btn-danger" : "btn-primary";
+
+        isVisible = true;
+        completion = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        StateHasChanged();
+
+        return completion.Task;
+    }
+
+    private void Close(bool confirmed)
+    {
+        isVisible = false;
+        completion?.TrySetResult(confirmed);
+        completion = null;
+    }
+}

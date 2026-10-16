@@ -1,6 +1,7 @@
-@namespace Heroicsoft.NetForge.Components
+@implements IDisposable
+@inject NavigationManager Navigation
 
-<div class="bf-shell @(sidebarCollapsed ? "bf-sidebar-collapsed" : null)">
+<div class="nf-shell @(sidebarCollapsed ? "nf-sidebar-collapsed" : null) @(sidebarOpen ? "nf-sidebar-open" : null)">
     @if (Sidebar is not null)
     {
         @Sidebar
@@ -9,44 +10,44 @@
     {
         <ForgeSidebar Sections="Sections" Brand="@Brand" BrandHref="@BrandHref"
                       LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl" MarkUrl="@MarkUrl"
-                      BrandContent="BrandContent" />
+                      BrandContent="BrandContent" SidebarFooter="SidebarFooter" />
     }
 
-    <div class="bf-main">
-        <ForgeTopbar ShowSearch="ShowSearch" SearchPlaceholder="SearchPlaceholder"
+    @* Only visible while the off-canvas sidebar is open on a narrow screen. *@
+    <div class="nf-scrim" @onclick="CloseSidebar"></div>
+
+    <div class="nf-main">
+        <ForgeTopbar ShowSearch="ShowSearch" SearchPlaceholder="@SearchPlaceholder"
                      OnSearch="OnSearch" OnToggleSidebar="ToggleSidebar" ShowThemePicker="ShowThemePicker"
-                     ShowUserMenu="ShowUserMenu">
+                     ShowUserMenu="ShowUserMenu" UserMenuItems="UserMenuItems">
             @TopbarEnd
         </ForgeTopbar>
 
-        <main class="bf-content">
+        <main class="nf-content">
             @ChildContent
         </main>
 
         @if (ShowVersion)
         {
-            <footer class="bf-version">
-                <span class="small text-muted">v@(Version ?? AppVersion.Current)</span>
-            </footer>
+            <footer class="nf-version">v@(Version ?? AppVersion.Current)</footer>
         }
     </div>
 </div>
-
-@if (ShowThemePicker)
-{
-    <ThemePicker />
-}
 
 <ForgeDialogHost />
 
 <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.
     <a href="." class="reload">Reload</a>
-    <span class="dismiss">🗙</span>
+    <span class="dismiss">&times;</span>
 </div>
 
 @code {
+    // Two flags because the toggle means different things by width: on a wide screen it
+    // collapses the sidebar to an icon rail, on a narrow one it slides the sidebar over the page.
+    // CSS applies whichever flag matches the breakpoint.
     private bool sidebarCollapsed;
+    private bool sidebarOpen;
 
     [Parameter]
     public string? Brand { get; set; }
@@ -73,6 +74,10 @@
     [Parameter]
     public RenderFragment? Sidebar { get; set; }
 
+    /// <summary>Pinned at the bottom of the generated sidebar, for example a user name and sign-out button.</summary>
+    [Parameter]
+    public RenderFragment? SidebarFooter { get; set; }
+
     [Parameter]
     public bool ShowSearch { get; set; }
 
@@ -85,11 +90,15 @@
     [Parameter]
     public RenderFragment? TopbarEnd { get; set; }
 
+    /// <summary>Shows the light or dark toggle in the topbar. The name matches the Bootstrap shell.</summary>
     [Parameter]
     public bool ShowThemePicker { get; set; } = true;
 
     [Parameter]
     public bool ShowUserMenu { get; set; } = true;
+
+    [Parameter]
+    public IReadOnlyList<ForgeNavItem>? UserMenuItems { get; set; }
 
     [Parameter]
     public bool ShowVersion { get; set; } = true;
@@ -100,5 +109,27 @@
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    private void ToggleSidebar() => sidebarCollapsed = !sidebarCollapsed;
+    protected override void OnInitialized() => Navigation.LocationChanged += OnLocationChanged;
+
+    private void ToggleSidebar()
+    {
+        sidebarCollapsed = !sidebarCollapsed;
+        sidebarOpen = !sidebarOpen;
+    }
+
+    private void CloseSidebar() => sidebarOpen = false;
+
+    // A link tapped in the off-canvas sidebar should reveal the page it opened.
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs args)
+    {
+        if (!sidebarOpen)
+        {
+            return;
+        }
+
+        sidebarOpen = false;
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose() => Navigation.LocationChanged -= OnLocationChanged;
 }

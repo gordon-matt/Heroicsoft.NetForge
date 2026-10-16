@@ -1,13 +1,11 @@
-@namespace Heroicsoft.NetForge.Components
-
 @if (!string.IsNullOrWhiteSpace(Section.Heading))
 {
-    <div class="bf-sidebar-heading">
+    <p class="nf-sidebar-heading">
         <span>@Section.Heading</span>
-    </div>
+    </p>
 }
 
-<ul class="nav flex-column bf-nav">
+<ul class="nf-nav">
     @foreach (var item in Section.Items)
     {
         @if (string.IsNullOrEmpty(item.Roles))

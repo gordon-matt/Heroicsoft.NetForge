@@ -1,32 +1,30 @@
-@namespace Heroicsoft.NetForge.Components
-
-<nav class="bf-sidebar" aria-label="Navigation">
-    <div class="bf-sidebar-brand">
-        <a href="@BrandHref" class="bf-sidebar-brand-link">
+<nav class="nf-sidebar" id="nf-sidebar" aria-label="Navigation">
+    <div class="nf-sidebar-brand">
+        <a href="@BrandHref" class="nf-brand-link">
             @if (BrandContent is not null)
             {
                 @BrandContent
             }
             else if (LogoUrl is not null)
             {
-                <img class="bf-brand-logo" src="@LogoUrl" alt="@Brand" />
+                <img class="nf-brand-logo @(LogoDarkUrl is not null ? "nf-has-dark" : null)" src="@LogoUrl" alt="@Brand" />
                 @if (LogoDarkUrl is not null)
                 {
-                    <img class="bf-brand-logo-dark" src="@LogoDarkUrl" alt="" />
+                    <img class="nf-brand-logo-dark" src="@LogoDarkUrl" alt="@Brand" />
                 }
                 @if (MarkUrl is not null)
                 {
-                    <img class="bf-brand-mark" src="@MarkUrl" alt="" />
+                    <img class="nf-brand-mark" src="@MarkUrl" alt="" />
                 }
             }
             else if (!string.IsNullOrWhiteSpace(Brand))
             {
-                <span class="bf-brand-text">@Brand</span>
+                <span class="nf-brand-text">@Brand</span>
             }
         </a>
     </div>
 
-    <div class="bf-sidebar-scroll">
+    <div class="nf-sidebar-scroll">
         @foreach (var section in Sections)
         {
             @if (string.IsNullOrEmpty(section.Roles))
@@ -41,6 +39,13 @@
             }
         }
     </div>
+
+    @if (SidebarFooter is not null)
+    {
+        <div class="nf-sidebar-footer">
+            @SidebarFooter
+        </div>
+    }
 </nav>
 
 @code {
@@ -64,4 +69,8 @@
 
     [Parameter]
     public RenderFragment? BrandContent { get; set; }
+
+    /// <summary>Pinned under the links, for example a user name and sign-out button. Hidden when the rail is collapsed.</summary>
+    [Parameter]
+    public RenderFragment? SidebarFooter { get; set; }
 }

@@ -1,6 +1,6 @@
 <img src="https://github.com/gordon-matt/Heroicsoft.NetForge/blob/master/_Misc/Logo-Wide.jpg" alt="Logo" width="100%" />
 
-Shared building blocks for the self-hosted MVC and Blazor apps. Authentication, result helpers, and the Hangfire dashboard filter are used by both. `Heroicsoft.NetForge.Components` is Blazor only: the shell, theme picker, toasts, and dialogs.
+Shared building blocks for the self-hosted MVC and Blazor apps. Authentication, result helpers, and the Hangfire dashboard filter are used by both. The two Blazor component packages share the same component names and services: use `Heroicsoft.NetForge.Components.Bootstrap` for apps built on Bootstrap and Bootswatch, and `Heroicsoft.NetForge.Components` for apps that use the NetForge `nf-` style (light and dark, no Bootstrap).
 
 ## Packages
 
@@ -9,22 +9,28 @@ Shared building blocks for the self-hosted MVC and Blazor apps. Authentication, 
 | `Heroicsoft.NetForge.Abstractions` | `AuthProvider`, `IUserContextService`, `BootswatchThemes`, `AppVersion`, `DatabaseProviders`, setup status, nav models |
 | `Heroicsoft.NetForge.Results` | `ResultExtensions` (`To<T>`, `GetDisplayMessage`) |
 | `Heroicsoft.NetForge.Authentication` | Identity / Keycloak / None registration, Keycloak back-channel and role mapping, `/auth/login`, setup redirect |
-| `Heroicsoft.NetForge.Components` | Shell, theme picker, toasts, confirm/prompt dialogs, pager, empty states, router |
+| `Heroicsoft.NetForge.Components` | Shared services (toasts, dialogs, sidebar refresh, paging maths, shell options) plus the 
+f- styled shell, dialogs, toasts, pager, empty states, router, and light/dark toggle. No Bootstrap. |
+| `Heroicsoft.NetForge.Components.Bootstrap` | The same set on Bootstrap/Bootswatch, with the Bootswatch theme picker. References Heroicsoft.NetForge.Components. |
 | `Heroicsoft.NetForge.Hangfire` | Administrator-only Hangfire dashboard filter |
 
 ## New app
 
 ```xml
-<PackageReference Include="Heroicsoft.NetForge.Components" Version="1.0.0" />
+<!-- Pick one: -->
+<PackageReference Include="Heroicsoft.NetForge.Components.Bootstrap" Version="1.0.0" />
+<!-- <PackageReference Include="Heroicsoft.NetForge.Components" Version="1.0.0" /> -->
 <PackageReference Include="Heroicsoft.NetForge.Authentication" Version="1.0.0" />
 <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="10.0.12" />
 ```
 
-Restore Bootswatch, Bootstrap, and Bootstrap Icons into `wwwroot/lib` (see `templates/libman.json`). The theme picker swaps those stylesheets at runtime; the library does not embed them.
+**Bootstrap apps:** restore Bootswatch, Bootstrap, and Bootstrap Icons into `wwwroot/lib` (see `templates/libman.json`). The theme picker swaps those stylesheets at runtime; the library does not embed them. Import `Heroicsoft.NetForge.Components.Bootstrap` in `_Imports.razor` and call `AddNetForgeBootstrapComponents(ui => ui.ThemeStorageKey = "myapp.theme")`.
+
+**nf apps:** no `libman` needed. Import `Heroicsoft.NetForge.Components` and call `AddNetForgeComponents(ui => { ui.ThemeStorageKey = "myapp.theme"; ui.AccentColor = "#4f46e5"; ui.AccentColorDark = "#818cf8"; })`. Never import both component namespaces in one app: the shared component names would be ambiguous.
 
 ```csharp
 builder.Services.AddCascadingAuthenticationState();
-builder.Services.AddNetForgeComponents(ui =>
+builder.Services.AddNetForgeBootstrapComponents(ui =>
 {
     ui.ThemeStorageKey = "myapp.theme";
 });
@@ -71,7 +77,7 @@ Hangfire hosts add `Heroicsoft.NetForge.Hangfire` and pass `new AdministratorDas
 
 MVC hosts keep their own `/auth` controller and `IUserContextService`. Pass `IncludeAuthController = false`, `RegisterUserContext = false`, and `Identity.UseRelaxedPasswordPolicy = false`. Keycloak behind a reverse proxy also sets `RequireHttpsMetadata = false`, correlation cookies to `SameSite=None` / `Secure=Always`, and `RedirectBrowserToPublicAuthority = true`. Set `AccessDeniedPath` to `/Home/AccessDenied` and `RemoteFailurePath` to `/Home/Error`. When `Authentication:Keycloak:PublicOrigin` is set, post-logout redirects to `{PublicOrigin}/signout-callback-oidc`.
 
-Blazor hosts leave those flags at their defaults and pass the app's existing theme storage key (`linkstash.theme`, and the same pattern in the other apps) so a stored theme survives the switch to `window.netForge`.
+Blazor hosts leave those flags at their defaults and pass the app's existing theme storage key (`linkstash.theme`, and the same pattern in the other apps) so a stored theme survives the switch.
 
 ## Left in the app
 

@@ -1,0 +1,16 @@
+@inject IOptions<ForgeUiOptions> UiOptions
+
+@* Needs no circuit: nf.js handles the click, flips data-theme on <html>, and stores the choice
+   under ForgeUiOptions.ThemeStorageKey. CSS shows the moon in light mode and the sun in dark. *@
+<button type="button" class="nf-icon-button nf-theme-toggle" data-nf-theme-toggle
+        data-theme-key="@UiOptions.Value.ThemeStorageKey"
+        title="Toggle light or dark theme" aria-label="Toggle light or dark theme">
+    <Icon Name="moon" Class="nf-theme-moon" Size="@Size" />
+    <Icon Name="sun" Class="nf-theme-sun" Size="@Size" />
+</button>
+
+@code {
+    /// <summary>Icon size in CSS pixels.</summary>
+    [Parameter]
+    public int Size { get; set; } = 18;
+}

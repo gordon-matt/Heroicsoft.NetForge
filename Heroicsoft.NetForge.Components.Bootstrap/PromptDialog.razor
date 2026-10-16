@@ -1,0 +1,128 @@
+@namespace Heroicsoft.NetForge.Components.Bootstrap
+@implements IPromptDialog
+@inject IJSRuntime JS
+
+@* Single-line text prompt, awaited like ConfirmDialog. Returns null when cancelled. *@
+@if (isVisible)
+{
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <EditForm Model="this" OnValidSubmit="Submit">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5">@title</h2>
+                        <button type="button" class="btn-close" aria-label="Close"
+                                @onclick="Cancel"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label class="form-label" for="@inputId">@label</label>
+                        <input id="@inputId" class="form-control" @ref="inputElement"
+                               @bind="Value" @bind:event="oninput" autocomplete="off" />
+                        @if (error is not null)
+                        {
+                            <div class="text-danger small mt-1">@error</div>
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" @onclick="Cancel">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary"
+                                disabled="@string.IsNullOrWhiteSpace(Value)">
+                            @confirmLabel
+                        </button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    private readonly string inputId = "bf-prompt-" + Guid.NewGuid().ToString("N");
+    private bool isVisible;
+    private string title = string.Empty;
+    private string label = string.Empty;
+    private string confirmLabel = "OK";
+    private string? error;
+    private bool selectFileNameStem;
+    private ElementReference inputElement;
+    private bool shouldFocus;
+    private TaskCompletionSource<string?>? completion;
+
+    public string Value { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Shows the prompt and completes with the trimmed text, or null when cancelled.
+    /// When <paramref name="selectFileNameStem"/> is true, the selection stops before the extension.
+    /// </summary>
+    public Task<string?> ShowAsync(
+        string title,
+        string label,
+        string initialValue = "",
+        string confirmLabel = "OK",
+        bool selectFileNameStem = false)
+    {
+        this.title = title;
+        this.label = label;
+        this.confirmLabel = confirmLabel;
+        this.selectFileNameStem = selectFileNameStem;
+
+        Value = initialValue;
+        error = null;
+        isVisible = true;
+        shouldFocus = true;
+
+        completion = new TaskCompletionSource<string?>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        StateHasChanged();
+
+        return completion.Task;
+    }
+
+    /// <summary>Shows a validation message without closing the dialog.</summary>
+    public void ShowError(string message)
+    {
+        error = message;
+        StateHasChanged();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!shouldFocus)
+        {
+            return;
+        }
+
+        shouldFocus = false;
+
+        if (selectFileNameStem)
+        {
+            await JS.InvokeVoidAsync("netForge.selectFileNameStem", inputElement);
+        }
+        else
+        {
+            await inputElement.FocusAsync();
+        }
+    }
+
+    private void Submit()
+    {
+        if (string.IsNullOrWhiteSpace(Value))
+        {
+            return;
+        }
+
+        isVisible = false;
+        completion?.TrySetResult(Value.Trim());
+        completion = null;
+    }
+
+    private void Cancel()
+    {
+        isVisible = false;
+        completion?.TrySetResult(null);
+        completion = null;
+    }
+}

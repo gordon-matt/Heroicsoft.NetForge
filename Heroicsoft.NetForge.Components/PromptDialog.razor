@@ -1,45 +1,36 @@
-@namespace Heroicsoft.NetForge.Components
+@implements IPromptDialog
+@implements IDisposable
 @inject IJSRuntime JS
 
 @* Single-line text prompt, awaited like ConfirmDialog. Returns null when cancelled. *@
 @if (isVisible)
 {
-    <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <EditForm Model="this" OnValidSubmit="Submit">
-                    <div class="modal-header">
-                        <h2 class="modal-title fs-5">@title</h2>
-                        <button type="button" class="btn-close" aria-label="Close"
-                                @onclick="Cancel"></button>
-                    </div>
-                    <div class="modal-body">
-                        <label class="form-label" for="@inputId">@label</label>
-                        <input id="@inputId" class="form-control" @ref="inputElement"
-                               @bind="Value" @bind:event="oninput" autocomplete="off" />
-                        @if (error is not null)
-                        {
-                            <div class="text-danger small mt-1">@error</div>
-                        }
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" @onclick="Cancel">
-                            Cancel
-                        </button>
-                        <button type="submit" class="btn btn-primary"
-                                disabled="@string.IsNullOrWhiteSpace(Value)">
-                            @confirmLabel
-                        </button>
-                    </div>
-                </EditForm>
+    <div class="nf-modal-backdrop" @onclick="Cancel" @onkeydown="OnKeyDown">
+        <form class="nf-modal" role="dialog" aria-modal="true" aria-labelledby="@titleId"
+              @onsubmit="Submit" @onsubmit:preventDefault="true" @onclick:stopPropagation="true">
+            <h2 class="nf-modal-title" id="@titleId">@title</h2>
+            <div class="nf-field">
+                <label for="@inputId">@label</label>
+                <input id="@inputId" class="nf-input @(error is not null ? "invalid" : null)" @ref="inputElement"
+                       @bind="Value" @bind:event="oninput" autocomplete="off" />
+                @if (error is not null)
+                {
+                    <span class="nf-validation">@error</span>
+                }
             </div>
-        </div>
+            <div class="nf-modal-actions">
+                <button type="button" class="nf-button" @onclick="Cancel">Cancel</button>
+                <button type="submit" class="nf-button nf-button-primary" disabled="@string.IsNullOrWhiteSpace(Value)">
+                    @confirmLabel
+                </button>
+            </div>
+        </form>
     </div>
-    <div class="modal-backdrop fade show"></div>
 }
 
 @code {
-    private readonly string inputId = "bf-prompt-" + Guid.NewGuid().ToString("N");
+    private readonly string inputId = "nf-prompt-" + Guid.NewGuid().ToString("N");
+    private readonly string titleId = "nf-prompt-title-" + Guid.NewGuid().ToString("N");
     private bool isVisible;
     private string title = string.Empty;
     private string label = string.Empty;
@@ -63,6 +54,8 @@
         string confirmLabel = "OK",
         bool selectFileNameStem = false)
     {
+        completion?.TrySetResult(null);
+
         this.title = title;
         this.label = label;
         this.confirmLabel = confirmLabel;
@@ -96,13 +89,28 @@
 
         shouldFocus = false;
 
-        if (selectFileNameStem)
+        try
         {
-            await JS.InvokeVoidAsync("netForge.selectFileNameStem", inputElement);
+            if (selectFileNameStem)
+            {
+                await JS.InvokeVoidAsync("netForge.selectFileNameStem", inputElement);
+            }
+            else
+            {
+                await inputElement.FocusAsync();
+            }
         }
-        else
+        catch (Exception ex) when (ex is JSException or JSDisconnectedException or InvalidOperationException)
         {
-            await inputElement.FocusAsync();
+            // Focus is a nicety. The circuit may be gone, or the dialog closed before this ran.
+        }
+    }
+
+    private void OnKeyDown(KeyboardEventArgs args)
+    {
+        if (args.Key == "Escape")
+        {
+            Cancel();
         }
     }
 
@@ -124,4 +132,6 @@
         completion?.TrySetResult(null);
         completion = null;
     }
+
+    public void Dispose() => completion?.TrySetResult(null);
 }

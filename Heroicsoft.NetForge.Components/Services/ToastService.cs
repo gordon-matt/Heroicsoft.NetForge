@@ -14,6 +14,9 @@ public sealed class ToastService : IDisposable
 
     public event Action? Changed;
 
+    /// <summary>Raised for each new toast, for hosts that render and time out toasts themselves.</summary>
+    public event Action<Toast>? Shown;
+
     public IReadOnlyCollection<Toast> Toasts =>
         [.. toasts.Values.OrderBy(toast => toast.CreatedAt)];
 
@@ -28,6 +31,50 @@ public sealed class ToastService : IDisposable
     /// <summary>Surfaces a failed result without every caller writing the same status switch.</summary>
     public void ShowFailure(IResult result, string? notFound = null) =>
         Error(result.GetDisplayMessage(notFound));
+
+    /// <summary>
+    /// Reports a batch that may have partly succeeded: one line when everything worked, otherwise
+    /// a count plus the first failure, which is nearly always representative of the rest.
+    /// </summary>
+    /// <param name="succeeded">Items that completed.</param>
+    /// <param name="failed">Items that did not.</param>
+    /// <param name="verb">Past-tense action, for example <c>Deleted</c>.</param>
+    /// <param name="firstError">Message from the first failed item, when there is one.</param>
+    public void ShowBulk(int succeeded, int failed, string verb, string? firstError = null)
+    {
+        if (failed == 0)
+        {
+            Success($"{verb} {succeeded} {(succeeded == 1 ? "item" : "items")}.");
+            return;
+        }
+
+        if (succeeded == 0)
+        {
+            Error($"None of the items were {verb.ToLowerInvariant()}. {firstError}".TrimEnd());
+            return;
+        }
+
+        Warning($"{verb} {succeeded} of {succeeded + failed} items. {failed} failed: {firstError}".TrimEnd());
+    }
+
+    /// <summary>
+    /// Shows a toast with a custom tone (<c>success</c>, <c>danger</c>, <c>warning</c>, <c>info</c>;
+    /// anything else renders neutral).
+    /// </summary>
+    public void Show(string message, string tone = "info", TimeSpan? duration = null)
+    {
+        var toast = new Toast(Guid.NewGuid(), message, tone, DateTime.UtcNow);
+        toasts[toast.Id] = toast;
+
+        timers[toast.Id] = new Timer(
+            _ => Dismiss(toast.Id),
+            null,
+            duration ?? TimeSpan.FromSeconds(6),
+            Timeout.InfiniteTimeSpan);
+
+        Shown?.Invoke(toast);
+        Changed?.Invoke();
+    }
 
     public void Dismiss(Guid id)
     {
@@ -52,19 +99,9 @@ public sealed class ToastService : IDisposable
         toasts.Clear();
     }
 
-    private void Show(string message, string level, TimeSpan? duration = null)
+    public sealed record Toast(Guid Id, string Message, string Level, DateTime CreatedAt)
     {
-        var toast = new Toast(Guid.NewGuid(), message, level, DateTime.UtcNow);
-        toasts[toast.Id] = toast;
-
-        timers[toast.Id] = new Timer(
-            _ => Dismiss(toast.Id),
-            null,
-            duration ?? TimeSpan.FromSeconds(6),
-            Timeout.InfiniteTimeSpan);
-
-        Changed?.Invoke();
+        /// <summary>Alias of <see cref="Level"/>, the name the app-local toast services used.</summary>
+        public string Tone => Level;
     }
-
-    public sealed record Toast(Guid Id, string Message, string Level, DateTime CreatedAt);
 }

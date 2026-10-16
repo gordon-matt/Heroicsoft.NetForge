@@ -1,7 +1,9 @@
-@namespace Heroicsoft.NetForge.Components
+@inject IOptions<ForgeShellOptions> ShellOptions
 
 @* Shown in place of a page's content when the signed-in user lacks the role. A redirect back
    to sign-in for someone already signed in reads as a bug. *@
+<PageTitle>@PageTitleText</PageTitle>
+
 <EmptyState Icon="@Icon" Title="@Title" Description="@Description">
     @if (ChildContent is not null)
     {
@@ -9,13 +11,13 @@
     }
     else
     {
-        <a class="btn btn-sm btn-outline-secondary" href="@HomeHref">@HomeLabel</a>
+        <a class="nf-button" href="@HomeHref">@HomeLabel</a>
     }
 </EmptyState>
 
 @code {
     [Parameter]
-    public string Icon { get; set; } = "bi-shield-lock";
+    public string Icon { get; set; } = "shield";
 
     [Parameter]
     public string Title { get; set; } = "You don't have access to this";
@@ -29,6 +31,15 @@
     [Parameter]
     public string HomeLabel { get; set; } = "Back home";
 
+    /// <summary>Overrides the browser tab title. Defaults to "Access denied - {Brand}".</summary>
+    [Parameter]
+    public string? PageTitleText { get; set; }
+
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
+
+    protected override void OnParametersSet() =>
+        PageTitleText ??= string.IsNullOrWhiteSpace(ShellOptions.Value.Brand)
+            ? "Access denied"
+            : $"Access denied - {ShellOptions.Value.Brand}";
 }

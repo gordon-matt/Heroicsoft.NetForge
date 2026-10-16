@@ -1,24 +1,22 @@
-@namespace Heroicsoft.NetForge.Components
-
-<div class="bf-page-header">
-    <div class="min-width-0">
-        <h1 class="h3 mb-1">
+<div class="nf-page-header">
+    <div class="nf-page-header-text">
+        <h1 class="nf-page-title">
             @if (Icon is not null)
             {
-                <i class="bi @IconClass me-2 text-primary"></i>
+                <Icon Name="@Icon" Size="22" Class="nf-page-title-icon" />
             }
             @Title
         </h1>
         @if (Description is not null)
         {
-            <p class="text-body-secondary mb-0">@Description</p>
+            <p class="nf-page-description">@Description</p>
         }
         @ChildContent
     </div>
 
     @if (Actions is not null)
     {
-        <div class="d-flex align-items-center gap-2 flex-shrink-0">
+        <div class="nf-page-actions">
             @Actions
         </div>
     }
@@ -28,6 +26,7 @@
     [Parameter, EditorRequired]
     public string Title { get; set; } = string.Empty;
 
+    /// <summary>Icon name from <see cref="IconSet"/>. Bootstrap Icons names are mapped.</summary>
     [Parameter]
     public string? Icon { get; set; }
 
@@ -39,10 +38,4 @@
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
-
-    private string IconClass => Icon is null
-        ? string.Empty
-        : Icon.StartsWith("bi-", StringComparison.Ordinal) || Icon.StartsWith("bi ", StringComparison.Ordinal)
-            ? Icon
-            : $"bi-{Icon}";
 }

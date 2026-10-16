@@ -1,19 +1,26 @@
-using Heroicsoft.NetForge.Abstractions.Theming;
-
 namespace Heroicsoft.NetForge.Components;
 
-/// <summary>Per-app knobs for the shell. Registered by <c>AddNetForgeComponents</c>.</summary>
+/// <summary>
+/// Per-app knobs for the nf-styled shell. Registered by <c>AddNetForgeComponents</c>. The
+/// Bootstrap component set has its own options type.
+/// </summary>
 public sealed class ForgeUiOptions
 {
-    /// <summary>Browser <c>localStorage</c> key for the Bootswatch theme. Keep it unique per app.</summary>
+    /// <summary>Browser <c>localStorage</c> key for the light or dark scheme. Keep it unique per app.</summary>
     public string ThemeStorageKey { get; set; } = "netforge.theme";
 
-    public string DefaultTheme { get; set; } = BootswatchThemes.Default;
+    /// <summary>
+    /// <c>light</c>, <c>dark</c>, or <c>system</c> (follow the operating system). Applied before first
+    /// paint when nothing is stored yet.
+    /// </summary>
+    public string DefaultColorScheme { get; set; } = "light";
 
-    /// <summary>Format string whose <c>{0}</c> is the theme name. The host serves the CSS.</summary>
-    public string StylesheetFormat { get; set; } = "lib/bootswatch/dist/{0}/bootstrap.min.css";
+    /// <summary>
+    /// Accent colour for this app (hex, <c>rgb()</c>, <c>hsl()</c>, or a colour name), written to
+    /// <c>--nf-accent</c> by the host page. Leave null to use the stylesheet's default indigo.
+    /// </summary>
+    public string? AccentColor { get; set; }
 
-    public string BootstrapScriptPath { get; set; } = "lib/bootstrap/dist/js/bootstrap.bundle.min.js";
-
-    public string IconsStylesheetPath { get; set; } = "lib/bootstrap-icons/font/bootstrap-icons.min.css";
+    /// <summary>Dark-scheme accent. Falls back to <see cref="AccentColor"/> when null.</summary>
+    public string? AccentColorDark { get; set; }
 }

@@ -1,3 +1,5 @@
+using Heroicsoft.NetForge.Components.Services;
+using Heroicsoft.NetForge.Components.Shell;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Heroicsoft.NetForge.Components;
@@ -5,8 +7,9 @@ namespace Heroicsoft.NetForge.Components;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Registers the toast, dialog, and sidebar-refresh services used by the shell components.
-    /// Scoped to the circuit, so one user's toasts never appear on another's screen.
+    /// Registers the toast, dialog, and sidebar-refresh services plus the options the nf-styled
+    /// components read. Scoped to the circuit, so one user's toasts never appear on another's screen.
+    /// The Bootstrap package calls this too and adds its own options on top.
     /// </summary>
     public static IServiceCollection AddNetForgeComponents(
         this IServiceCollection services,
@@ -22,9 +25,9 @@ public static class ServiceCollectionExtensions
         }
 
         services.AddOptions<ForgeShellOptions>();
-        services.AddScoped<Services.ToastService>();
-        services.AddScoped<Services.DialogService>();
-        services.AddScoped<Services.SidebarRefresh>();
+        services.AddScoped<ToastService>();
+        services.AddScoped<DialogService>();
+        services.AddScoped<SidebarRefresh>();
 
         return services;
     }

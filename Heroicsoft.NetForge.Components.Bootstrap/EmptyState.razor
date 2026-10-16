@@ -1,0 +1,29 @@
+@namespace Heroicsoft.NetForge.Components.Bootstrap
+<div class="bf-empty-state">
+    <i class="bi @IconClass bf-empty-icon"></i>
+    <p class="mb-1 fs-5">@Title</p>
+    @if (Description is not null)
+    {
+        <p class="small mb-3">@Description</p>
+    }
+    @ChildContent
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = string.Empty;
+
+    /// <summary>Bootstrap Icons class, for example <c>bi-inbox</c>.</summary>
+    [Parameter]
+    public string Icon { get; set; } = "bi-inbox";
+
+    [Parameter]
+    public string? Description { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    private string IconClass => Icon.StartsWith("bi-", StringComparison.Ordinal) || Icon.StartsWith("bi ", StringComparison.Ordinal)
+        ? Icon
+        : $"bi-{Icon}";
+}

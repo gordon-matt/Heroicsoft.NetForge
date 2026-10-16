@@ -1,0 +1,82 @@
+@namespace Heroicsoft.NetForge.Components.Bootstrap
+@inject IOptions<ForgeBootstrapOptions> UiOptions
+
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="@(BootswatchThemes.IsDarkColorScheme(InitialTheme) ? "dark" : "light")">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <title>@Title</title>
+    <ResourcePreloader />
+    @* Not fingerprinted by the theme picker: theme-init.js and ThemePicker both swap this href. *@
+    <link id="theme-stylesheet" rel="stylesheet" href="@BootswatchThemes.StylesheetHref(InitialTheme, Ui.StylesheetFormat)" />
+    <script src="@Assets[$"{AssetBase}/js/theme-init.js"]"
+            data-theme-key="@Ui.ThemeStorageKey"
+            data-default-theme="@InitialTheme"
+            data-stylesheet-format="@Ui.StylesheetFormat"></script>
+    <link rel="stylesheet" href="@Ui.IconsStylesheetPath" />
+    <link rel="stylesheet" href="@Assets[$"{AssetBase}/css/forge.css"]" />
+    @if (!string.IsNullOrWhiteSpace(AppStylesheet))
+    {
+        <link rel="stylesheet" href="@AppStylesheet" />
+    }
+    @if (!string.IsNullOrWhiteSpace(IconHref))
+    {
+        <link rel="icon" type="image/png" href="@IconHref" />
+    }
+    @AdditionalHead
+    <ImportMap />
+    <HeadOutlet @rendermode="@RenderModeInUse" />
+</head>
+
+<body>
+    @ChildContent
+    <script src="@Assets["_framework/blazor.web.js"]"></script>
+    <script src="@Ui.BootstrapScriptPath"></script>
+    <script src="@Assets[$"{AssetBase}/js/forge.js"]"></script>
+    @AdditionalBody
+</body>
+
+</html>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public string? IconHref { get; set; }
+
+    /// <summary>App stylesheet href, usually <c>@@Assets["css/site.css"]</c> from the host.</summary>
+    [Parameter]
+    public string? AppStylesheet { get; set; }
+
+    [Parameter]
+    public IComponentRenderMode? PageRenderMode { get; set; }
+
+    [Parameter]
+    public RenderFragment? AdditionalHead { get; set; }
+
+    [Parameter]
+    public RenderFragment? AdditionalBody { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Where the static web assets of this package are served. The path has to be spelled out:
+    /// inside a class library <c>@@Assets["js/forge.js"]</c> resolves against the host, not here.
+    /// </summary>
+    private const string AssetBase = "_content/Heroicsoft.NetForge.Components.Bootstrap";
+
+    private ForgeBootstrapOptions Ui => UiOptions.Value;
+
+    private string InitialTheme =>
+        BootswatchThemes.TryNormalize(Ui.DefaultTheme, out string theme, BootswatchThemes.Default)
+            ? theme
+            : BootswatchThemes.Default;
+
+    private IComponentRenderMode RenderModeInUse =>
+        PageRenderMode ?? Microsoft.AspNetCore.Components.Web.RenderMode.InteractiveServer;
+}

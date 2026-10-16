@@ -1,0 +1,35 @@
+@namespace Heroicsoft.NetForge.Components.Bootstrap
+@implements IDisposable
+@inject ToastService ToastService
+
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1090;">
+    @foreach (var toast in ToastService.Toasts)
+    {
+        <div class="toast show align-items-center border-0 text-bg-@toast.Level" role="alert"
+             aria-live="assertive" aria-atomic="true" @key="toast.Id">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi @IconFor(toast.Level) me-2"></i>@toast.Message
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                        aria-label="Close" @onclick="() => ToastService.Dismiss(toast.Id)"></button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    protected override void OnInitialized() => ToastService.Changed += OnToastsChanged;
+
+    private void OnToastsChanged() => InvokeAsync(StateHasChanged);
+
+    private static string IconFor(string level) => level switch
+    {
+        "success" => "bi-check-circle",
+        "danger" => "bi-exclamation-octagon",
+        "warning" => "bi-exclamation-triangle",
+        _ => "bi-info-circle",
+    };
+
+    public void Dispose() => ToastService.Changed -= OnToastsChanged;
+}
