@@ -1,4 +1,4 @@
-<img src="https://github.com/gordon-matt/Heroicsoft.NetForge/blob/master/_Misc/Logo-Wide.jpg" alt="Logo" width="300" />
+<img src="https://github.com/gordon-matt/Heroicsoft.NetForge/blob/master/_Misc/Logo-Wide.jpg" alt="Logo" width="100%" />
 
 Shared building blocks for the self-hosted MVC and Blazor apps. Authentication, result helpers, and the Hangfire dashboard filter are used by both. `Heroicsoft.NetForge.Components` is Blazor only: the shell, theme picker, toasts, and dialogs.
 
