@@ -1,0 +1,104 @@
+@namespace Heroicsoft.NetForge.Components
+
+<div class="bf-shell @(sidebarCollapsed ? "bf-sidebar-collapsed" : null)">
+    @if (Sidebar is not null)
+    {
+        @Sidebar
+    }
+    else
+    {
+        <ForgeSidebar Sections="Sections" Brand="@Brand" BrandHref="@BrandHref"
+                      LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl" MarkUrl="@MarkUrl"
+                      BrandContent="BrandContent" />
+    }
+
+    <div class="bf-main">
+        <ForgeTopbar ShowSearch="ShowSearch" SearchPlaceholder="SearchPlaceholder"
+                     OnSearch="OnSearch" OnToggleSidebar="ToggleSidebar" ShowThemePicker="ShowThemePicker"
+                     ShowUserMenu="ShowUserMenu">
+            @TopbarEnd
+        </ForgeTopbar>
+
+        <main class="bf-content">
+            @ChildContent
+        </main>
+
+        @if (ShowVersion)
+        {
+            <footer class="bf-version">
+                <span class="small text-muted">v@(Version ?? AppVersion.Current)</span>
+            </footer>
+        }
+    </div>
+</div>
+
+@if (ShowThemePicker)
+{
+    <ThemePicker />
+}
+
+<ForgeDialogHost />
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
+
+@code {
+    private bool sidebarCollapsed;
+
+    [Parameter]
+    public string? Brand { get; set; }
+
+    [Parameter]
+    public string BrandHref { get; set; } = "/";
+
+    [Parameter]
+    public string? LogoUrl { get; set; }
+
+    [Parameter]
+    public string? LogoDarkUrl { get; set; }
+
+    [Parameter]
+    public string? MarkUrl { get; set; }
+
+    [Parameter]
+    public RenderFragment? BrandContent { get; set; }
+
+    [Parameter]
+    public IReadOnlyList<ForgeNavSection> Sections { get; set; } = [];
+
+    /// <summary>Replaces the generated sidebar. Use this when the nav is data the page owns.</summary>
+    [Parameter]
+    public RenderFragment? Sidebar { get; set; }
+
+    [Parameter]
+    public bool ShowSearch { get; set; }
+
+    [Parameter]
+    public string SearchPlaceholder { get; set; } = "Search";
+
+    [Parameter]
+    public EventCallback<string> OnSearch { get; set; }
+
+    [Parameter]
+    public RenderFragment? TopbarEnd { get; set; }
+
+    [Parameter]
+    public bool ShowThemePicker { get; set; } = true;
+
+    [Parameter]
+    public bool ShowUserMenu { get; set; } = true;
+
+    [Parameter]
+    public bool ShowVersion { get; set; } = true;
+
+    [Parameter]
+    public string? Version { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    private void ToggleSidebar() => sidebarCollapsed = !sidebarCollapsed;
+}

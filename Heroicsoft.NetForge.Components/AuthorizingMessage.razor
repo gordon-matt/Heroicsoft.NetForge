@@ -1,0 +1,11 @@
+@namespace Heroicsoft.NetForge.Components
+
+<div class="p-4 text-center text-body-secondary">
+    <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+    @Message
+</div>
+
+@code {
+    [Parameter]
+    public string Message { get; set; } = "Checking your access…";
+}

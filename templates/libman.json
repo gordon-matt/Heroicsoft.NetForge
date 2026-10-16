@@ -1,0 +1,77 @@
+{
+  "version": "1.0",
+  "defaultProvider": "jsdelivr",
+  "libraries": [
+    {
+      "library": "bootswatch@5.3.8",
+      "destination": "wwwroot/lib/bootswatch/",
+      "files": [
+        "LICENSE",
+        "README.md",
+        "dist/brite/bootstrap.min.css",
+        "dist/cerulean/bootstrap.min.css",
+        "dist/cosmo/bootstrap.min.css",
+        "dist/cyborg/bootstrap.min.css",
+        "dist/darkly/bootstrap.min.css",
+        "dist/flatly/bootstrap.min.css",
+        "dist/journal/bootstrap.min.css",
+        "dist/litera/bootstrap.min.css",
+        "dist/lumen/bootstrap.min.css",
+        "dist/lux/bootstrap.min.css",
+        "dist/materia/bootstrap.min.css",
+        "dist/minty/bootstrap.min.css",
+        "dist/morph/bootstrap.min.css",
+        "dist/pulse/bootstrap.min.css",
+        "dist/quartz/bootstrap.min.css",
+        "dist/sandstone/bootstrap.min.css",
+        "dist/simplex/bootstrap.min.css",
+        "dist/sketchy/bootstrap.min.css",
+        "dist/slate/bootstrap.min.css",
+        "dist/solar/bootstrap.min.css",
+        "dist/spacelab/bootstrap.min.css",
+        "dist/superhero/bootstrap.min.css",
+        "dist/united/bootstrap.min.css",
+        "dist/vapor/bootstrap.min.css",
+        "dist/yeti/bootstrap.min.css",
+        "dist/zephyr/bootstrap.min.css"
+      ]
+    },
+    {
+      "library": "bootstrap@5.3.8",
+      "destination": "wwwroot/lib/bootstrap/",
+      "files": [
+        "LICENSE",
+        "README.md",
+        "dist/css/bootstrap.min.css",
+        "dist/js/bootstrap.bundle.min.js",
+        "dist/js/bootstrap.bundle.min.js.map"
+      ]
+    },
+    {
+      "library": "bootstrap-icons@1.13.1",
+      "destination": "wwwroot/lib/bootstrap-icons/",
+      "files": [
+        "LICENSE",
+        "README.md",
+        "font/fonts/bootstrap-icons.woff",
+        "font/fonts/bootstrap-icons.woff2",
+        "font/bootstrap-icons.min.css"
+      ]
+    },
+    {
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot/lib/jquery/",
+      "files": [ "dist/jquery.min.js" ]
+    },
+    {
+      "library": "jquery-validation@1.21.0",
+      "destination": "wwwroot/lib/jquery-validation/",
+      "files": [ "dist/jquery.validate.min.js" ]
+    },
+    {
+      "library": "jquery-validation-unobtrusive@4.0.0",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive/",
+      "files": [ "dist/jquery.validate.unobtrusive.min.js" ]
+    }
+  ]
+}

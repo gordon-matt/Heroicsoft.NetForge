@@ -1,0 +1,131 @@
+@namespace Heroicsoft.NetForge.Components
+
+@if (PageCount > 1 || TotalCount > 0)
+{
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <span class="small text-body-secondary">
+            @if (TotalCount == 0)
+            {
+                <text>No results</text>
+            }
+            else
+            {
+                <text>
+                    @FirstOnPage.ToString("N0")–@LastOnPage.ToString("N0")
+                    of @TotalCount.ToString("N0")
+                </text>
+            }
+        </span>
+
+        @if (PageCount > 1)
+        {
+            <nav aria-label="@AriaLabel">
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item @(PageNumber <= 1 ? "disabled" : null)">
+                        <button type="button" class="page-link" @onclick="() => GoAsync(1)"
+                                aria-label="First page">
+                            <i class="bi bi-chevron-double-left"></i>
+                        </button>
+                    </li>
+                    <li class="page-item @(PageNumber <= 1 ? "disabled" : null)">
+                        <button type="button" class="page-link" @onclick="() => GoAsync(PageNumber - 1)"
+                                aria-label="Previous page">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                    </li>
+
+                    @foreach (int visiblePage in VisiblePages)
+                    {
+                        <li class="page-item @(visiblePage == PageNumber ? "active" : null)">
+                            <button type="button" class="page-link" @onclick="() => GoAsync(visiblePage)">
+                                @visiblePage
+                            </button>
+                        </li>
+                    }
+
+                    <li class="page-item @(PageNumber >= PageCount ? "disabled" : null)">
+                        <button type="button" class="page-link" @onclick="() => GoAsync(PageNumber + 1)"
+                                aria-label="Next page">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </li>
+                    <li class="page-item @(PageNumber >= PageCount ? "disabled" : null)">
+                        <button type="button" class="page-link" @onclick="() => GoAsync(PageCount)"
+                                aria-label="Last page">
+                            <i class="bi bi-chevron-double-right"></i>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        }
+
+        @if (PageSizeChanged.HasDelegate)
+        {
+            <div class="d-flex align-items-center gap-2">
+                <label class="small text-body-secondary" for="@pageSizeId">Per page</label>
+                <select id="@pageSizeId" class="form-select form-select-sm" style="width: auto;"
+                        value="@PageSize" @onchange="OnPageSizeChangedAsync">
+                    @foreach (int size in Sizes)
+                    {
+                        <option value="@size">@size</option>
+                    }
+                </select>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private readonly string pageSizeId = "bf-pager-" + Guid.NewGuid().ToString("N");
+
+    private static readonly int[] DefaultPageSizes = [12, 24, 48, 96];
+
+    [Parameter, EditorRequired]
+    public int PageNumber { get; set; } = 1;
+
+    [Parameter, EditorRequired]
+    public int PageSize { get; set; } = 24;
+
+    [Parameter, EditorRequired]
+    public int TotalCount { get; set; }
+
+    [Parameter]
+    public EventCallback<int> PageNumberChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<int> PageSizeChanged { get; set; }
+
+    [Parameter]
+    public IReadOnlyList<int>? PageSizes { get; set; }
+
+    [Parameter]
+    public string AriaLabel { get; set; } = "Pagination";
+
+    private IReadOnlyList<int> Sizes => PageSizes is { Count: > 0 } ? PageSizes : DefaultPageSizes;
+
+    private int PageCount => PagerMath.PageCount(TotalCount, PageSize);
+
+    private int FirstOnPage => PagerMath.FirstOnPage(PageNumber, PageSize);
+
+    private int LastOnPage => PagerMath.LastOnPage(PageNumber, PageSize, TotalCount);
+
+    private IReadOnlyList<int> VisiblePages => PagerMath.VisiblePages(PageNumber, PageCount);
+
+    private async Task GoAsync(int page)
+    {
+        page = Math.Clamp(page, 1, PageCount);
+
+        if (page != PageNumber)
+        {
+            await PageNumberChanged.InvokeAsync(page);
+        }
+    }
+
+    private async Task OnPageSizeChangedAsync(ChangeEventArgs args)
+    {
+        if (int.TryParse(args.Value?.ToString(), out int size))
+        {
+            await PageSizeChanged.InvokeAsync(size);
+        }
+    }
+}

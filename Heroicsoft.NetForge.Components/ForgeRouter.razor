@@ -1,0 +1,47 @@
+@namespace Heroicsoft.NetForge.Components
+
+<Router AppAssembly="AppAssembly"
+        AdditionalAssemblies="@(AdditionalAssemblies ?? Array.Empty<Assembly>())"
+        NotFoundPage="NotFoundPage">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="routeData" DefaultLayout="DefaultLayout">
+            <NotAuthorized>
+                @if (NotAuthorized is not null)
+                {
+                    @NotAuthorized
+                }
+                else
+                {
+                    <RedirectToLogin />
+                }
+            </NotAuthorized>
+            <Authorizing>
+                <AuthorizingMessage Message="@AuthorizingText" />
+            </Authorizing>
+        </AuthorizeRouteView>
+        <FocusOnNavigate RouteData="routeData" Selector="@FocusSelector" />
+    </Found>
+</Router>
+
+@code {
+    [Parameter, EditorRequired]
+    public Assembly AppAssembly { get; set; } = default!;
+
+    [Parameter]
+    public IEnumerable<Assembly>? AdditionalAssemblies { get; set; }
+
+    [Parameter, EditorRequired]
+    public Type NotFoundPage { get; set; } = default!;
+
+    [Parameter]
+    public Type DefaultLayout { get; set; } = typeof(ShellLayout);
+
+    [Parameter]
+    public string FocusSelector { get; set; } = "h1";
+
+    [Parameter]
+    public string AuthorizingText { get; set; } = "Checking your access…";
+
+    [Parameter]
+    public RenderFragment? NotAuthorized { get; set; }
+}

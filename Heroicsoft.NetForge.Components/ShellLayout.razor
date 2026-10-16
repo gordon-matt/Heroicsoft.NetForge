@@ -1,0 +1,66 @@
+@namespace Heroicsoft.NetForge.Components
+@inherits LayoutComponentBase
+@implements IDisposable
+@inject IOptions<ForgeShellOptions> ShellOptions
+@inject IServiceProvider Services
+@inject SidebarRefresh SidebarRefresh
+@inject NavigationManager Navigation
+
+<AppShell Brand="@options.Brand"
+         BrandHref="@options.BrandHref"
+         LogoUrl="@options.LogoUrl"
+         LogoDarkUrl="@options.LogoDarkUrl"
+         MarkUrl="@options.MarkUrl"
+         Sections="@sections"
+         ShowSearch="@ShowSearch"
+         SearchPlaceholder="@options.SearchPlaceholder"
+         OnSearch="SearchAsync"
+         ShowThemePicker="@options.ShowThemePicker"
+         ShowUserMenu="@options.ShowUserMenu"
+         ShowVersion="@options.ShowVersion"
+         Version="@options.Version">
+    @Body
+</AppShell>
+
+@code {
+    private ForgeShellOptions options = new();
+    private IShellNavigation? navigation;
+    private IReadOnlyList<ForgeNavSection> sections = [];
+
+    private bool ShowSearch => !string.IsNullOrWhiteSpace(SearchFormat);
+
+    private string? SearchFormat => navigation?.SearchUrlFormat ?? options.SearchUrlFormat;
+
+    protected override void OnInitialized()
+    {
+        options = ShellOptions.Value;
+        navigation = Services.GetService<IShellNavigation>();
+        sections = navigation?.Sections ?? options.Sections;
+        SidebarRefresh.Changed += OnSidebarChanged;
+    }
+
+    private void OnSidebarChanged() =>
+        InvokeAsync(() =>
+        {
+            sections = navigation?.Sections ?? options.Sections;
+            StateHasChanged();
+        });
+
+    private Task SearchAsync(string term)
+    {
+        if (string.IsNullOrWhiteSpace(SearchFormat) || string.IsNullOrWhiteSpace(term))
+        {
+            return Task.CompletedTask;
+        }
+
+        string url = string.Format(
+            System.Globalization.CultureInfo.InvariantCulture,
+            SearchFormat,
+            Uri.EscapeDataString(term.Trim()));
+
+        Navigation.NavigateTo(url);
+        return Task.CompletedTask;
+    }
+
+    public void Dispose() => SidebarRefresh.Changed -= OnSidebarChanged;
+}

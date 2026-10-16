@@ -1,0 +1,279 @@
+/*
+ * App shell. Everything is expressed with Bootstrap CSS variables (--bs-*) rather than literal
+ * colours, because the theme picker swaps the whole Bootswatch stylesheet at runtime. A
+ * hard-coded colour would survive the swap and clash with every theme but the one it was picked for.
+ */
+
+:root {
+    --bf-sidebar-width: 230px;
+    --bf-sidebar-collapsed-width: 60px;
+    --bf-topbar-height: 52px;
+}
+
+html, body {
+    height: 100%;
+}
+
+/* The shell owns scrolling. Standalone pages (errors, Identity) must scroll with the document,
+   or they clip when the viewport shrinks. */
+body:has(.bf-shell) {
+    overflow: hidden;
+}
+
+.bf-shell {
+    position: relative;
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+}
+
+.bf-standalone {
+    min-height: 100%;
+    overflow: auto;
+}
+
+.bf-main {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.bf-content {
+    flex: 1 1 auto;
+    overflow: auto;
+    padding: 1rem 1.25rem 2rem;
+}
+
+.bf-version {
+    position: absolute;
+    right: 0.75rem;
+    bottom: 0.3rem;
+    line-height: 1;
+    z-index: 5;
+    pointer-events: none;
+    opacity: 0.75;
+}
+
+.bf-sidebar {
+    width: var(--bf-sidebar-width);
+    flex: 0 0 var(--bf-sidebar-width);
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bs-tertiary-bg);
+    border-right: 1px solid var(--bs-border-color);
+    transition: width 0.15s ease, flex-basis 0.15s ease;
+    overflow: hidden;
+}
+
+.bf-sidebar-brand {
+    height: var(--bf-topbar-height);
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    border-bottom: 1px solid var(--bs-border-color);
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.bf-sidebar-brand-link {
+    color: var(--bs-body-color);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
+.bf-brand-text {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.bf-brand-logo,
+.bf-brand-logo-dark {
+    display: block;
+    height: 36px;
+    width: auto;
+}
+
+.bf-brand-logo-dark,
+.bf-brand-mark {
+    display: none;
+}
+
+.bf-brand-mark {
+    height: 32px;
+    width: auto;
+}
+
+[data-bs-theme="dark"] .bf-brand-logo { display: none; }
+[data-bs-theme="dark"] .bf-brand-logo-dark { display: block; }
+
+.bf-sidebar-scroll {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 1rem;
+}
+
+.bf-sidebar-heading {
+    padding: 0.75rem 1rem 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--bs-secondary-color);
+    white-space: nowrap;
+}
+
+.bf-nav .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 1rem;
+    color: var(--bs-body-color);
+    border-left: 3px solid transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bf-nav .nav-link:hover {
+    background-color: var(--bs-secondary-bg);
+}
+
+.bf-nav .nav-link.active {
+    background-color: var(--bs-secondary-bg);
+    border-left-color: var(--bs-primary);
+    font-weight: 500;
+}
+
+.bf-nav .nav-link i {
+    flex: 0 0 auto;
+    width: 1.1rem;
+    text-align: center;
+}
+
+.bf-nav .nav-link .bf-truncate {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.bf-nav .nav-link .badge {
+    flex: 0 0 auto;
+    font-weight: 500;
+}
+
+.bf-sidebar-collapsed .bf-sidebar {
+    width: var(--bf-sidebar-collapsed-width);
+    flex-basis: var(--bf-sidebar-collapsed-width);
+}
+
+.bf-sidebar-collapsed .bf-brand-text,
+.bf-sidebar-collapsed .bf-brand-logo,
+.bf-sidebar-collapsed .bf-brand-logo-dark,
+.bf-sidebar-collapsed .bf-nav .nav-link span,
+.bf-sidebar-collapsed .bf-nav .nav-link .badge,
+.bf-sidebar-collapsed .bf-sidebar-heading span {
+    display: none;
+}
+
+.bf-sidebar-collapsed .bf-brand-mark { display: block; }
+
+.bf-sidebar-collapsed .bf-sidebar-heading {
+    border-top: 1px solid var(--bs-border-color);
+    padding: 0.5rem 0 0;
+    margin: 0.5rem 0.5rem 0;
+}
+
+@media (max-width: 767.98px) {
+    .bf-sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1040;
+        box-shadow: var(--bs-box-shadow-lg);
+    }
+
+    .bf-sidebar-collapsed .bf-sidebar {
+        width: 0;
+        flex-basis: 0;
+        border-right: none;
+    }
+}
+
+.bf-topbar {
+    height: var(--bf-topbar-height);
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.75rem;
+    background-color: var(--bs-body-bg);
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+.bf-topbar-search {
+    max-width: 480px;
+    flex: 1 1 auto;
+}
+
+.bf-sidebar-toggle {
+    color: var(--bs-body-color);
+    text-decoration: none;
+    padding: 0.25rem 0.4rem;
+}
+
+.bf-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+}
+
+.bf-empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--bs-secondary-color);
+}
+
+.bf-empty-state .bf-empty-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.75rem;
+    opacity: 0.55;
+}
+
+.bf-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bf-theme-list {
+    max-height: 320px;
+    overflow: auto;
+}
+
+#blazor-error-ui {
+    background: var(--bs-danger-bg-subtle, #b32121);
+    color: var(--bs-danger-text-emphasis, inherit);
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1100;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}

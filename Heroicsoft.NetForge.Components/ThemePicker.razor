@@ -1,0 +1,171 @@
+@namespace Heroicsoft.NetForge.Components
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+@inject IOptions<ForgeUiOptions> UiOptions
+
+@* Per-browser theme in localStorage. The opener lives in the topbar as ThemePickerOpener. *@
+<div class="modal fade" id="bf-theme-picker" tabindex="-1" aria-labelledby="bf-theme-picker-label"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="bf-theme-picker-label">
+                    <i class="bi bi-palette me-1"></i> Theme
+                </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="small text-body-secondary mb-2">
+                    Saved in this browser only. Click to preview, then <strong>OK</strong> to keep it, or
+                    <strong>Cancel</strong> to go back.
+                </p>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button type="button" role="tab" aria-selected="@(showDarkTab ? "true" : "false")"
+                                class="nav-link @(showDarkTab ? "active" : null)"
+                                @onclick="() => showDarkTab = true">
+                            Dark
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button type="button" role="tab" aria-selected="@(showDarkTab ? "false" : "true")"
+                                class="nav-link @(showDarkTab ? null : "active")"
+                                @onclick="() => showDarkTab = false">
+                            Light
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content pt-3">
+                    <div class="list-group bf-theme-list" role="tabpanel">
+                        @foreach (string theme in showDarkTab ? BootswatchThemes.DarkThemes : BootswatchThemes.LightThemes)
+                        {
+                            bool isPreview = string.Equals(theme, previewTheme, StringComparison.OrdinalIgnoreCase);
+                            bool isSaved = string.Equals(theme, committedTheme, StringComparison.OrdinalIgnoreCase);
+                            <button type="button"
+                                    class="list-group-item list-group-item-action d-flex align-items-center justify-content-between gap-2 @(isPreview ? "active" : null)"
+                                    @onclick="() => PreviewThemeAsync(theme)">
+                                <span>@TitleCase(theme)</span>
+                                @if (isSaved)
+                                {
+                                    <span class="badge rounded-pill ms-2">Saved</span>
+                                }
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" @onclick="CancelAsync">Cancel</button>
+                <button type="button" class="btn btn-primary" @onclick="OkAsync">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private const string ModalId = "bf-theme-picker";
+
+    private DotNetObjectReference<ThemePicker>? dotNetRef;
+    private string committedTheme = BootswatchThemes.Default;
+    private string previewTheme = BootswatchThemes.Default;
+    private bool closedWithOk;
+    private bool showDarkTab = BootswatchThemes.IsDarkColorScheme(BootswatchThemes.Default);
+
+    private ForgeUiOptions Ui => UiOptions.Value;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        dotNetRef = DotNetObjectReference.Create(this);
+
+        // Dismissing with Escape or the backdrop has to revert the preview, and Bootstrap only
+        // reports that through its own event.
+        await JS.InvokeVoidAsync("netForge.registerThemeModalDismiss", ModalId, dotNetRef);
+
+        string raw = await JS.InvokeAsync<string>("netForge.getStoredTheme", Ui.ThemeStorageKey);
+        if (BootswatchThemes.TryNormalize(raw, out string stored, Ui.DefaultTheme))
+        {
+            committedTheme = stored;
+            previewTheme = stored;
+            showDarkTab = BootswatchThemes.IsDarkColorScheme(stored);
+        }
+        else
+        {
+            BootswatchThemes.TryNormalize(Ui.DefaultTheme, out string fallback, BootswatchThemes.Default);
+            committedTheme = fallback;
+            previewTheme = fallback;
+            showDarkTab = BootswatchThemes.IsDarkColorScheme(fallback);
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task PreviewThemeAsync(string theme)
+    {
+        if (string.Equals(theme, previewTheme, StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        await ApplyThemeToDomAsync(theme);
+        StateHasChanged();
+    }
+
+    private async Task OkAsync()
+    {
+        await JS.InvokeVoidAsync("netForge.setStoredTheme", Ui.ThemeStorageKey, previewTheme);
+        committedTheme = previewTheme;
+        closedWithOk = true;
+        await JS.InvokeVoidAsync("netForge.hideModal", ModalId);
+    }
+
+    private async Task CancelAsync()
+    {
+        await ApplyThemeToDomAsync(committedTheme);
+        await JS.InvokeVoidAsync("netForge.hideModal", ModalId);
+    }
+
+    private async Task ApplyThemeToDomAsync(string theme)
+    {
+        bool isDark = BootswatchThemes.IsDarkColorScheme(theme);
+
+        await JS.InvokeVoidAsync(
+            "netForge.setThemeHref",
+            BootswatchThemes.StylesheetHref(theme, Ui.StylesheetFormat),
+            isDark ? "dark" : "light");
+
+        previewTheme = theme;
+        showDarkTab = isDark;
+    }
+
+    [JSInvokable]
+    public async Task OnThemeModalDismissed()
+    {
+        if (closedWithOk)
+        {
+            closedWithOk = false;
+            return;
+        }
+
+        if (!string.Equals(previewTheme, committedTheme, StringComparison.OrdinalIgnoreCase))
+        {
+            await ApplyThemeToDomAsync(committedTheme);
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        dotNetRef?.Dispose();
+        dotNetRef = null;
+        return ValueTask.CompletedTask;
+    }
+
+    private static string TitleCase(string value) =>
+        string.IsNullOrEmpty(value) ? value : char.ToUpperInvariant(value[0]) + value[1..];
+}

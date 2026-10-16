@@ -1,0 +1,17 @@
+@namespace Heroicsoft.NetForge.Components
+@inject DialogService Dialogs
+
+<Toaster />
+<ConfirmDialog @ref="confirmDialog" />
+<PromptDialog @ref="promptDialog" />
+
+@code {
+    private ConfirmDialog confirmDialog = default!;
+    private PromptDialog promptDialog = default!;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Dialogs.Attach(confirmDialog);
+        Dialogs.Attach(promptDialog);
+    }
+}

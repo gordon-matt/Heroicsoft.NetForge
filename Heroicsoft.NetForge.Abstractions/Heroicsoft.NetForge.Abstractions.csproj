@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<RootNamespace>Heroicsoft.NetForge.Abstractions</RootNamespace>
+		<Description>Contracts shared by Heroicsoft Blazor apps: auth modes, Bootswatch themes, navigation, setup status, and version reporting.</Description>
+	</PropertyGroup>
+
+</Project>

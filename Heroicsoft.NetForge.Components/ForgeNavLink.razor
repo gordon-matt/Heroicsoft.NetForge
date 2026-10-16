@@ -1,0 +1,33 @@
+@namespace Heroicsoft.NetForge.Components
+
+<li class="nav-item">
+    @if (Item.External)
+    {
+        <a class="nav-link" href="@Item.Href" target="_blank" rel="noopener" title="@Item.Title">
+            <i class="bi @IconClass"></i>
+            <span class="bf-truncate">@Item.Title</span>
+            <i class="bi bi-box-arrow-up-right ms-auto small"></i>
+        </a>
+    }
+    else
+    {
+        <NavLink class="nav-link" href="@Item.Href" Match="@(Item.MatchAll ? NavLinkMatch.All : NavLinkMatch.Prefix)" title="@Item.Title">
+            <i class="bi @IconClass"></i>
+            <span class="bf-truncate">@Item.Title</span>
+            @if (!string.IsNullOrEmpty(Item.Badge))
+            {
+                <span class="badge @Item.BadgeCssClass rounded-pill ms-auto">@Item.Badge</span>
+            }
+        </NavLink>
+    }
+</li>
+
+@code {
+    [Parameter, EditorRequired]
+    public ForgeNavItem Item { get; set; } = default!;
+
+    private string IconClass =>
+        Item.Icon.StartsWith("bi-", StringComparison.Ordinal) || Item.Icon.StartsWith("bi ", StringComparison.Ordinal)
+            ? Item.Icon
+            : $"bi-{Item.Icon}";
+}

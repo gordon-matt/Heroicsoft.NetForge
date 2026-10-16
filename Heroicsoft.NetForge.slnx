@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="Heroicsoft.NetForge.Abstractions/Heroicsoft.NetForge.Abstractions.csproj" />
+  <Project Path="Heroicsoft.NetForge.Authentication/Heroicsoft.NetForge.Authentication.csproj" />
+  <Project Path="Heroicsoft.NetForge.Components/Heroicsoft.NetForge.Components.csproj" />
+  <Project Path="Heroicsoft.NetForge.Hangfire/Heroicsoft.NetForge.Hangfire.csproj" />
+  <Project Path="Heroicsoft.NetForge.Results/Heroicsoft.NetForge.Results.csproj" />
+  <Project Path="Heroicsoft.NetForge.Tests/Heroicsoft.NetForge.Tests.csproj" />
+</Solution>

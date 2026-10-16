@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<RootNamespace>Heroicsoft.NetForge.Components</RootNamespace>
+		<Description>Blazor-only shell, theme picker, toasts, dialogs, and paging. The other NetForge packages are shared with MVC.</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Heroicsoft.NetForge.Abstractions\Heroicsoft.NetForge.Abstractions.csproj" />
+		<ProjectReference Include="..\Heroicsoft.NetForge.Results\Heroicsoft.NetForge.Results.csproj" />
+	</ItemGroup>
+
+</Project>
