@@ -1,19 +1,26 @@
 @namespace Heroicsoft.NetForge.Components.Bootstrap
-<div class="bf-shell @(sidebarCollapsed ? "bf-sidebar-collapsed" : null)">
-    @if (Sidebar is not null)
+<div class="bf-shell @(sidebarCollapsed ? "bf-sidebar-collapsed" : null) @(NavigationPlacement == ForgeNavigationPlacement.Topbar ? "bf-shell-topnav" : null)">
+    @if (NavigationPlacement != ForgeNavigationPlacement.Topbar)
     {
-        @Sidebar
-    }
-    else
-    {
-        <Heroicsoft.NetForge.Components.Bootstrap.ForgeSidebar Sections="Sections" Brand="@Brand" BrandHref="@BrandHref"
-                      LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl" MarkUrl="@MarkUrl"
-                      BrandContent="BrandContent" />
+        @if (Sidebar is not null)
+        {
+            @Sidebar
+        }
+        else
+        {
+            <Heroicsoft.NetForge.Components.Bootstrap.ForgeSidebar Sections="Sections" Brand="@Brand" BrandHref="@BrandHref"
+                          LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl" MarkUrl="@MarkUrl"
+                          BrandContent="BrandContent" />
+        }
     }
 
     <div class="bf-main">
         <Heroicsoft.NetForge.Components.Bootstrap.ForgeTopbar ShowSearch="ShowSearch" SearchPlaceholder="@SearchPlaceholder"
-                     OnSearch="OnSearch" OnToggleSidebar="ToggleSidebar" ShowThemePicker="ShowThemePicker"
+                     OnSearch="OnSearch" OnToggleSidebar="ToggleSidebar"
+                     ShowSidebarToggle="@(NavigationPlacement != ForgeNavigationPlacement.Topbar)"
+                     Sections="@(NavigationPlacement == ForgeNavigationPlacement.Topbar ? Sections : [])"
+                     Brand="@Brand" BrandHref="@BrandHref" LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl"
+                     ShowThemePicker="ShowThemePicker"
                      ShowUserMenu="ShowUserMenu" UserMenuItems="UserMenuItems">
             @TopbarEnd
         </Heroicsoft.NetForge.Components.Bootstrap.ForgeTopbar>
@@ -67,6 +74,10 @@
 
     [Parameter]
     public IReadOnlyList<ForgeNavSection> Sections { get; set; } = [];
+
+    /// <summary>Sidebar is the default. Topbar draws <see cref="Sections"/> in the header instead.</summary>
+    [Parameter]
+    public ForgeNavigationPlacement NavigationPlacement { get; set; } = ForgeNavigationPlacement.Sidebar;
 
     /// <summary>Replaces the generated sidebar. Use this when the nav is data the page owns.</summary>
     [Parameter]

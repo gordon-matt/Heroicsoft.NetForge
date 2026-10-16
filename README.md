@@ -71,7 +71,7 @@ if (auth == AuthProvider.Identity)
 
 `Authentication:Provider` is `Identity`, `Keycloak`, or `None`, with the same `Authentication:Keycloak` keys the other apps already use. `None` signs every request in as a single administrator and must not be exposed beyond the machine running it.
 
-Pages inject `ToastService`, `DialogService`, and `SidebarRefresh` instead of copying those types. `ShellLayout` is the default layout: set `ForgeShellOptions.Sections` for a static menu, or register `IShellNavigation` when the sidebar is loaded from data and call `SidebarRefresh.NotifyChanged()` after a write.
+Pages inject `ToastService`, `DialogService`, and `SidebarRefresh` instead of copying those types. `ShellLayout` is the default layout: set `ForgeShellOptions.Sections` for a static menu, or register `IShellNavigation` when the sidebar is loaded from data and call `SidebarRefresh.NotifyChanged()` after a write. Set `NavigationPlacement` to `Topbar` when those links belong in the header and the app should not render a sidebar.
 
 Hangfire hosts add `Heroicsoft.NetForge.Hangfire` and pass `new AdministratorDashboardAuthorizationFilter()` in the dashboard options.
 

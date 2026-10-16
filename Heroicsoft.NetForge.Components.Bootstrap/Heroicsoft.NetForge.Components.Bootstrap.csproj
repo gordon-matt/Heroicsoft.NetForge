@@ -4,7 +4,7 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<RootNamespace>Heroicsoft.NetForge.Components.Bootstrap</RootNamespace>
 		<Description>Bootstrap and Bootswatch implementation of the NetForge Blazor shell, theme picker, toasts, dialogs, paging, and status pages. For apps that already use Bootstrap; apps with their own styling use Heroicsoft.NetForge.Components.</Description>
-		<Version>1.0.1</Version>
+		<Version>1.0.2</Version>
 	</PropertyGroup>
 
 	<ItemGroup>

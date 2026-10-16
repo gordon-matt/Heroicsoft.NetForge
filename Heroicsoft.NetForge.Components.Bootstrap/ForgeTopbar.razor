@@ -2,10 +2,77 @@
 @inject IAuthProviderService Auth
 
 <header class="bf-topbar">
-    <button type="button" class="btn btn-sm btn-link bf-sidebar-toggle" title="Toggle sidebar"
-            @onclick="OnToggleSidebar">
-        <i class="bi bi-list fs-4"></i>
-    </button>
+    @if (ShowSidebarToggle)
+    {
+        <button type="button" class="btn btn-sm btn-link bf-sidebar-toggle" title="Toggle sidebar"
+                @onclick="OnToggleSidebar">
+            <i class="bi bi-list fs-4"></i>
+        </button>
+    }
+    else if (Brand is not null || LogoUrl is not null)
+    {
+        <a class="bf-sidebar-brand-link bf-topbar-brand" href="@BrandHref">
+            @if (LogoUrl is not null)
+            {
+                <img class="bf-brand-logo" src="@LogoUrl" alt="@Brand" />
+            }
+            @if (LogoDarkUrl is not null)
+            {
+                <img class="bf-brand-logo-dark" src="@LogoDarkUrl" alt="@Brand" />
+            }
+            @if (LogoUrl is null && LogoDarkUrl is null)
+            {
+                <span class="bf-brand-text">@Brand</span>
+            }
+        </a>
+        <button type="button" class="btn btn-sm btn-link bf-sidebar-toggle d-md-none" title="Menu"
+                @onclick="() => navOpen = !navOpen">
+            <i class="bi bi-list fs-4"></i>
+        </button>
+    }
+
+    @if (Sections.Count > 0)
+    {
+        <ul class="nav bf-topnav @(navOpen ? "is-open" : null)">
+            @foreach (var section in Sections)
+            {
+                @if (string.IsNullOrEmpty(section.Roles))
+                {
+                    @foreach (var item in section.Items)
+                    {
+                        @if (string.IsNullOrEmpty(item.Roles))
+                        {
+                            <Heroicsoft.NetForge.Components.Bootstrap.ForgeNavLink Item="item" />
+                        }
+                        else
+                        {
+                            <AuthorizeView Roles="@item.Roles">
+                                <Heroicsoft.NetForge.Components.Bootstrap.ForgeNavLink Item="item" />
+                            </AuthorizeView>
+                        }
+                    }
+                }
+                else
+                {
+                    <AuthorizeView Roles="@section.Roles" Context="sectionUser">
+                        @foreach (var item in section.Items)
+                        {
+                            @if (string.IsNullOrEmpty(item.Roles))
+                            {
+                                <Heroicsoft.NetForge.Components.Bootstrap.ForgeNavLink Item="item" />
+                            }
+                            else
+                            {
+                                <AuthorizeView Roles="@item.Roles" Context="itemUser">
+                                    <Heroicsoft.NetForge.Components.Bootstrap.ForgeNavLink Item="item" />
+                                </AuthorizeView>
+                            }
+                        }
+                    </AuthorizeView>
+                }
+            }
+        </ul>
+    }
 
     @if (ShowSearch)
     {
@@ -80,6 +147,24 @@
     public EventCallback OnToggleSidebar { get; set; }
 
     [Parameter]
+    public bool ShowSidebarToggle { get; set; } = true;
+
+    [Parameter]
+    public IReadOnlyList<ForgeNavSection> Sections { get; set; } = [];
+
+    [Parameter]
+    public string? Brand { get; set; }
+
+    [Parameter]
+    public string BrandHref { get; set; } = "/";
+
+    [Parameter]
+    public string? LogoUrl { get; set; }
+
+    [Parameter]
+    public string? LogoDarkUrl { get; set; }
+
+    [Parameter]
     public bool ShowSearch { get; set; }
 
     [Parameter]
@@ -107,6 +192,8 @@
     public RenderFragment? ChildContent { get; set; }
 
     private string searchTerm = string.Empty;
+
+    private bool navOpen;
 
     private string LogoutUrl => Auth.Provider == AuthProvider.Keycloak
         ? "/auth/logout"

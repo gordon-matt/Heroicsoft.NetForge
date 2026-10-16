@@ -225,6 +225,65 @@ body:has(.bf-shell) {
     padding: 0.25rem 0.4rem;
 }
 
+/* Top-bar navigation: the same sections, without a sidebar. */
+.bf-shell-topnav .bf-topbar {
+    height: auto;
+    min-height: var(--bf-topbar-height);
+    flex-wrap: wrap;
+    background-color: var(--bs-tertiary-bg);
+}
+
+.bf-topbar-brand {
+    flex: 0 0 auto;
+    margin-right: 0.25rem;
+}
+
+.bf-topbar-brand .bf-brand-logo,
+.bf-topbar-brand .bf-brand-logo-dark {
+    height: 40px;
+}
+
+.bf-topnav {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.bf-topnav .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-left: none;
+    border-radius: var(--bs-border-radius);
+    padding: 0.35rem 0.7rem;
+    color: var(--bs-body-color);
+    white-space: nowrap;
+}
+
+.bf-topnav .nav-link.active {
+    border-left-color: transparent;
+    background-color: var(--bs-secondary-bg);
+    color: var(--bs-primary);
+}
+
+@media (max-width: 767.98px) {
+    .bf-topnav {
+        display: none;
+        flex-basis: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        padding-bottom: 0.4rem;
+    }
+
+    .bf-topnav.is-open { display: flex; }
+}
+
 .bf-page-header {
     display: flex;
     justify-content: space-between;

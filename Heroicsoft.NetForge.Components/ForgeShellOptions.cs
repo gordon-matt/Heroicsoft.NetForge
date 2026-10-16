@@ -38,5 +38,19 @@ public sealed class ForgeShellOptions
 
     public string? Version { get; set; }
 
+    /// <summary>
+    /// Where <see cref="Sections"/> are rendered. <see cref="ForgeNavigationPlacement.Sidebar"/> is
+    /// the default. <see cref="ForgeNavigationPlacement.Topbar"/> keeps the links in the top bar
+    /// and does not render a sidebar.
+    /// </summary>
+    public ForgeNavigationPlacement NavigationPlacement { get; set; } = ForgeNavigationPlacement.Sidebar;
+
     public List<ForgeNavSection> Sections { get; set; } = [];
+}
+
+/// <summary>Where the shell draws <see cref="ForgeShellOptions.Sections"/>.</summary>
+public enum ForgeNavigationPlacement
+{
+    Sidebar = 0,
+    Topbar = 1,
 }
