@@ -40,6 +40,13 @@
             }
         }
     </div>
+
+    @if (SidebarFooter is not null)
+    {
+        <div class="bf-sidebar-footer border-top p-2">
+            @SidebarFooter
+        </div>
+    }
 </nav>
 
 @code {
@@ -63,4 +70,8 @@
 
     [Parameter]
     public RenderFragment? BrandContent { get; set; }
+
+    /// <summary>Pinned under the links.</summary>
+    [Parameter]
+    public RenderFragment? SidebarFooter { get; set; }
 }

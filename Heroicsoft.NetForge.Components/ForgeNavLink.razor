@@ -1,19 +1,62 @@
+@inject NavigationManager Navigation
+@implements IDisposable
+
 <li class="nf-nav-item">
     @if (Item.External)
     {
-        <a class="nf-nav-link" href="@Item.Href" target="_blank" rel="noopener noreferrer" title="@Item.Title">
-            <Icon Name="@Item.Icon" />
+        <a class="nf-nav-link" href="@Item.Href" target="_blank" rel="noopener noreferrer" title="@Tip">
+            @if (Item.TagIcon)
+            {
+                <span class="nf-tag-icon" aria-hidden="true"></span>
+            }
+            else
+            {
+                <Icon Name="@Item.Icon" />
+            }
             <span class="nf-nav-label">@Item.Title</span>
             <Icon Name="external" Size="14" Class="nf-nav-external" />
+        </a>
+    }
+    else if (UsesQuery)
+    {
+        <a class="nf-nav-link @(IsCurrent ? "is-active" : null)" href="@Item.Href" title="@Tip">
+            @if (Item.TagIcon)
+            {
+                <span class="nf-tag-icon" aria-hidden="true"></span>
+            }
+            else
+            {
+                <Icon Name="@Item.Icon" />
+            }
+            <span class="nf-nav-label">@Item.Title</span>
+            @if (Item.Count is int queryCount)
+            {
+                <span class="nf-nav-count">@queryCount.ToString("N0")</span>
+            }
+            else if (!string.IsNullOrEmpty(Item.Badge))
+            {
+                <span class="nf-badge nf-nav-badge @ForgeBadge.ToneClass(Item.BadgeCssClass)">@Item.Badge</span>
+            }
         </a>
     }
     else
     {
         <NavLink class="nf-nav-link" ActiveClass="active" href="@Item.Href"
-                 Match="@(Item.MatchAll ? NavLinkMatch.All : NavLinkMatch.Prefix)" title="@Item.Title">
-            <Icon Name="@Item.Icon" />
+                 Match="@(Item.MatchAll ? NavLinkMatch.All : NavLinkMatch.Prefix)" title="@Tip">
+            @if (Item.TagIcon)
+            {
+                <span class="nf-tag-icon" aria-hidden="true"></span>
+            }
+            else
+            {
+                <Icon Name="@Item.Icon" />
+            }
             <span class="nf-nav-label">@Item.Title</span>
-            @if (!string.IsNullOrEmpty(Item.Badge))
+            @if (Item.Count is int count)
+            {
+                <span class="nf-nav-count">@count.ToString("N0")</span>
+            }
+            else if (!string.IsNullOrEmpty(Item.Badge))
             {
                 <span class="nf-badge nf-nav-badge @ForgeBadge.ToneClass(Item.BadgeCssClass)">@Item.Badge</span>
             }
@@ -24,4 +67,23 @@
 @code {
     [Parameter, EditorRequired]
     public ForgeNavItem Item { get; set; } = default!;
+
+    private bool UsesQuery => Item.ActiveQuery is not null || Item.ActivePaths is not null;
+
+    private string Tip => string.IsNullOrWhiteSpace(Item.Tooltip) ? Item.Title : Item.Tooltip;
+
+    private bool IsCurrent =>
+        ForgeNavMatch.IsCurrent(Item, Navigation.ToBaseRelativePath(Navigation.Uri));
+
+    protected override void OnInitialized()
+    {
+        if (UsesQuery)
+        {
+            Navigation.LocationChanged += OnLocationChanged;
+        }
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs args) => InvokeAsync(StateHasChanged);
+
+    public void Dispose() => Navigation.LocationChanged -= OnLocationChanged;
 }

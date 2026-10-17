@@ -4,7 +4,7 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<RootNamespace>Heroicsoft.NetForge.Components</RootNamespace>
 		<Description>Blazor shell, dialogs, toasts, and status pages in the unified NetForge (nf-) style, plus the toast, dialog, and sidebar services that Heroicsoft.NetForge.Components.Bootstrap shares. Blazor only; the other NetForge packages are shared with MVC.</Description>
-		<Version>1.0.2</Version>
+		<Version>1.0.3-beta</Version>
 	</PropertyGroup>
 
 	<ItemGroup>

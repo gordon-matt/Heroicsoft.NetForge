@@ -17,7 +17,7 @@
     <div class="nf-scrim" @onclick="CloseSidebar"></div>
 
     <div class="nf-main">
-        <ForgeTopbar ShowSearch="ShowSearch" SearchPlaceholder="@SearchPlaceholder"
+        <ForgeTopbar ShowSearch="ShowSearch" SearchPlaceholder="@SearchPlaceholder" SearchText="@SearchText"
                      OnSearch="OnSearch" OnToggleSidebar="ToggleSidebar" ShowThemePicker="ShowThemePicker"
                      ShowUserMenu="ShowUserMenu" UserMenuItems="UserMenuItems">
             @TopbarEnd
@@ -83,6 +83,10 @@
 
     [Parameter]
     public string SearchPlaceholder { get; set; } = "Search";
+
+    /// <summary>The term currently in the address bar. The box copies this when the page changes.</summary>
+    [Parameter]
+    public string SearchText { get; set; } = "";
 
     [Parameter]
     public EventCallback<string> OnSearch { get; set; }

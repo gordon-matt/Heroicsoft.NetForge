@@ -11,7 +11,7 @@
         <form class="nf-search" role="search" @onsubmit="SubmitSearch" @onsubmit:preventDefault="true">
             <Icon Name="search" />
             <input type="search" data-nf-search placeholder="@SearchPlaceholder" aria-label="@SearchPlaceholder"
-                   autocomplete="off" @bind="searchTerm" @bind:event="oninput" />
+                   autocomplete="off" value="@searchTerm" @oninput="OnInput" />
             <kbd aria-hidden="true">/</kbd>
         </form>
     }
@@ -81,6 +81,9 @@
     public string SearchPlaceholder { get; set; } = "Search";
 
     [Parameter]
+    public string SearchText { get; set; } = "";
+
+    [Parameter]
     public EventCallback<string> OnSearch { get; set; }
 
     /// <summary>Shows the light or dark toggle. The name matches the Bootstrap topbar.</summary>
@@ -103,7 +106,17 @@
     public RenderFragment? ChildContent { get; set; }
 
     private string searchTerm = string.Empty;
+    private string appliedSearchText = string.Empty;
     private bool menuOpen;
+
+    protected override void OnParametersSet()
+    {
+        if (!string.Equals(SearchText, appliedSearchText, StringComparison.Ordinal))
+        {
+            appliedSearchText = SearchText ?? string.Empty;
+            searchTerm = appliedSearchText;
+        }
+    }
 
     private string LogoutUrl => Auth.Provider == AuthProvider.Keycloak
         ? "/auth/logout"
@@ -128,13 +141,16 @@
         }
     }
 
-    private async Task SubmitSearch()
+    private async Task OnInput(ChangeEventArgs args)
     {
-        if (string.IsNullOrWhiteSpace(searchTerm))
-        {
-            return;
-        }
+        searchTerm = args.Value?.ToString() ?? string.Empty;
 
-        await OnSearch.InvokeAsync(searchTerm.Trim());
+        // The search box's clear button empties the field without submitting the form.
+        if (searchTerm.Length == 0)
+        {
+            await SubmitSearch();
+        }
     }
+
+    private Task SubmitSearch() => OnSearch.InvokeAsync(searchTerm.Trim());
 }

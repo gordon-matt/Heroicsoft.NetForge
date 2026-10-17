@@ -4,8 +4,8 @@ namespace Heroicsoft.NetForge.Components.Shell;
 
 /// <summary>
 /// Static shell content, shared by the nf and Bootstrap component sets. Dynamic sidebars
-/// implement <see cref="IShellNavigation"/> instead; when that service is registered it replaces
-/// <see cref="Sections"/>.
+/// implement <see cref="IShellNavigation"/> instead; when that service is registered its sections
+/// replace <see cref="Sections"/>.
 /// </summary>
 public sealed class ForgeShellOptions
 {
@@ -46,6 +46,12 @@ public sealed class ForgeShellOptions
     public ForgeNavigationPlacement NavigationPlacement { get; set; } = ForgeNavigationPlacement.Sidebar;
 
     public List<ForgeNavSection> Sections { get; set; } = [];
+
+    /// <summary>Component rendered at the end of the top bar, before the user menu. A notification bell, for example.</summary>
+    public Type? TopbarEndComponent { get; set; }
+
+    /// <summary>Component pinned at the bottom of the generated sidebar.</summary>
+    public Type? SidebarFooterComponent { get; set; }
 }
 
 /// <summary>Where the shell draws <see cref="ForgeShellOptions.Sections"/>.</summary>

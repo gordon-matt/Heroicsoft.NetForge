@@ -10,12 +10,13 @@
         {
             <Heroicsoft.NetForge.Components.Bootstrap.ForgeSidebar Sections="Sections" Brand="@Brand" BrandHref="@BrandHref"
                           LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl" MarkUrl="@MarkUrl"
-                          BrandContent="BrandContent" />
+                          BrandContent="BrandContent" SidebarFooter="SidebarFooter" />
         }
     }
 
     <div class="bf-main">
         <Heroicsoft.NetForge.Components.Bootstrap.ForgeTopbar ShowSearch="ShowSearch" SearchPlaceholder="@SearchPlaceholder"
+                     SearchText="@SearchText"
                      OnSearch="OnSearch" OnToggleSidebar="ToggleSidebar"
                      ShowSidebarToggle="@(NavigationPlacement != ForgeNavigationPlacement.Topbar)"
                      Sections="@(NavigationPlacement == ForgeNavigationPlacement.Topbar ? Sections : [])"
@@ -83,11 +84,19 @@
     [Parameter]
     public RenderFragment? Sidebar { get; set; }
 
+    /// <summary>Pinned at the bottom of the generated sidebar.</summary>
+    [Parameter]
+    public RenderFragment? SidebarFooter { get; set; }
+
     [Parameter]
     public bool ShowSearch { get; set; }
 
     [Parameter]
     public string SearchPlaceholder { get; set; } = "Search";
+
+    /// <summary>The term currently in the address bar. The box copies this when the page changes.</summary>
+    [Parameter]
+    public string SearchText { get; set; } = "";
 
     [Parameter]
     public EventCallback<string> OnSearch { get; set; }
