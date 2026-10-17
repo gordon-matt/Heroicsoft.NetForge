@@ -315,6 +315,40 @@ kbd {
     margin-left: auto;
 }
 
+.nf-topbar-brand { flex: 0 0 auto; }
+.nf-topbar-brand .nf-brand-logo,
+.nf-topbar-brand .nf-brand-logo-dark { height: 40px; }
+
+/* Top-bar navigation: the same sections, without a sidebar. A heading becomes a menu. */
+.nf-shell-topnav .nf-topbar {
+    height: auto;
+    min-height: var(--nf-topbar-height);
+    flex-wrap: wrap;
+}
+
+.nf-topnav {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    gap: 0.1rem;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nf-topnav .nf-nav-link {
+    height: 34px;
+    padding: 0 0.7rem;
+}
+
+.nf-topnav .nf-menu-list.is-start { left: 0; right: auto; }
+
+.nf-shell-topnav .nf-topnav-toggle { display: none; }
+
+.nf-menu-item.is-active { background: var(--nf-selected); color: var(--nf-accent); font-weight: 600; }
+
 .nf-search {
     display: flex;
     align-items: center;
@@ -966,6 +1000,16 @@ kbd {
     .nf-sidebar-open .nf-scrim { position: fixed; inset: 0; z-index: 34; display: block; background: var(--nf-scrim); }
 
     .nf-content { padding: 1rem; }
+
+    .nf-shell-topnav .nf-topnav-toggle { display: inline-flex; }
+    .nf-shell-topnav .nf-topnav {
+        display: none;
+        flex-basis: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        padding-bottom: 0.4rem;
+    }
+    .nf-shell-topnav .nf-topnav.is-open { display: flex; }
     .nf-split { grid-template-columns: minmax(0, 1fr); }
     .nf-search kbd,
     .nf-menu-name { display: none; }

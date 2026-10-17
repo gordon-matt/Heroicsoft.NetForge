@@ -38,36 +38,12 @@
             {
                 @if (string.IsNullOrEmpty(section.Roles))
                 {
-                    @foreach (var item in section.Items)
-                    {
-                        @if (string.IsNullOrEmpty(item.Roles))
-                        {
-                            <Heroicsoft.NetForge.Components.Bootstrap.ForgeNavLink Item="item" />
-                        }
-                        else
-                        {
-                            <AuthorizeView Roles="@item.Roles">
-                                <Heroicsoft.NetForge.Components.Bootstrap.ForgeNavLink Item="item" />
-                            </AuthorizeView>
-                        }
-                    }
+                    <Heroicsoft.NetForge.Components.Bootstrap.ForgeNavMenu Section="section" />
                 }
                 else
                 {
-                    <AuthorizeView Roles="@section.Roles" Context="sectionUser">
-                        @foreach (var item in section.Items)
-                        {
-                            @if (string.IsNullOrEmpty(item.Roles))
-                            {
-                                <Heroicsoft.NetForge.Components.Bootstrap.ForgeNavLink Item="item" />
-                            }
-                            else
-                            {
-                                <AuthorizeView Roles="@item.Roles" Context="itemUser">
-                                    <Heroicsoft.NetForge.Components.Bootstrap.ForgeNavLink Item="item" />
-                                </AuthorizeView>
-                            }
-                        }
+                    <AuthorizeView Roles="@section.Roles">
+                        <Heroicsoft.NetForge.Components.Bootstrap.ForgeNavMenu Section="section" />
                     </AuthorizeView>
                 }
             }

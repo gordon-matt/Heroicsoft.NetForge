@@ -1,16 +1,19 @@
 @implements IDisposable
 @inject NavigationManager Navigation
 
-<div class="nf-shell @(sidebarCollapsed ? "nf-sidebar-collapsed" : null) @(sidebarOpen ? "nf-sidebar-open" : null)">
-    @if (Sidebar is not null)
+<div class="nf-shell @(sidebarCollapsed ? "nf-sidebar-collapsed" : null) @(sidebarOpen ? "nf-sidebar-open" : null) @(NavigationPlacement == ForgeNavigationPlacement.Topbar ? "nf-shell-topnav" : null)">
+    @if (NavigationPlacement != ForgeNavigationPlacement.Topbar)
     {
-        @Sidebar
-    }
-    else
-    {
-        <ForgeSidebar Sections="Sections" Brand="@Brand" BrandHref="@BrandHref"
-                      LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl" MarkUrl="@MarkUrl"
-                      BrandContent="BrandContent" SidebarFooter="SidebarFooter" />
+        @if (Sidebar is not null)
+        {
+            @Sidebar
+        }
+        else
+        {
+            <ForgeSidebar Sections="Sections" Brand="@Brand" BrandHref="@BrandHref"
+                          LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl" MarkUrl="@MarkUrl"
+                          BrandContent="BrandContent" SidebarFooter="SidebarFooter" />
+        }
     }
 
     @* Only visible while the off-canvas sidebar is open on a narrow screen. *@
@@ -19,6 +22,9 @@
     <div class="nf-main">
         <ForgeTopbar ShowSearch="ShowSearch" SearchPlaceholder="@SearchPlaceholder" SearchText="@SearchText"
                      OnSearch="OnSearch" OnToggleSidebar="ToggleSidebar" ShowThemePicker="ShowThemePicker"
+                     ShowSidebarToggle="@(NavigationPlacement != ForgeNavigationPlacement.Topbar)"
+                     Sections="@(NavigationPlacement == ForgeNavigationPlacement.Topbar ? Sections : [])"
+                     Brand="@Brand" BrandHref="@BrandHref" LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl"
                      ShowUserMenu="ShowUserMenu" UserMenuItems="UserMenuItems">
             @TopbarEnd
         </ForgeTopbar>
@@ -69,6 +75,10 @@
 
     [Parameter]
     public IReadOnlyList<ForgeNavSection> Sections { get; set; } = [];
+
+    /// <summary>Sidebar is the default. Topbar draws <see cref="Sections"/> in the header instead.</summary>
+    [Parameter]
+    public ForgeNavigationPlacement NavigationPlacement { get; set; } = ForgeNavigationPlacement.Sidebar;
 
     /// <summary>Replaces the generated sidebar. Use this when the nav is data the page owns.</summary>
     [Parameter]

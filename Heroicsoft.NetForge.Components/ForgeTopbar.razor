@@ -1,10 +1,53 @@
 @inject IAuthProviderService Auth
 
 <header class="nf-topbar">
-    <button type="button" class="nf-icon-button nf-sidebar-toggle" title="Toggle sidebar"
-            aria-label="Toggle sidebar" aria-controls="nf-sidebar" @onclick="OnToggleSidebar">
-        <Icon Name="menu" />
-    </button>
+    @if (ShowSidebarToggle)
+    {
+        <button type="button" class="nf-icon-button nf-sidebar-toggle" title="Toggle sidebar"
+                aria-label="Toggle sidebar" aria-controls="nf-sidebar" @onclick="OnToggleSidebar">
+            <Icon Name="menu" />
+        </button>
+    }
+    else if (LogoUrl is not null || !string.IsNullOrWhiteSpace(Brand))
+    {
+        <a class="nf-brand-link nf-topbar-brand" href="@BrandHref">
+            @if (LogoUrl is not null)
+            {
+                <img class="nf-brand-logo @(LogoDarkUrl is not null ? "nf-has-dark" : null)" src="@LogoUrl" alt="@Brand" />
+                @if (LogoDarkUrl is not null)
+                {
+                    <img class="nf-brand-logo-dark" src="@LogoDarkUrl" alt="@Brand" />
+                }
+            }
+            else
+            {
+                <span class="nf-brand-text">@Brand</span>
+            }
+        </a>
+    }
+
+    @if (Sections.Count > 0)
+    {
+        <button type="button" class="nf-icon-button nf-topnav-toggle" title="Menu" aria-expanded="@navOpen"
+                @onclick="() => navOpen = !navOpen">
+            <Icon Name="menu" />
+        </button>
+        <ul class="nf-topnav @(navOpen ? "is-open" : null)">
+            @foreach (var section in Sections)
+            {
+                @if (string.IsNullOrEmpty(section.Roles))
+                {
+                    <ForgeNavMenu Section="section" />
+                }
+                else
+                {
+                    <AuthorizeView Roles="@section.Roles">
+                        <ForgeNavMenu Section="section" />
+                    </AuthorizeView>
+                }
+            }
+        </ul>
+    }
 
     @if (ShowSearch)
     {
@@ -75,6 +118,24 @@
     public EventCallback OnToggleSidebar { get; set; }
 
     [Parameter]
+    public bool ShowSidebarToggle { get; set; } = true;
+
+    [Parameter]
+    public IReadOnlyList<ForgeNavSection> Sections { get; set; } = [];
+
+    [Parameter]
+    public string? Brand { get; set; }
+
+    [Parameter]
+    public string BrandHref { get; set; } = "/";
+
+    [Parameter]
+    public string? LogoUrl { get; set; }
+
+    [Parameter]
+    public string? LogoDarkUrl { get; set; }
+
+    [Parameter]
     public bool ShowSearch { get; set; }
 
     [Parameter]
@@ -108,6 +169,7 @@
     private string searchTerm = string.Empty;
     private string appliedSearchText = string.Empty;
     private bool menuOpen;
+    private bool navOpen;
 
     protected override void OnParametersSet()
     {

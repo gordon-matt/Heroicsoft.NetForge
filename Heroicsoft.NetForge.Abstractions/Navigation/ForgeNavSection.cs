@@ -1,6 +1,9 @@
 namespace Heroicsoft.NetForge.Abstractions.Navigation;
 
-/// <summary>A labelled group of sidebar links. A null heading renders the items with no label.</summary>
+/// <summary>
+/// A labelled group of links. A null heading renders the items with no label.
+/// In the top bar, a heading becomes a menu that holds the items.
+/// </summary>
 public sealed class ForgeNavSection
 {
     public string? Heading { get; init; }
