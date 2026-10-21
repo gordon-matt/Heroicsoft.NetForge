@@ -6,6 +6,16 @@ window.netForge = {
         return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
     },
 
+    /** The key theme-init.js is currently reading and writing. Empty before that script runs. */
+    currentStorageKey: function () {
+        return document.documentElement.getAttribute('data-nf-storage-key') || '';
+    },
+
+    /** The area whose theme is applied. Empty string is the default area (the public site). */
+    currentThemeArea: function () {
+        return document.documentElement.getAttribute('data-nf-theme-area') || '';
+    },
+
     /**
      * Applies and stores a scheme. Raises 'nf:themechange' on document so an app can react, for
      * example by swapping a syntax-highlighting stylesheet.
@@ -22,7 +32,13 @@ window.netForge = {
             }
         }
 
-        document.dispatchEvent(new CustomEvent('nf:themechange', { detail: { theme: theme } }));
+        document.dispatchEvent(new CustomEvent('nf:themechange', {
+            detail: {
+                theme: theme,
+                area: document.documentElement.getAttribute('data-nf-theme-area') || '',
+                storageKey: key || ''
+            }
+        }));
     },
 
     toggleTheme: function (key) {
@@ -47,7 +63,10 @@ window.netForge = {
 document.addEventListener('click', function (event) {
     var toggle = event.target.closest && event.target.closest('[data-nf-theme-toggle]');
     if (toggle) {
-        window.netForge.toggleTheme(toggle.getAttribute('data-theme-key'));
+        // Prefer the live key. Client-side navigation between areas updates it without
+        // re-rendering this button.
+        var key = document.documentElement.getAttribute('data-nf-storage-key') || toggle.getAttribute('data-theme-key');
+        window.netForge.toggleTheme(key);
     }
 });
 

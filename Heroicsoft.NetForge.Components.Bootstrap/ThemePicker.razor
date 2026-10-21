@@ -67,6 +67,7 @@
     private const string ModalId = "bf-theme-picker";
 
     private DotNetObjectReference<ThemePicker>? dotNetRef;
+    private string activeKey = "";
     private string committedTheme = BootswatchThemes.Default;
     private string previewTheme = BootswatchThemes.Default;
     private bool closedWithOk;
@@ -86,23 +87,31 @@
         // Dismissing with Escape or the backdrop has to revert the preview, and Bootstrap only
         // reports that through its own event.
         await JS.InvokeVoidAsync("netForge.registerThemeModalDismiss", ModalId, dotNetRef);
-
-        string raw = await JS.InvokeAsync<string>("netForge.getStoredTheme", Ui.ThemeStorageKey);
-        if (BootswatchThemes.TryNormalize(raw, out string stored, Ui.DefaultTheme))
-        {
-            committedTheme = stored;
-            previewTheme = stored;
-            showDarkTab = BootswatchThemes.IsDarkColorScheme(stored);
-        }
-        else
-        {
-            BootswatchThemes.TryNormalize(Ui.DefaultTheme, out string fallback, BootswatchThemes.Default);
-            committedTheme = fallback;
-            previewTheme = fallback;
-            showDarkTab = BootswatchThemes.IsDarkColorScheme(fallback);
-        }
-
+        await LoadStoredThemeAsync();
         StateHasChanged();
+    }
+
+    private async Task LoadStoredThemeAsync()
+    {
+        activeKey = await StorageKeyAsync();
+        string area = await JS.InvokeAsync<string>("netForge.currentThemeArea");
+        string configured = ThemeStorage.ValueFor(area, Ui.Areas, Ui.DefaultTheme);
+        if (!BootswatchThemes.TryNormalize(configured, out string fallback, BootswatchThemes.Default))
+        {
+            fallback = BootswatchThemes.Default;
+        }
+
+        string raw = await JS.InvokeAsync<string>("netForge.getStoredTheme", activeKey);
+        BootswatchThemes.TryNormalize(raw, out string stored, fallback);
+        committedTheme = stored;
+        previewTheme = stored;
+        showDarkTab = BootswatchThemes.IsDarkColorScheme(stored);
+    }
+
+    private async Task<string> StorageKeyAsync()
+    {
+        string live = await JS.InvokeAsync<string>("netForge.currentStorageKey");
+        return string.IsNullOrEmpty(live) ? ThemeStorage.KeyFor(Ui.ThemeStorageKey, null) : live;
     }
 
     private async Task PreviewThemeAsync(string theme)
@@ -118,7 +127,7 @@
 
     private async Task OkAsync()
     {
-        await JS.InvokeVoidAsync("netForge.setStoredTheme", Ui.ThemeStorageKey, previewTheme);
+        await JS.InvokeVoidAsync("netForge.setStoredTheme", activeKey, previewTheme);
         committedTheme = previewTheme;
         closedWithOk = true;
         await JS.InvokeVoidAsync("netForge.hideModal", ModalId);
@@ -141,6 +150,20 @@
 
         previewTheme = theme;
         showDarkTab = isDark;
+    }
+
+    /// <summary>Reloads when navigation has moved the page into another area.</summary>
+    [JSInvokable]
+    public async Task OnThemeModalOpening()
+    {
+        string live = await JS.InvokeAsync<string>("netForge.currentStorageKey");
+        if (string.IsNullOrEmpty(live) || string.Equals(live, activeKey, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        await LoadStoredThemeAsync();
+        await InvokeAsync(StateHasChanged);
     }
 
     [JSInvokable]

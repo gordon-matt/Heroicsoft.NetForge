@@ -2,7 +2,7 @@
 @inject IOptions<ForgeBootstrapOptions> UiOptions
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="@(BootswatchThemes.IsDarkColorScheme(InitialTheme) ? "dark" : "light")">
+<html lang="en" data-bs-theme="@InitialScheme" data-theme="@InitialScheme" data-nf-storage-key="@StorageKey" data-nf-theme-area="@ResolvedArea">
 
 <head>
     <meta charset="utf-8" />
@@ -14,7 +14,9 @@
     <link id="theme-stylesheet" rel="stylesheet" href="@BootswatchThemes.StylesheetHref(InitialTheme, Ui.StylesheetFormat)" />
     <script src="@Assets[$"{AssetBase}/js/theme-init.js"]"
             data-theme-key="@Ui.ThemeStorageKey"
-            data-default-theme="@InitialTheme"
+            data-default-theme="@DefaultThemeName"
+            data-theme-areas="@AreasAttribute"
+            data-theme-area="@PinnedArea"
             data-stylesheet-format="@Ui.StylesheetFormat"></script>
     <link rel="stylesheet" href="@Ui.IconsStylesheetPath" />
     <link rel="stylesheet" href="@Assets[$"{AssetBase}/css/forge.css"]" />
@@ -65,6 +67,18 @@
     public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
+    /// Pins this document to an area. Null follows the route, or the first path segment when that
+    /// name is listed in <see cref="ForgeBootstrapOptions.Areas"/>. An empty string is the public site.
+    /// Set this when a library is mounted somewhere other than <c>/{area}</c>, for example
+    /// IdentityNexus at <c>/identity</c> while it should use the Admin theme.
+    /// </summary>
+    [Parameter]
+    public string? Area { get; set; }
+
+    [CascadingParameter]
+    private HttpContext? HttpContext { get; set; }
+
+    /// <summary>
     /// Where the static web assets of this package are served. The path has to be spelled out:
     /// inside a class library <c>@@Assets["js/forge.js"]</c> resolves against the host, not here.
     /// </summary>
@@ -72,10 +86,36 @@
 
     private ForgeBootstrapOptions Ui => UiOptions.Value;
 
-    private string InitialTheme =>
+    private string ResolvedArea => ThemeStorage.ResolveArea(
+        Area,
+        HttpContext?.GetRouteValue("area") as string,
+        HttpContext?.Request.Path.Value,
+        Ui.Areas.Keys);
+
+    private string StorageKey => ThemeStorage.KeyFor(Ui.ThemeStorageKey, ResolvedArea);
+
+    /// <summary>Null leaves the attribute off the script, so the script follows the URL.</summary>
+    private string? PinnedArea => Area is null ? null : ThemeStorage.NormalizeArea(Area);
+
+    private string? AreasAttribute => ThemeStorage.AreasAttribute(Ui.Areas);
+
+    private string InitialTheme
+    {
+        get
+        {
+            string configured = ThemeStorage.ValueFor(ResolvedArea, Ui.Areas, Ui.DefaultTheme);
+            return BootswatchThemes.TryNormalize(configured, out string theme, BootswatchThemes.Default)
+                ? theme
+                : BootswatchThemes.Default;
+        }
+    }
+
+    private string DefaultThemeName =>
         BootswatchThemes.TryNormalize(Ui.DefaultTheme, out string theme, BootswatchThemes.Default)
             ? theme
             : BootswatchThemes.Default;
+
+    private string InitialScheme => BootswatchThemes.IsDarkColorScheme(InitialTheme) ? "dark" : "light";
 
     private IComponentRenderMode RenderModeInUse =>
         PageRenderMode ?? Microsoft.AspNetCore.Components.Web.RenderMode.InteractiveServer;

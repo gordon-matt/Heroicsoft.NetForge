@@ -63,7 +63,8 @@ public static partial class IconSet
         ["calendar"] = """<rect x="4" y="5" width="16" height="15" rx="2" /><path d="M8 3.5v4M16 3.5v4M4 10h16" />""",
         ["x-circle"] = """<circle cx="12" cy="12" r="8" /><path d="m9 9 6 6M15 9l-6 6" />""",
 
-        // Added for the shared components.
+        ["arrow-left"] = """<path d="M19 12H5" /><path d="m12 19-7-7 7-7" />""",
+        ["layout"] = """<rect x="3" y="3" width="7" height="9" rx="1" /><rect x="14" y="3" width="7" height="5" rx="1" /><rect x="14" y="12" width="7" height="9" rx="1" /><rect x="3" y="16" width="7" height="5" rx="1" />""",
         ["chevron-left"] = """<path d="m15 6-6 6 6 6" />""",
         ["chevron-right"] = """<path d="m9 6 6 6-6 6" />""",
         ["chevron-down"] = """<path d="m6 9 6 6 6-6" />""",
@@ -97,6 +98,8 @@ public static partial class IconSet
         ["person"] = "user",
         ["person-circle"] = "user",
         ["box-arrow-right"] = "logout",
+        ["log-out"] = "logout",
+        ["users"] = "people",
         ["box-arrow-up-right"] = "external",
         ["pencil"] = "edit",
         ["pencil-square"] = "edit",

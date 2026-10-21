@@ -28,11 +28,14 @@ f- styled shell, dialogs, toasts, pager, empty states, router, and light/dark to
 
 **nf apps:** no `libman` needed. Import `Heroicsoft.NetForge.Components` and call `AddNetForgeComponents(ui => { ui.ThemeStorageKey = "myapp.theme"; ui.AccentColor = "#4f46e5"; ui.AccentColorDark = "#818cf8"; })`. Never import both component namespaces in one app: the shared component names would be ambiguous.
 
+`ThemeStorageKey` is the key for the default area (the public site, an empty name). A named area gets that key plus a lower-case suffix, so `myapp.theme` and `myapp.theme.admin` are remembered separately and every library on the same area follows the same choice. List the areas that should differ. Anything not listed, including the Identity UI, keeps the default area's theme. `ForgeHostPage` reads the route or the first path segment (`/Admin/...`). Set `Area="Admin"` when a screen lives at some other path but should still use that area, which is how LogVue or IdentityNexus can share the back-office theme from `/logs` or `/identity`. The value is a Bootswatch name, or for an nf app `light`, `dark`, or `system`. Null uses the app default.
+
 ```csharp
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddNetForgeBootstrapComponents(ui =>
 {
     ui.ThemeStorageKey = "myapp.theme";
+    ui.Areas["Admin"] = "darkly";
 });
 builder.Services.Configure<ForgeShellOptions>(shell =>
 {

@@ -16,8 +16,27 @@ window.netForge = {
         }
         if (dataBsTheme === 'dark' || dataBsTheme === 'light') {
             document.documentElement.setAttribute('data-bs-theme', dataBsTheme);
+            // Same attribute the nf shell uses, so a library stylesheet can follow either host.
+            document.documentElement.setAttribute('data-theme', dataBsTheme);
         }
-        document.dispatchEvent(new CustomEvent('netforge:themechange', { detail: { href: href, colorScheme: dataBsTheme } }));
+        document.dispatchEvent(new CustomEvent('netforge:themechange', {
+            detail: {
+                href: href,
+                colorScheme: dataBsTheme,
+                area: document.documentElement.getAttribute('data-nf-theme-area') || '',
+                storageKey: document.documentElement.getAttribute('data-nf-storage-key') || ''
+            }
+        }));
+    },
+
+    /** The key theme-init.js is currently reading and writing. Empty before that script runs. */
+    currentStorageKey: function () {
+        return document.documentElement.getAttribute('data-nf-storage-key') || '';
+    },
+
+    /** The area whose theme is applied. Empty string is the default area (the public site). */
+    currentThemeArea: function () {
+        return document.documentElement.getAttribute('data-nf-theme-area') || '';
     },
 
     /** Raw value from localStorage; may be empty or invalid, so validate in .NET. */
@@ -46,6 +65,9 @@ window.netForge = {
         if (!el) {
             return;
         }
+        el.addEventListener('show.bs.modal', function () {
+            dotNetRef.invokeMethodAsync('OnThemeModalOpening');
+        });
         el.addEventListener('hidden.bs.modal', function () {
             dotNetRef.invokeMethodAsync('OnThemeModalDismissed');
         });
