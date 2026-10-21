@@ -81,6 +81,14 @@ public static partial class IconSet
         ["inbox"] = """<path d="M4 13h4l1.5 2.5h5L16 13h4M4 13l2-8h12l2 8v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z" />""",
         ["signpost"] = """<path d="M12 3v18" /><path d="M5 5h11l3 3-3 3H5z" /><path d="M19 13H8l-3 3 3 3h11z" />""",
         ["settings"] = """<path d="M4 7h10M18 7h2M4 17h2M10 17h10" /><circle cx="16" cy="7" r="2" /><circle cx="8" cy="17" r="2" />""",
+        ["bookmark"] = """<path d="M7 4h10a1 1 0 0 1 1 1v15l-6-3.5L6 20V5a1 1 0 0 1 1-1z" />""",
+        ["bug"] = """<path d="M9 9V7.5a3 3 0 0 1 6 0V9" /><path d="M8 13h8v1a4 4 0 0 1-8 0z" /><path d="M12 20v-6M7 13H4M20 13h-3M6.5 8.5 4.5 6.5M17.5 8.5l2 2M6.5 17.5 4.5 19.5M17.5 17.5l2 2" />""",
+        ["database"] = """<ellipse cx="12" cy="6" rx="7" ry="3" /><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6" /><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3" />""",
+        ["equal"] = """<path d="M6 9h12M6 15h12" />""",
+        ["not-equal"] = """<path d="M6 9h12M6 15h12M16 5 8 19" />""",
+        ["globe"] = """<circle cx="12" cy="12" r="8" /><path d="M12 4a12 12 0 0 1 0 16 12 12 0 0 1 0-16M4 12h16" />""",
+        ["help"] = """<circle cx="12" cy="12" r="8" /><path d="M9.5 9.5a2.5 2.5 0 1 1 3.2 2.4c-.6.3-1.2.8-1.2 1.6V14M12 17h.01" />""",
+        ["refresh"] = """<path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5" />""",
     }.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
 
     private static readonly FrozenDictionary<string, IReadOnlyList<IconShape>> Shapes =

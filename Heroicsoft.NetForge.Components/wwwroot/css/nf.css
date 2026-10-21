@@ -308,11 +308,23 @@ kbd {
     z-index: 20;
 }
 
+.nf-topbar-center {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
 .nf-topbar-end {
     display: flex;
     align-items: center;
     gap: 0.35rem;
     margin-left: auto;
+}
+
+/* A filter sidebar is not an icon rail, so the toggle only exists on a narrow screen. */
+@media (min-width: 861px) {
+    .nf-sidebar-fixed .nf-sidebar-toggle { display: none; }
 }
 
 .nf-topbar-brand { flex: 0 0 auto; }

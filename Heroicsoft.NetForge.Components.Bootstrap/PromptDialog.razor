@@ -15,9 +15,13 @@
                                 @onclick="Cancel"></button>
                     </div>
                     <div class="modal-body">
+                        @if (description is not null)
+                        {
+                            <p class="text-secondary small">@description</p>
+                        }
                         <label class="form-label" for="@inputId">@label</label>
                         <input id="@inputId" class="form-control" @ref="inputElement"
-                               @bind="Value" @bind:event="oninput" autocomplete="off" />
+                               @bind="Value" @bind:event="oninput" maxlength="@maxLength" autocomplete="off" />
                         @if (error is not null)
                         {
                             <div class="text-danger small mt-1">@error</div>
@@ -45,6 +49,8 @@
     private string title = string.Empty;
     private string label = string.Empty;
     private string confirmLabel = "OK";
+    private string? description;
+    private int maxLength = 256;
     private string? error;
     private bool selectFileNameStem;
     private ElementReference inputElement;
@@ -60,16 +66,20 @@
     public Task<string?> ShowAsync(
         string title,
         string label,
-        string initialValue = "",
+        string? initialValue = "",
         string confirmLabel = "OK",
-        bool selectFileNameStem = false)
+        bool selectFileNameStem = false,
+        string? description = null,
+        int maxLength = 256)
     {
         this.title = title;
         this.label = label;
         this.confirmLabel = confirmLabel;
         this.selectFileNameStem = selectFileNameStem;
+        this.description = description;
+        this.maxLength = maxLength;
 
-        Value = initialValue;
+        Value = initialValue ?? "";
         error = null;
         isVisible = true;
         shouldFocus = true;

@@ -17,9 +17,11 @@ public interface IPromptDialog
     Task<string?> ShowAsync(
         string title,
         string label,
-        string initialValue = "",
+        string? initialValue = "",
         string confirmLabel = "OK",
-        bool selectFileNameStem = false);
+        bool selectFileNameStem = false,
+        string? description = null,
+        int maxLength = 256);
 }
 
 /// <summary>
@@ -48,10 +50,12 @@ public sealed class DialogService
     public Task<string?> PromptAsync(
         string title,
         string label,
-        string initialValue = "",
+        string? initialValue = "",
         string confirmLabel = "OK",
-        bool selectFileNameStem = false) =>
-        Require(prompt).ShowAsync(title, label, initialValue, confirmLabel, selectFileNameStem);
+        bool selectFileNameStem = false,
+        string? description = null,
+        int maxLength = 256) =>
+        Require(prompt).ShowAsync(title, label, initialValue, confirmLabel, selectFileNameStem, description, maxLength);
 
     private static T Require<T>(T? dialog) where T : class =>
         dialog ?? throw new InvalidOperationException(

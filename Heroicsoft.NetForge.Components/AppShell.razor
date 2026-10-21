@@ -1,7 +1,7 @@
 @implements IDisposable
 @inject NavigationManager Navigation
 
-<div class="nf-shell @(sidebarCollapsed ? "nf-sidebar-collapsed" : null) @(sidebarOpen ? "nf-sidebar-open" : null) @(NavigationPlacement == ForgeNavigationPlacement.Topbar ? "nf-shell-topnav" : null)">
+<div class="nf-shell @(sidebarCollapsed ? "nf-sidebar-collapsed" : null) @(sidebarOpen ? "nf-sidebar-open" : null) @(CollapsibleSidebar ? null : "nf-sidebar-fixed") @(NavigationPlacement == ForgeNavigationPlacement.Topbar ? "nf-shell-topnav" : null)">
     @if (NavigationPlacement != ForgeNavigationPlacement.Topbar)
     {
         @if (Sidebar is not null)
@@ -25,7 +25,7 @@
                      ShowSidebarToggle="@(NavigationPlacement != ForgeNavigationPlacement.Topbar)"
                      Sections="@(NavigationPlacement == ForgeNavigationPlacement.Topbar ? Sections : [])"
                      Brand="@Brand" BrandHref="@BrandHref" LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl"
-                     ShowUserMenu="ShowUserMenu" UserMenuItems="UserMenuItems">
+                     ShowUserMenu="ShowUserMenu" UserMenuItems="UserMenuItems" CenterContent="TopbarCenter">
             @TopbarEnd
         </ForgeTopbar>
 
@@ -101,8 +101,21 @@
     [Parameter]
     public EventCallback<string> OnSearch { get; set; }
 
+    /// <summary>
+    /// Replaces the topbar search. Use this when the box is more than a term, for example LogVue's query field.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? TopbarCenter { get; set; }
+
     [Parameter]
     public RenderFragment? TopbarEnd { get; set; }
+
+    /// <summary>
+    /// When false, the sidebar stays full width on a wide screen and the toggle only opens it over the page
+    /// on a narrow one. Filter sidebars, such as LogVue's, are not usable as an icon rail.
+    /// </summary>
+    [Parameter]
+    public bool CollapsibleSidebar { get; set; } = true;
 
     /// <summary>Shows the light or dark toggle in the topbar. The name matches the Bootstrap shell.</summary>
     [Parameter]
@@ -127,7 +140,11 @@
 
     private void ToggleSidebar()
     {
-        sidebarCollapsed = !sidebarCollapsed;
+        if (CollapsibleSidebar)
+        {
+            sidebarCollapsed = !sidebarCollapsed;
+        }
+
         sidebarOpen = !sidebarOpen;
     }
 
