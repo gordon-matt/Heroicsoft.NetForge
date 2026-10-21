@@ -29,14 +29,7 @@
                 <Icon Name="@Item.Icon" />
             }
             <span class="nf-nav-label">@Item.Title</span>
-            @if (Item.Count is int queryCount)
-            {
-                <span class="nf-nav-count">@queryCount.ToString("N0")</span>
-            }
-            else if (!string.IsNullOrEmpty(Item.Badge))
-            {
-                <span class="nf-badge nf-nav-badge @ForgeBadge.ToneClass(Item.BadgeCssClass)">@Item.Badge</span>
-            }
+            @Trailing
         </a>
     }
     else
@@ -52,14 +45,7 @@
                 <Icon Name="@Item.Icon" />
             }
             <span class="nf-nav-label">@Item.Title</span>
-            @if (Item.Count is int count)
-            {
-                <span class="nf-nav-count">@count.ToString("N0")</span>
-            }
-            else if (!string.IsNullOrEmpty(Item.Badge))
-            {
-                <span class="nf-badge nf-nav-badge @ForgeBadge.ToneClass(Item.BadgeCssClass)">@Item.Badge</span>
-            }
+            @Trailing
         </NavLink>
     }
 </li>
@@ -71,6 +57,39 @@
     private bool UsesQuery => Item.ActiveQuery is not null || Item.ActivePaths is not null;
 
     private string Tip => string.IsNullOrWhiteSpace(Item.Tooltip) ? Item.Title : Item.Tooltip;
+
+    private RenderFragment Trailing => builder =>
+    {
+        if (Item.BadgeComponent is Type type)
+        {
+            builder.OpenComponent<DynamicComponent>(0);
+            builder.AddAttribute(1, "Type", type);
+            if (Item.BadgeParameters is not null)
+            {
+                builder.AddAttribute(2, "Parameters", Item.BadgeParameters);
+            }
+
+            builder.CloseComponent();
+            return;
+        }
+
+        if (Item.Count is int count)
+        {
+            builder.OpenElement(3, "span");
+            builder.AddAttribute(4, "class", "nf-nav-count");
+            builder.AddContent(5, count.ToString("N0"));
+            builder.CloseElement();
+            return;
+        }
+
+        if (!string.IsNullOrEmpty(Item.Badge))
+        {
+            builder.OpenElement(6, "span");
+            builder.AddAttribute(7, "class", "nf-badge nf-nav-badge " + ForgeBadge.ToneClass(Item.BadgeCssClass));
+            builder.AddContent(8, Item.Badge);
+            builder.CloseElement();
+        }
+    };
 
     private bool IsCurrent =>
         ForgeNavMatch.IsCurrent(Item, Navigation.ToBaseRelativePath(Navigation.Uri));

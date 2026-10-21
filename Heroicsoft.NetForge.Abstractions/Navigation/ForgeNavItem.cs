@@ -23,6 +23,11 @@ public sealed class ForgeNavItem
 
     public string BadgeCssClass { get; init; } = "text-bg-secondary";
 
+    /// <summary>Rendered after the title. Use this for a count that changes while the page is open. Static text uses <see cref="Badge"/>.</summary>
+    public Type? BadgeComponent { get; init; }
+
+    public IDictionary<string, object>? BadgeParameters { get; init; }
+
     /// <summary>When true, the link is only active on an exact path match.</summary>
     public bool MatchAll { get; init; }
 
