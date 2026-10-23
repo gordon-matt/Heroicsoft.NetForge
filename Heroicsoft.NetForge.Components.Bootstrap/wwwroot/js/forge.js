@@ -95,5 +95,24 @@ window.netForge = {
         var value = element.value || '';
         var dot = value.lastIndexOf('.');
         element.setSelectionRange(0, dot > 0 ? dot : value.length);
+    },
+
+    /**
+     * Plays a toast sound, like egalink-toasty's playSound. Browsers may block audio until the user
+     * has interacted with the page; that rejection is ignored.
+     */
+    playSound: function (src) {
+        if (!src) {
+            return;
+        }
+        try {
+            var audio = new Audio(src);
+            var played = audio.play();
+            if (played && played.catch) {
+                played.catch(function () { /* autoplay blocked */ });
+            }
+        } catch (e) {
+            /* audio not supported */
+        }
     }
 };

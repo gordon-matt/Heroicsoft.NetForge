@@ -25,10 +25,23 @@ public static class ServiceCollectionExtensions
         }
 
         services.AddOptions<ForgeShellOptions>();
+        services.AddOptions<ForgeToastSoundOptions>();
         services.AddScoped<ToastService>();
         services.AddScoped<DialogService>();
         services.AddScoped<SidebarRefresh>();
 
+        return services;
+    }
+
+    /// <summary>
+    /// Turns on and configures toast sounds (egalink-toasty style). Sounds stay off unless this is
+    /// called with <see cref="ForgeToastSoundOptions.EnableSounds"/> set to true.
+    /// </summary>
+    public static IServiceCollection ConfigureNetForgeToastSounds(
+        this IServiceCollection services,
+        Action<ForgeToastSoundOptions> configure)
+    {
+        services.Configure(configure);
         return services;
     }
 }
