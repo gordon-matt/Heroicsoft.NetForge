@@ -27,8 +27,9 @@ public sealed class NetForgeAuthOptions
     public string? RemoteFailurePath { get; set; }
 
     /// <summary>
-    /// When false, the host keeps its own <c>/auth</c> controller. Two controllers on that route
-    /// would make login ambiguous.
+    /// When false, the host keeps its own <c>/auth</c> controller. The NetForge controller is
+    /// removed even if the MVC SDK discovered it, because two controllers on that route make
+    /// login ambiguous.
     /// </summary>
     public bool IncludeAuthController { get; set; } = true;
 

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
@@ -42,6 +44,26 @@ public static class ServiceCollectionExtensions
         if (authOptions.IncludeAuthController)
         {
             controllers.AddApplicationPart(typeof(AuthController).Assembly);
+        }
+        else
+        {
+            // The MVC SDK discovers controllers in referenced assemblies by itself.
+            // Skipping AddApplicationPart does not remove that controller, and two
+            // /auth/login actions then match.
+            controllers.ConfigureApplicationPartManager(manager =>
+            {
+                var discovered = manager.ApplicationParts
+                    .OfType<AssemblyPart>()
+                    .Where(part => part.Assembly == typeof(AuthController).Assembly)
+                    .ToList();
+
+                foreach (var part in discovered)
+                {
+                    manager.ApplicationParts.Remove(part);
+                }
+
+                manager.FeatureProviders.Add(new SuppressAuthControllerFeatureProvider());
+            });
         }
 
         string provider = string.IsNullOrWhiteSpace(authOptions.Provider)
@@ -299,5 +321,22 @@ public static class ServiceCollectionExtensions
                 ? new HttpUserContextService(accessor, options)
                 : new BlazorAwareUserContextService(accessor, authenticationState, options);
         });
+    }
+}
+
+/// <summary>
+/// Drops <see cref="Controllers.AuthController"/> after the SDK has discovered it.
+/// </summary>
+file sealed class SuppressAuthControllerFeatureProvider : IApplicationFeatureProvider<ControllerFeature>
+{
+    public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
+    {
+        for (int index = feature.Controllers.Count - 1; index >= 0; index--)
+        {
+            if (feature.Controllers[index].AsType() == typeof(Controllers.AuthController))
+            {
+                feature.Controllers.RemoveAt(index);
+            }
+        }
     }
 }
