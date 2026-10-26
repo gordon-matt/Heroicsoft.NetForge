@@ -1,4 +1,4 @@
-using Heroicsoft.NetForge.Components.Services;
+using Heroicsoft.NetForge.Components.Toasts;
 
 namespace Heroicsoft.NetForge.Tests;
 

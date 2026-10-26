@@ -1,4 +1,6 @@
-using Heroicsoft.NetForge.Components;
+using Heroicsoft.NetForge.Components.Icons;
+using Heroicsoft.NetForge.Components.Paging;
+using Heroicsoft.NetForge.Components.Status;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;

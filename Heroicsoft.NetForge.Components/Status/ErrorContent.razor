@@ -1,0 +1,18 @@
+<PageTitle>@PageTitleText</PageTitle>
+
+<div class="nf-status">
+    <Icon Name="danger" Size="56" Class="nf-status-icon nf-status-icon-danger" />
+    <h1 class="nf-status-title">@Title</h1>
+    <p class="nf-status-message">@Message</p>
+
+    @if (requestId is not null)
+    {
+        <p class="nf-status-reference">
+            Reference: <code>@requestId</code>
+        </p>
+    }
+
+    <a class="nf-button nf-button-primary" href="@HomeHref">
+        <Icon Name="@HomeIcon" /> @HomeLabel
+    </a>
+</div>

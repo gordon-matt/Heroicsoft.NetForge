@@ -1,0 +1,27 @@
+<Router AppAssembly="AppAssembly"
+        AdditionalAssemblies="@(AdditionalAssemblies ?? Array.Empty<Assembly>())"
+        NotFoundPage="NotFoundPage">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="routeData" DefaultLayout="DefaultLayout">
+            <NotAuthorized>
+                @if (NotAuthorized is not null)
+                {
+                    @NotAuthorized
+                }
+                else if (context.User.Identity?.IsAuthenticated == true)
+                {
+                    @* Signed in but missing a role: another sign-in would loop. *@
+                    <Heroicsoft.NetForge.Components.Bootstrap.Status.AccessDenied />
+                }
+                else
+                {
+                    <RedirectToLogin />
+                }
+            </NotAuthorized>
+            <Authorizing>
+                <Heroicsoft.NetForge.Components.Bootstrap.Status.AuthorizingMessage Message="@AuthorizingText" />
+            </Authorizing>
+        </AuthorizeRouteView>
+        <FocusOnNavigate RouteData="routeData" Selector="@FocusSelector" />
+    </Found>
+</Router>

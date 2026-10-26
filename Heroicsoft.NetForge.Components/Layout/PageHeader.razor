@@ -1,0 +1,23 @@
+<div class="nf-page-header">
+    <div class="nf-page-header-text">
+        <h1 class="nf-page-title">
+            @if (Icon is not null)
+            {
+                <Icon Name="@Icon" Size="22" Class="nf-page-title-icon" />
+            }
+            @Title
+        </h1>
+        @if (Description is not null)
+        {
+            <p class="nf-page-description">@Description</p>
+        }
+        @ChildContent
+    </div>
+
+    @if (Actions is not null)
+    {
+        <div class="nf-page-actions">
+            @Actions
+        </div>
+    }
+</div>

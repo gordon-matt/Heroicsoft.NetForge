@@ -1,0 +1,49 @@
+<nav class="nf-sidebar" id="nf-sidebar" aria-label="Navigation">
+    <div class="nf-sidebar-brand">
+        <a href="@BrandHref" class="nf-brand-link">
+            @if (BrandContent is not null)
+            {
+                @BrandContent
+            }
+            else if (LogoUrl is not null)
+            {
+                <img class="nf-brand-logo @(LogoDarkUrl is not null ? "nf-has-dark" : null)" src="@LogoUrl" alt="@Brand" />
+                @if (LogoDarkUrl is not null)
+                {
+                    <img class="nf-brand-logo-dark" src="@LogoDarkUrl" alt="@Brand" />
+                }
+                @if (MarkUrl is not null)
+                {
+                    <img class="nf-brand-mark" src="@MarkUrl" alt="" />
+                }
+            }
+            else if (!string.IsNullOrWhiteSpace(Brand))
+            {
+                <span class="nf-brand-text">@Brand</span>
+            }
+        </a>
+    </div>
+
+    <div class="nf-sidebar-scroll">
+        @foreach (var section in Sections)
+        {
+            @if (string.IsNullOrEmpty(section.Roles))
+            {
+                <ForgeNavSectionView Section="section" />
+            }
+            else
+            {
+                <AuthorizeView Roles="@section.Roles">
+                    <ForgeNavSectionView Section="section" />
+                </AuthorizeView>
+            }
+        }
+    </div>
+
+    @if (SidebarFooter is not null)
+    {
+        <div class="nf-sidebar-footer">
+            @SidebarFooter
+        </div>
+    }
+</nav>

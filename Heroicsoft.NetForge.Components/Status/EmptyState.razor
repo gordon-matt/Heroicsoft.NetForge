@@ -1,0 +1,12 @@
+<div class="nf-empty">
+    <Icon Name="@Icon" Size="40" Class="nf-empty-icon" />
+    <h2 class="nf-empty-title">@Title</h2>
+    @if (Description is not null)
+    {
+        <p class="nf-empty-description">@Description</p>
+    }
+    @if (ChildContent is not null)
+    {
+        <div class="nf-empty-body">@ChildContent</div>
+    }
+</div>

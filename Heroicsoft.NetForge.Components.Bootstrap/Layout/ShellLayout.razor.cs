@@ -1,0 +1,115 @@
+using Heroicsoft.NetForge.Abstractions.Navigation;
+using Heroicsoft.NetForge.Components.Layout;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+
+namespace Heroicsoft.NetForge.Components.Bootstrap.Layout;
+
+public partial class ShellLayout : IDisposable
+{
+    [Inject]
+    private IOptions<ForgeShellOptions> ShellOptions { get; set; } = default!;
+
+    [Inject]
+    private IServiceProvider Services { get; set; } = default!;
+
+    [Inject]
+    private SidebarRefresh SidebarRefresh { get; set; } = default!;
+
+    [Inject]
+    private NavigationManager Navigation { get; set; } = default!;
+
+    private readonly CancellationTokenSource lifetime = new();
+    private ForgeShellOptions options = new();
+    private IShellNavigation? navigation;
+    private IReadOnlyList<ForgeNavSection> sections = [];
+    private string searchText = string.Empty;
+    private int loadVersion;
+
+    private bool ShowSearch => !string.IsNullOrWhiteSpace(SearchFormat);
+
+    private string? SearchFormat => navigation?.SearchUrlFormat ?? options.SearchUrlFormat;
+
+    private RenderFragment? EndContent => Slot(options.TopbarEndComponent);
+
+    private RenderFragment? FooterContent => Slot(options.SidebarFooterComponent);
+
+    private static RenderFragment? Slot(Type? type) => type is null ? null : builder =>
+    {
+        builder.OpenComponent<DynamicComponent>(0);
+        builder.AddComponentParameter(1, nameof(DynamicComponent.Type), type);
+        builder.CloseComponent();
+    };
+
+    protected override void OnInitialized()
+    {
+        options = ShellOptions.Value;
+        navigation = Services.GetService<IShellNavigation>();
+        sections = navigation is null ? options.Sections : [];
+        searchText = CurrentTerm();
+        SidebarRefresh.Changed += OnSidebarChanged;
+        Navigation.LocationChanged += OnLocationChanged;
+    }
+
+    protected override Task OnInitializedAsync() => LoadSectionsAsync();
+
+    private void OnSidebarChanged() => _ = InvokeAsync(LoadSectionsAsync);
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs args) =>
+        InvokeAsync(() =>
+        {
+            searchText = CurrentTerm();
+            StateHasChanged();
+        });
+
+    private async Task LoadSectionsAsync()
+    {
+        if (navigation is null)
+        {
+            return;
+        }
+
+        int version = ++loadVersion;
+
+        try
+        {
+            var next = await navigation.GetSectionsAsync(lifetime.Token);
+
+            if (version == loadVersion)
+            {
+                sections = next;
+            }
+        }
+        catch (Exception ex) when (ex is OperationCanceledException or ObjectDisposedException)
+        {
+            return;
+        }
+    }
+
+    private Task SearchAsync(string term)
+    {
+        string? trimmed = string.IsNullOrWhiteSpace(term) ? null : term.Trim();
+        var current = Navigation.ToAbsoluteUri(Navigation.Uri);
+        string? url = navigation?.FormatSearchUrl(trimmed, current) ?? ForgeSearchUrl.Build(SearchFormat, trimmed);
+
+        if (!string.IsNullOrWhiteSpace(url))
+        {
+            Navigation.NavigateTo(url);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private string CurrentTerm() =>
+        ForgeSearchUrl.ReadTerm(SearchFormat, Navigation.ToAbsoluteUri(Navigation.Uri));
+
+    public void Dispose()
+    {
+        SidebarRefresh.Changed -= OnSidebarChanged;
+        Navigation.LocationChanged -= OnLocationChanged;
+        lifetime.Cancel();
+        lifetime.Dispose();
+    }
+}

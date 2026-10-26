@@ -6,15 +6,9 @@ namespace Heroicsoft.NetForge.Abstractions.Navigation;
 /// </summary>
 public static class ForgeSearchUrl
 {
-    public static string ReadTerm(string? format, Uri uri)
-    {
-        if (!TryGetKey(format, out string key))
-        {
-            return string.Empty;
-        }
-
-        return ForgeQuery.Parse(uri.Query).TryGetValue(key, out string? value) ? value : string.Empty;
-    }
+    public static string ReadTerm(string? format, Uri uri) => !TryGetKey(format, out string key)
+            ? string.Empty
+            : ForgeQuery.Parse(uri.Query).TryGetValue(key, out string? value) ? value : string.Empty;
 
     /// <summary>A null or blank <paramref name="term"/> drops the search parameter and keeps the path.</summary>
     public static string? Build(string? format, string? term)

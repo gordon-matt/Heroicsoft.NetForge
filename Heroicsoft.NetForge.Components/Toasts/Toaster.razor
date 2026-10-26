@@ -1,0 +1,13 @@
+<div class="nf-toasts" role="region" aria-label="Notifications" aria-live="polite">
+    @foreach (var toast in ToastService.Toasts)
+    {
+        <div class="nf-toast nf-toast-@toast.Level" role="@(toast.Level == "danger" ? "alert" : "status")" @key="toast.Id">
+            <Icon Name="@IconFor(toast.Level)" Class="nf-toast-icon" />
+            <span class="nf-toast-message">@toast.Message</span>
+            <button type="button" class="nf-icon-button nf-toast-close" aria-label="Dismiss"
+                    @onclick="() => ToastService.Dismiss(toast.Id)">
+                <Icon Name="x" Size="16" />
+            </button>
+        </div>
+    }
+</div>

@@ -1,0 +1,9 @@
+<div class="bf-empty-state">
+    <i class="bi @IconClass bf-empty-icon"></i>
+    <p class="mb-1 fs-5">@Title</p>
+    @if (Description is not null)
+    {
+        <p class="small mb-3">@Description</p>
+    }
+    @ChildContent
+</div>

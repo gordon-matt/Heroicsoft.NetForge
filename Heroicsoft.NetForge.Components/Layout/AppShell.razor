@@ -1,0 +1,46 @@
+<div class="nf-shell @(sidebarCollapsed ? "nf-sidebar-collapsed" : null) @(sidebarOpen ? "nf-sidebar-open" : null) @(CollapsibleSidebar ? null : "nf-sidebar-fixed") @(NavigationPlacement == ForgeNavigationPlacement.Topbar ? "nf-shell-topnav" : null)">
+    @if (NavigationPlacement != ForgeNavigationPlacement.Topbar)
+    {
+        @if (Sidebar is not null)
+        {
+            @Sidebar
+        }
+        else
+        {
+            <ForgeSidebar Sections="Sections" Brand="@Brand" BrandHref="@BrandHref"
+                          LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl" MarkUrl="@MarkUrl"
+                          BrandContent="BrandContent" SidebarFooter="SidebarFooter" />
+        }
+    }
+
+    @* Only visible while the off-canvas sidebar is open on a narrow screen. *@
+    <div class="nf-scrim" @onclick="CloseSidebar"></div>
+
+    <div class="nf-main">
+        <ForgeTopbar ShowSearch="ShowSearch" SearchPlaceholder="@SearchPlaceholder" SearchText="@SearchText"
+                     OnSearch="OnSearch" OnToggleSidebar="ToggleSidebar" ShowThemePicker="ShowThemePicker"
+                     ShowSidebarToggle="@(NavigationPlacement != ForgeNavigationPlacement.Topbar)"
+                     Sections="@(NavigationPlacement == ForgeNavigationPlacement.Topbar ? Sections : [])"
+                     Brand="@Brand" BrandHref="@BrandHref" LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl"
+                     ShowUserMenu="ShowUserMenu" UserMenuItems="UserMenuItems" CenterContent="TopbarCenter">
+            @TopbarEnd
+        </ForgeTopbar>
+
+        <main class="nf-content">
+            @ChildContent
+        </main>
+
+        @if (ShowVersion)
+        {
+            <footer class="nf-version">v@(Version ?? AppVersion.Current)</footer>
+        }
+    </div>
+</div>
+
+<ForgeDialogHost />
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">&times;</span>
+</div>

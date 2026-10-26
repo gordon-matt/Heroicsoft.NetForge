@@ -1,0 +1,14 @@
+@* Shown in place of a page's content when the signed-in user lacks the role. A redirect back
+   to sign-in for someone already signed in reads as a bug. *@
+<PageTitle>@PageTitleText</PageTitle>
+
+<EmptyState Icon="@Icon" Title="@Title" Description="@Description">
+    @if (ChildContent is not null)
+    {
+        @ChildContent
+    }
+    else
+    {
+        <a class="nf-button" href="@HomeHref">@HomeLabel</a>
+    }
+</EmptyState>

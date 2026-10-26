@@ -1,0 +1,48 @@
+<li class="nf-nav-item">
+    @if (Item.External)
+    {
+        <a class="nf-nav-link" href="@Item.Href" target="_blank" rel="noopener noreferrer" title="@Tip">
+            @if (Item.TagIcon)
+            {
+                <span class="nf-tag-icon" aria-hidden="true"></span>
+            }
+            else
+            {
+                <Icon Name="@Item.Icon" />
+            }
+            <span class="nf-nav-label">@Item.Title</span>
+            <Icon Name="external" Size="14" Class="nf-nav-external" />
+        </a>
+    }
+    else if (UsesQuery)
+    {
+        <a class="nf-nav-link @(IsCurrent ? "is-active" : null)" href="@Item.Href" title="@Tip">
+            @if (Item.TagIcon)
+            {
+                <span class="nf-tag-icon" aria-hidden="true"></span>
+            }
+            else
+            {
+                <Icon Name="@Item.Icon" />
+            }
+            <span class="nf-nav-label">@Item.Title</span>
+            @Trailing
+        </a>
+    }
+    else
+    {
+        <NavLink class="nf-nav-link" ActiveClass="active" href="@Item.Href"
+                 Match="@(Item.MatchAll ? NavLinkMatch.All : NavLinkMatch.Prefix)" title="@Tip">
+            @if (Item.TagIcon)
+            {
+                <span class="nf-tag-icon" aria-hidden="true"></span>
+            }
+            else
+            {
+                <Icon Name="@Item.Icon" />
+            }
+            <span class="nf-nav-label">@Item.Title</span>
+            @Trailing
+        </NavLink>
+    }
+</li>

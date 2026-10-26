@@ -1,0 +1,75 @@
+@if (PageCount > 1 || TotalCount > 0)
+{
+    <div class="nf-pager">
+        <span class="nf-pager-info">
+            @if (TotalCount == 0)
+            {
+                <text>No results</text>
+            }
+            else
+            {
+                <text>
+                    @FirstOnPage.ToString("N0")-@LastOnPage.ToString("N0")
+                    of @TotalCount.ToString("N0")
+                </text>
+            }
+        </span>
+
+        @if (PageCount > 1)
+        {
+            <nav aria-label="@AriaLabel">
+                <ul class="nf-pagination">
+                    <li>
+                        <button type="button" class="nf-page-button" disabled="@(PageNumber <= 1)"
+                                @onclick="() => GoAsync(1)" aria-label="First page">
+                            <Icon Name="chevrons-left" Size="16" />
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="nf-page-button" disabled="@(PageNumber <= 1)"
+                                @onclick="() => GoAsync(PageNumber - 1)" aria-label="Previous page">
+                            <Icon Name="chevron-left" Size="16" />
+                        </button>
+                    </li>
+
+                    @foreach (int visiblePage in VisiblePages)
+                    {
+                        <li>
+                            <button type="button" class="nf-page-button @(visiblePage == PageNumber ? "is-active" : null)"
+                                    aria-current="@(visiblePage == PageNumber ? "page" : null)"
+                                    @onclick="() => GoAsync(visiblePage)">
+                                @visiblePage
+                            </button>
+                        </li>
+                    }
+
+                    <li>
+                        <button type="button" class="nf-page-button" disabled="@(PageNumber >= PageCount)"
+                                @onclick="() => GoAsync(PageNumber + 1)" aria-label="Next page">
+                            <Icon Name="chevron-right" Size="16" />
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="nf-page-button" disabled="@(PageNumber >= PageCount)"
+                                @onclick="() => GoAsync(PageCount)" aria-label="Last page">
+                            <Icon Name="chevrons-right" Size="16" />
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        }
+
+        @if (PageSizeChanged.HasDelegate)
+        {
+            <div class="nf-pager-size">
+                <label for="@pageSizeId">Per page</label>
+                <select id="@pageSizeId" class="nf-select" value="@PageSize" @onchange="OnPageSizeChangedAsync">
+                    @foreach (int size in Sizes)
+                    {
+                        <option value="@size">@size</option>
+                    }
+                </select>
+            </div>
+        }
+    </div>
+}

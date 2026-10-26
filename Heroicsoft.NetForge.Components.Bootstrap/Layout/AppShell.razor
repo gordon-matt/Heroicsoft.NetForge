@@ -1,0 +1,52 @@
+<div class="bf-shell @(sidebarCollapsed ? "bf-sidebar-collapsed" : null) @(NavigationPlacement == ForgeNavigationPlacement.Topbar ? "bf-shell-topnav" : null)">
+    @if (NavigationPlacement != ForgeNavigationPlacement.Topbar)
+    {
+        @if (Sidebar is not null)
+        {
+            @Sidebar
+        }
+        else
+        {
+            <Heroicsoft.NetForge.Components.Bootstrap.Layout.ForgeSidebar Sections="Sections" Brand="@Brand" BrandHref="@BrandHref"
+                          LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl" MarkUrl="@MarkUrl"
+                          BrandContent="BrandContent" SidebarFooter="SidebarFooter" />
+        }
+    }
+
+    <div class="bf-main">
+        <Heroicsoft.NetForge.Components.Bootstrap.Layout.ForgeTopbar ShowSearch="ShowSearch" SearchPlaceholder="@SearchPlaceholder"
+                     SearchText="@SearchText"
+                     OnSearch="OnSearch" OnToggleSidebar="ToggleSidebar"
+                     ShowSidebarToggle="@(NavigationPlacement != ForgeNavigationPlacement.Topbar)"
+                     Sections="@(NavigationPlacement == ForgeNavigationPlacement.Topbar ? Sections : [])"
+                     Brand="@Brand" BrandHref="@BrandHref" LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl"
+                     ShowThemePicker="ShowThemePicker"
+                     ShowUserMenu="ShowUserMenu" UserMenuItems="UserMenuItems">
+            @TopbarEnd
+        </Heroicsoft.NetForge.Components.Bootstrap.Layout.ForgeTopbar>
+
+        <main class="bf-content">
+            @ChildContent
+        </main>
+
+        @if (ShowVersion)
+        {
+            <footer class="bf-version">
+                <span class="small text-muted">v@(Version ?? AppVersion.Current)</span>
+            </footer>
+        }
+    </div>
+</div>
+
+@if (ShowThemePicker)
+{
+    <ThemePicker />
+}
+
+<Heroicsoft.NetForge.Components.Bootstrap.Dialogs.ForgeDialogHost />
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>

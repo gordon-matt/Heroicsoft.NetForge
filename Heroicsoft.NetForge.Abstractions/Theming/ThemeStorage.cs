@@ -55,12 +55,7 @@ public static class ThemeStorage
         }
 
         string segment = FirstSegment(requestPath);
-        if (segment.Length > 0 && known.Contains(segment))
-        {
-            return segment;
-        }
-
-        return "";
+        return segment.Length > 0 && known.Contains(segment) ? segment : "";
     }
 
     /// <summary>

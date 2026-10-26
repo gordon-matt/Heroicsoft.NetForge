@@ -1,0 +1,22 @@
+@inherits LayoutComponentBase
+
+<Heroicsoft.NetForge.Components.Bootstrap.Layout.AppShell Brand="@options.Brand"
+         BrandHref="@options.BrandHref"
+         LogoUrl="@options.LogoUrl"
+         LogoDarkUrl="@options.LogoDarkUrl"
+         MarkUrl="@options.MarkUrl"
+         NavigationPlacement="@options.NavigationPlacement"
+         Sections="@sections"
+         ShowSearch="@ShowSearch"
+         SearchPlaceholder="@options.SearchPlaceholder"
+         SearchText="@searchText"
+         OnSearch="SearchAsync"
+         ShowThemePicker="@options.ShowThemePicker"
+         ShowUserMenu="@options.ShowUserMenu"
+         UserMenuItems="@options.UserMenuItems"
+         ShowVersion="@options.ShowVersion"
+         Version="@options.Version"
+         TopbarEnd="@EndContent"
+         SidebarFooter="@FooterContent">
+    @Body
+</Heroicsoft.NetForge.Components.Bootstrap.Layout.AppShell>

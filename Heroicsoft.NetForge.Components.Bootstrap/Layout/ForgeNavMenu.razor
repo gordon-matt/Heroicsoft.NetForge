@@ -1,0 +1,57 @@
+@if (string.IsNullOrWhiteSpace(Section.Heading))
+{
+    @foreach (var item in Section.Items)
+    {
+        @if (string.IsNullOrEmpty(item.Roles))
+        {
+            <Heroicsoft.NetForge.Components.Bootstrap.Layout.ForgeNavLink Item="item" />
+        }
+        else
+        {
+            <AuthorizeView Roles="@item.Roles">
+                <Heroicsoft.NetForge.Components.Bootstrap.Layout.ForgeNavLink Item="item" />
+            </AuthorizeView>
+        }
+    }
+}
+else
+{
+    <li class="nav-item dropdown">
+        <button type="button" class="nav-link dropdown-toggle @(AnyCurrent ? "active" : null)"
+                data-bs-toggle="dropdown" aria-expanded="false">
+            @Section.Heading
+        </button>
+        <ul class="dropdown-menu">
+            @foreach (var item in Section.Items)
+            {
+                @if (string.IsNullOrEmpty(item.Roles))
+                {
+                    @MenuItem(item)
+                }
+                else
+                {
+                    <AuthorizeView Roles="@item.Roles">
+                        @MenuItem(item)
+                    </AuthorizeView>
+                }
+            }
+        </ul>
+    </li>
+}
+
+@code {
+    private RenderFragment MenuItem(ForgeNavItem item) => @<li>
+        <a class="dropdown-item @(ForgeNavMatch.IsCurrent(item, RelativeUrl) ? "active" : null)"
+           href="@item.Href"
+           target="@(item.External ? "_blank" : null)"
+           rel="@(item.External ? "noopener" : null)"
+           aria-current="@(ForgeNavMatch.IsCurrent(item, RelativeUrl) ? "page" : null)">
+            <i class="bi @IconClass(item)" aria-hidden="true"></i>
+            <span>@item.Title</span>
+            @if (item.External)
+            {
+                <i class="bi bi-box-arrow-up-right ms-auto small" aria-hidden="true"></i>
+            }
+        </a>
+    </li>;
+}

@@ -1,0 +1,49 @@
+<nav class="bf-sidebar" aria-label="Navigation">
+    <div class="bf-sidebar-brand">
+        <a href="@BrandHref" class="bf-sidebar-brand-link">
+            @if (BrandContent is not null)
+            {
+                @BrandContent
+            }
+            else if (LogoUrl is not null)
+            {
+                <img class="bf-brand-logo" src="@LogoUrl" alt="@Brand" />
+                @if (LogoDarkUrl is not null)
+                {
+                    <img class="bf-brand-logo-dark" src="@LogoDarkUrl" alt="" />
+                }
+                @if (MarkUrl is not null)
+                {
+                    <img class="bf-brand-mark" src="@MarkUrl" alt="" />
+                }
+            }
+            else if (!string.IsNullOrWhiteSpace(Brand))
+            {
+                <span class="bf-brand-text">@Brand</span>
+            }
+        </a>
+    </div>
+
+    <div class="bf-sidebar-scroll">
+        @foreach (var section in Sections)
+        {
+            @if (string.IsNullOrEmpty(section.Roles))
+            {
+                <Heroicsoft.NetForge.Components.Bootstrap.Layout.ForgeNavSectionView Section="section" />
+            }
+            else
+            {
+                <AuthorizeView Roles="@section.Roles">
+                    <Heroicsoft.NetForge.Components.Bootstrap.Layout.ForgeNavSectionView Section="section" />
+                </AuthorizeView>
+            }
+        }
+    </div>
+
+    @if (SidebarFooter is not null)
+    {
+        <div class="bf-sidebar-footer border-top p-2">
+            @SidebarFooter
+        </div>
+    }
+</nav>

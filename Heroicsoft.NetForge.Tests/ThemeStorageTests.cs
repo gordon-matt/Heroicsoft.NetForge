@@ -12,10 +12,7 @@ public class ThemeStorageTests
     [InlineData("kinnect-theme", "Admin", "kinnect-theme.admin")]
     [InlineData("kinnect-theme", " admin ", "kinnect-theme.admin")]
     [InlineData("myapp.theme", "Docs", "myapp.theme.docs")]
-    public void KeyFor_KeepsTheBaseKeyOnTheDefaultArea_AndSuffixesANamedArea(string? baseKey, string? area, string expected)
-    {
-        Assert.Equal(expected, ThemeStorage.KeyFor(baseKey, area));
-    }
+    public void KeyFor_KeepsTheBaseKeyOnTheDefaultArea_AndSuffixesANamedArea(string? baseKey, string? area, string expected) => Assert.Equal(expected, ThemeStorage.KeyFor(baseKey, area));
 
     [Fact]
     public void ResolveArea_UsesAnExplicitArea_IncludingAnExplicitDefault()
@@ -49,16 +46,10 @@ public class ThemeStorageTests
     [InlineData("/administration", "")]
     [InlineData("/", "")]
     [InlineData(null, "")]
-    public void ResolveArea_MatchesTheFirstPathSegment_OnlyWhenThatAreaIsListed(string? path, string expected)
-    {
-        Assert.Equal(expected, ThemeStorage.ResolveArea(null, null, path, ["Admin"]));
-    }
+    public void ResolveArea_MatchesTheFirstPathSegment_OnlyWhenThatAreaIsListed(string? path, string expected) => Assert.Equal(expected, ThemeStorage.ResolveArea(null, null, path, ["Admin"]));
 
     [Fact]
-    public void ResolveArea_WithNoNamedAreas_StaysOnTheDefaultArea()
-    {
-        Assert.Equal("", ThemeStorage.ResolveArea(null, "Admin", "/Admin/users", null));
-    }
+    public void ResolveArea_WithNoNamedAreas_StaysOnTheDefaultArea() => Assert.Equal("", ThemeStorage.ResolveArea(null, "Admin", "/Admin/users", null));
 
     [Fact]
     public void ValueFor_UsesTheAreaDefault_ThenTheAppDefault()

@@ -1,0 +1,31 @@
+@* Bootstrap modal driven from C#, so callers can await a decision instead of wiring callbacks. *@
+@if (isVisible)
+{
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">@title</h2>
+                    <button type="button" class="btn-close" aria-label="Close"
+                            @onclick="() => Close(false)"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0">@message</p>
+                    @if (detail is not null)
+                    {
+                        <p class="small text-body-secondary mt-2 mb-0">@detail</p>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" @onclick="() => Close(false)">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn @confirmButtonClass" @onclick="() => Close(true)">
+                        @confirmLabel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+}

@@ -1,0 +1,22 @@
+@if (!string.IsNullOrWhiteSpace(Section.Heading))
+{
+    <div class="bf-sidebar-heading">
+        <span>@Section.Heading</span>
+    </div>
+}
+
+<ul class="nav flex-column bf-nav">
+    @foreach (var item in Section.Items)
+    {
+        @if (string.IsNullOrEmpty(item.Roles))
+        {
+            <Heroicsoft.NetForge.Components.Bootstrap.Layout.ForgeNavLink Item="item" />
+        }
+        else
+        {
+            <AuthorizeView Roles="@item.Roles">
+                <Heroicsoft.NetForge.Components.Bootstrap.Layout.ForgeNavLink Item="item" />
+            </AuthorizeView>
+        }
+    }
+</ul>

@@ -1,0 +1,15 @@
+@inherits LayoutComponentBase
+
+@* For pages that own the whole viewport: setup, errors, anything reached before the shell
+   has the data it needs to render a sidebar. *@
+<div class="bf-standalone">
+    @Body
+</div>
+
+<Heroicsoft.NetForge.Components.Bootstrap.Dialogs.ForgeDialogHost />
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>

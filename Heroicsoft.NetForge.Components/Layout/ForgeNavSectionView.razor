@@ -1,0 +1,22 @@
+@if (!string.IsNullOrWhiteSpace(Section.Heading))
+{
+    <p class="nf-sidebar-heading">
+        <span>@Section.Heading</span>
+    </p>
+}
+
+<ul class="nf-nav">
+    @foreach (var item in Section.Items)
+    {
+        @if (string.IsNullOrEmpty(item.Roles))
+        {
+            <ForgeNavLink Item="item" />
+        }
+        else
+        {
+            <AuthorizeView Roles="@item.Roles">
+                <ForgeNavLink Item="item" />
+            </AuthorizeView>
+        }
+    }
+</ul>

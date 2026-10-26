@@ -1,0 +1,29 @@
+@* Single-line text prompt, awaited like ConfirmDialog. Returns null when cancelled. *@
+@if (isVisible)
+{
+    <div class="nf-modal-backdrop" @onclick="Cancel" @onkeydown="OnKeyDown">
+        <form class="nf-modal" role="dialog" aria-modal="true" aria-labelledby="@titleId"
+              @onsubmit="Submit" @onsubmit:preventDefault="true" @onclick:stopPropagation="true">
+            <h2 class="nf-modal-title" id="@titleId">@title</h2>
+            @if (description is not null)
+            {
+                <p class="nf-muted nf-small">@description</p>
+            }
+            <div class="nf-field">
+                <label for="@inputId">@label</label>
+                <input id="@inputId" class="nf-input @(error is not null ? "invalid" : null)" @ref="inputElement"
+                       @bind="Value" @bind:event="oninput" maxlength="@maxLength" autocomplete="off" />
+                @if (error is not null)
+                {
+                    <span class="nf-validation">@error</span>
+                }
+            </div>
+            <div class="nf-modal-actions">
+                <button type="button" class="nf-button" @onclick="Cancel">Cancel</button>
+                <button type="submit" class="nf-button nf-button-primary" disabled="@string.IsNullOrWhiteSpace(Value)">
+                    @confirmLabel
+                </button>
+            </div>
+        </form>
+    </div>
+}

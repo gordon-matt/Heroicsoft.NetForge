@@ -1,0 +1,25 @@
+@* Modal driven from C#, so callers can await a decision instead of wiring callbacks. Escape and
+   a click on the backdrop both count as Cancel. *@
+@if (isVisible)
+{
+    <div class="nf-modal-backdrop" @onclick="() => Close(false)" @onkeydown="OnKeyDown">
+        <div class="nf-modal" role="dialog" aria-modal="true" aria-labelledby="@titleId"
+             aria-describedby="@messageId" @onclick:stopPropagation="true">
+            <h2 class="nf-modal-title" id="@titleId">@title</h2>
+            <p class="nf-modal-message" id="@messageId">@message</p>
+            @if (detail is not null)
+            {
+                <p class="nf-modal-detail">@detail</p>
+            }
+            <div class="nf-modal-actions">
+                <button type="button" class="nf-button" @ref="cancelButton" @onclick="() => Close(false)">
+                    Cancel
+                </button>
+                <button type="button" class="nf-button @(isDestructive ? "nf-button-danger-solid" : "nf-button-primary")"
+                        @ref="confirmButton" @onclick="() => Close(true)">
+                    @confirmLabel
+                </button>
+            </div>
+        </div>
+    </div>
+}

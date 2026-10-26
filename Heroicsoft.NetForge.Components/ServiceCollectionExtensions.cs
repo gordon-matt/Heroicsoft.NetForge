@@ -1,5 +1,7 @@
-using Heroicsoft.NetForge.Components.Services;
-using Heroicsoft.NetForge.Components.Shell;
+using Heroicsoft.NetForge.Components.Dialogs;
+using Heroicsoft.NetForge.Components.Layout;
+using Heroicsoft.NetForge.Components.Theming;
+using Heroicsoft.NetForge.Components.Toasts;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Heroicsoft.NetForge.Components;

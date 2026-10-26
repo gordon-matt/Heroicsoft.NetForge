@@ -1,15 +1,14 @@
-using Heroicsoft.NetForge.Components;
-using Heroicsoft.NetForge.Components.Services;
+using Heroicsoft.NetForge.Components.Icons;
+using Heroicsoft.NetForge.Components.Layout;
+using Heroicsoft.NetForge.Components.Theming;
+using Heroicsoft.NetForge.Components.Toasts;
 
 namespace Heroicsoft.NetForge.Tests;
 
 public class ForgeAccentCssTests
 {
     [Fact]
-    public void Build_WithNoAccent_EmitsNothing()
-    {
-        Assert.Null(ForgeAccentCss.Build(new ForgeUiOptions()));
-    }
+    public void Build_WithNoAccent_EmitsNothing() => Assert.Null(ForgeAccentCss.Build(new ForgeUiOptions()));
 
     [Fact]
     public void Build_WithOneAccent_UsesItForBothSchemes()
@@ -54,10 +53,7 @@ public class ForgeAccentCssTests
     [InlineData("expression(alert(1))")]
     [InlineData("")]
     [InlineData(null)]
-    public void Build_RefusesValuesThatCouldBreakOutOfTheStyleElement(string? value)
-    {
-        Assert.Null(ForgeAccentCss.Build(new ForgeUiOptions { AccentColor = value, AccentColorDark = value }));
-    }
+    public void Build_RefusesValuesThatCouldBreakOutOfTheStyleElement(string? value) => Assert.Null(ForgeAccentCss.Build(new ForgeUiOptions { AccentColor = value, AccentColorDark = value }));
 
     [Theory]
     [InlineData("#4f46e5", ForgeAccentCss.LightText)]
@@ -65,20 +61,14 @@ public class ForgeAccentCssTests
     [InlineData("#000", ForgeAccentCss.LightText)]
     [InlineData("#ffffff", ForgeAccentCss.DarkText)]
     [InlineData("#fff8", ForgeAccentCss.DarkText)]
-    public void ContrastText_PicksTheMoreReadableColour(string accent, string expected)
-    {
-        Assert.Equal(expected, ForgeAccentCss.ContrastText(accent));
-    }
+    public void ContrastText_PicksTheMoreReadableColour(string accent, string expected) => Assert.Equal(expected, ForgeAccentCss.ContrastText(accent));
 
     [Theory]
     [InlineData("rebeccapurple")]
     [InlineData("#12")]
     [InlineData("#zzzzzz")]
     [InlineData(null)]
-    public void ContrastText_IsNullWhenTheColourIsNotUsableHex(string? accent)
-    {
-        Assert.Null(ForgeAccentCss.ContrastText(accent));
-    }
+    public void ContrastText_IsNullWhenTheColourIsNotUsableHex(string? accent) => Assert.Null(ForgeAccentCss.ContrastText(accent));
 }
 
 public class IconSetTests
@@ -94,10 +84,7 @@ public class IconSetTests
     [InlineData("no-such-icon", IconSet.Fallback)]
     [InlineData("", IconSet.Fallback)]
     [InlineData(null, IconSet.Fallback)]
-    public void Normalize_ResolvesNamesFromBothIconVocabularies(string? name, string expected)
-    {
-        Assert.Equal(expected, IconSet.Normalize(name));
-    }
+    public void Normalize_ResolvesNamesFromBothIconVocabularies(string? name, string expected) => Assert.Equal(expected, IconSet.Normalize(name));
 
     [Fact]
     public void EveryIcon_IsParsedIntoAtLeastOneShape()
@@ -121,10 +108,7 @@ public class IconSetTests
     [InlineData("jobs")]
     [InlineData("logs")]
     [InlineData("bell")]
-    public void TheAppIconNames_AreStillAvailable(string name)
-    {
-        Assert.Contains(name, IconSet.Names);
-    }
+    public void TheAppIconNames_AreStillAvailable(string name) => Assert.Contains(name, IconSet.Names);
 
     [Fact]
     public void MultiShapeIcons_KeepEveryElementAndAttribute()
@@ -149,10 +133,7 @@ public class ForgeBadgeTests
     [InlineData("text-bg-info", "nf-badge-info")]
     [InlineData("nf-badge-success", "nf-badge-success")]
     [InlineData("something-else", "nf-badge-muted")]
-    public void ToneClass_AcceptsBootstrapAndNativeClasses(string? cssClass, string expected)
-    {
-        Assert.Equal(expected, ForgeBadge.ToneClass(cssClass));
-    }
+    public void ToneClass_AcceptsBootstrapAndNativeClasses(string? cssClass, string expected) => Assert.Equal(expected, ForgeBadge.ToneClass(cssClass));
 }
 
 public class ToastServiceShownTests

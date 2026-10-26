@@ -1,5 +1,5 @@
 using Heroicsoft.NetForge.Authentication;
-using Heroicsoft.NetForge.Components.Services;
+using Heroicsoft.NetForge.Components.Paging;
 
 namespace Heroicsoft.NetForge.Tests;
 

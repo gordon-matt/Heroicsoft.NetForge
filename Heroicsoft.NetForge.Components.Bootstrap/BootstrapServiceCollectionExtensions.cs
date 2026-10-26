@@ -1,3 +1,4 @@
+using Heroicsoft.NetForge.Components.Bootstrap.Theming;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Heroicsoft.NetForge.Components.Bootstrap;

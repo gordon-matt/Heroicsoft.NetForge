@@ -1,0 +1,9 @@
+@* Needs no circuit: nf.js handles the click, flips data-theme on <html>, and stores the choice
+   under the area's key (data-nf-storage-key). The attribute below is the fallback for the
+   default area. CSS shows the moon in light mode and the sun in dark. *@
+<button type="button" class="nf-icon-button nf-theme-toggle" data-nf-theme-toggle
+        data-theme-key="@UiOptions.Value.ThemeStorageKey"
+        title="Toggle light or dark theme" aria-label="Toggle light or dark theme">
+    <Icon Name="moon" Class="nf-theme-moon" Size="@Size" />
+    <Icon Name="sun" Class="nf-theme-sun" Size="@Size" />
+</button>

@@ -327,7 +327,7 @@ public static class ServiceCollectionExtensions
 /// <summary>
 /// Drops <see cref="Controllers.AuthController"/> after the SDK has discovered it.
 /// </summary>
-file sealed class SuppressAuthControllerFeatureProvider : IApplicationFeatureProvider<ControllerFeature>
+internal sealed class SuppressAuthControllerFeatureProvider : IApplicationFeatureProvider<ControllerFeature>
 {
     public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
     {
