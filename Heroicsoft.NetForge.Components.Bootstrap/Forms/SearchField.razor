@@ -1,0 +1,31 @@
+@if (OnSubmit.HasDelegate)
+{
+    <form class="@Class" role="search" @onsubmit="SubmitAsync" @onsubmit:preventDefault="true">
+        @Body
+    </form>
+}
+else
+{
+    <div class="@Class">
+        @Body
+    </div>
+}
+
+@code {
+    private RenderFragment Body => @<text>
+        @if (!string.IsNullOrEmpty(Label))
+        {
+            <label class="@ResolvedLabelClass" for="@Id">@Label</label>
+        }
+        <div class="input-group @(Small ? "input-group-sm" : null) @GroupClass">
+            <span class="input-group-text @IconClass"><i class="bi bi-search"></i></span>
+            <input type="search" id="@Id" class="form-control @InputClass" placeholder="@Placeholder" aria-label="@AriaLabelText"
+                   autocomplete="@Autocomplete" value="@Value" @oninput="OnInputAsync" @onkeydown="OnKeyDown" @onkeyup="OnKeyUp" />
+            @if (!string.IsNullOrEmpty(SubmitText))
+            {
+                <button type="submit" class="btn btn-primary">@SubmitText</button>
+            }
+            @Trailing
+        </div>
+    </text>;
+}

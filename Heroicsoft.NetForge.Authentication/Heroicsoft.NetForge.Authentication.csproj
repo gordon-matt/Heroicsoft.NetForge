@@ -4,7 +4,7 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<RootNamespace>Heroicsoft.NetForge.Authentication</RootNamespace>
 		<Description>Identity, Keycloak, and single-user authentication for Heroicsoft Blazor apps, plus the first-run setup gate.</Description>
-		<Version>1.0.3.1</Version>
+		<Version>1.1.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>

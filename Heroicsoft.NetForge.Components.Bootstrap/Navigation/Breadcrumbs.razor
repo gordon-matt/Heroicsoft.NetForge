@@ -1,0 +1,47 @@
+@typeparam TItem
+
+@if (Items is { Count: > 0 })
+{
+    <nav aria-label="@AriaLabel">
+        <ol class="@NavClass" style="@DividerStyle">
+            @for (var i = 0; i < Items.Count; i++)
+            {
+                var item = Items[i];
+                var last = i == Items.Count - 1;
+                var href = Href?.Invoke(item);
+                <li class="@ItemClass(last)" aria-current="@CurrentValue(last)">
+                    @if (Leading is not null)
+                    {
+                        @Leading(item)
+                    }
+                    @if (last)
+                    {
+                        @Text(item)
+                    }
+                    else if (!string.IsNullOrEmpty(href) && OnNavigate.HasDelegate)
+                    {
+                        <a class="@LinkClass" href="@href" @onclick="() => OnNavigate.InvokeAsync(item)" @onclick:preventDefault>
+                            @Text(item)
+                        </a>
+                    }
+                    else if (!string.IsNullOrEmpty(href))
+                    {
+                        <a class="@LinkClass" href="@href">
+                            @Text(item)
+                        </a>
+                    }
+                    else if (OnNavigate.HasDelegate)
+                    {
+                        <button type="button" class="btn btn-link btn-sm p-0 align-baseline @LinkClass" @onclick="() => OnNavigate.InvokeAsync(item)">
+                            @Text(item)
+                        </button>
+                    }
+                    else
+                    {
+                        <span>@Text(item)</span>
+                    }
+                </li>
+            }
+        </ol>
+    </nav>
+}

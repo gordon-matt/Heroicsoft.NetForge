@@ -1,0 +1,68 @@
+@typeparam TItem
+
+@if (Items is { Count: > 0 })
+{
+    <nav class="@NavClass" aria-label="@AriaLabel">
+        @for (var i = 0; i < Items.Count; i++)
+        {
+            var item = Items[i];
+            var last = i == Items.Count - 1;
+            var href = Href?.Invoke(item);
+            if (i > 0)
+            {
+                <span class="@SeparatorClass" aria-hidden="true">@Separator</span>
+            }
+
+            if (last)
+            {
+                <span class="@CurrentClass" aria-current="page">
+                    @if (Leading is not null)
+                    {
+                        @Leading(item)
+                    }
+                    @Text(item)
+                </span>
+            }
+            else if (!string.IsNullOrEmpty(href) && OnNavigate.HasDelegate)
+            {
+                <a class="@LinkClass" href="@href" @onclick="() => OnNavigate.InvokeAsync(item)" @onclick:preventDefault>
+                    @if (Leading is not null)
+                    {
+                        @Leading(item)
+                    }
+                    @Text(item)
+                </a>
+            }
+            else if (!string.IsNullOrEmpty(href))
+            {
+                <a class="@LinkClass" href="@href">
+                    @if (Leading is not null)
+                    {
+                        @Leading(item)
+                    }
+                    @Text(item)
+                </a>
+            }
+            else if (OnNavigate.HasDelegate)
+            {
+                <button type="button" class="@LinkClass" @onclick="() => OnNavigate.InvokeAsync(item)">
+                    @if (Leading is not null)
+                    {
+                        @Leading(item)
+                    }
+                    @Text(item)
+                </button>
+            }
+            else
+            {
+                <span>
+                    @if (Leading is not null)
+                    {
+                        @Leading(item)
+                    }
+                    @Text(item)
+                </span>
+            }
+        }
+    </nav>
+}

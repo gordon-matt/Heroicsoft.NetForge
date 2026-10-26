@@ -1,0 +1,28 @@
+@if (Open || Persistent)
+{
+    @if (Scrim && Open && !Inline)
+    {
+        <div class="bf-drawer-scrim" @onclick="CloseAsync"></div>
+    }
+    <aside class="@PanelClass" style="@PanelStyle" aria-label="@Label" aria-hidden="@(!Open)" @onkeydown="OnKeyDownAsync">
+        <header class="bf-drawer-head">
+            <div class="bf-drawer-title">
+                @if (TitleContent is not null)
+                {
+                    @TitleContent
+                }
+                else if (!string.IsNullOrEmpty(Title))
+                {
+                    <strong>@Title</strong>
+                }
+            </div>
+            <div class="bf-drawer-actions">
+                @Actions
+                <button type="button" class="btn-close" aria-label="Close" @onclick="CloseAsync"></button>
+            </div>
+        </header>
+        <div class="bf-drawer-body @BodyClass">
+            @ChildContent
+        </div>
+    </aside>
+}

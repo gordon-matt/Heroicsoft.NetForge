@@ -1,0 +1,52 @@
+@typeparam TItem where TItem : class
+
+<div class="nf-tag-picker @Class">
+    <div class="nf-chip-row nf-tag-picker-tags">
+        @if (Selected.Count == 0)
+        {
+            <span class="nf-muted nf-small">No @Label.ToLowerInvariant() yet.</span>
+        }
+        else
+        {
+            @foreach (var item in Selected)
+            {
+                <span class="nf-chip nf-tag-chip @ChipClass">
+                    <span>@NameOf(item)</span>
+                    <button type="button" class="nf-tag-remove" aria-label="Remove" title="Remove" @onclick="() => RemoveAsync(item)">
+                        <Icon Name="x" Size="14" />
+                    </button>
+                </span>
+            }
+        }
+    </div>
+
+    <div class="nf-tag-picker-field">
+        <input class="nf-input" type="text" id="@Id" autocomplete="off"
+               placeholder="@Placeholder"
+               @bind="input" @bind:event="oninput"
+               @bind:after="OnInputChangedAsync"
+               onkeydown="if(event.key==='Enter'){event.preventDefault();}"
+               @onkeyup="OnKeyUpAsync"
+               @onkeyup:stopPropagation="true"
+               @onfocus="OnFocusAsync"
+               @onblur="OnBlurAsync" />
+
+        @if (showSuggestions && (suggestions.Count > 0 || !string.IsNullOrWhiteSpace(input)))
+        {
+            <div class="nf-tag-picker-menu">
+                @foreach (var suggestion in suggestions)
+                {
+                    <button type="button" @onmousedown="() => CommitAsync(NameOf(suggestion))" @onmousedown:preventDefault="true">
+                        @NameOf(suggestion)
+                    </button>
+                }
+                @if (AllowCreate && !string.IsNullOrWhiteSpace(input) && !suggestions.Any(suggestion => string.Equals(NameOf(suggestion), input.Trim(), StringComparison.OrdinalIgnoreCase)))
+                {
+                    <button type="button" @onmousedown="() => CommitAsync(input!.Trim())" @onmousedown:preventDefault="true">
+                        Create "@input.Trim()"
+                    </button>
+                }
+            </div>
+        }
+    </div>
+</div>

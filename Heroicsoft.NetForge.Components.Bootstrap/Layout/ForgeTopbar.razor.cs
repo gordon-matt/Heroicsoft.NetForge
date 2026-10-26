@@ -85,9 +85,9 @@ public partial class ForgeTopbar
         _ => "/",
     };
 
-    private async Task OnInput(ChangeEventArgs args)
+    private async Task OnSearchChanged(string? value)
     {
-        searchTerm = args.Value?.ToString() ?? string.Empty;
+        searchTerm = value ?? string.Empty;
 
         // The search box's clear button empties the field without submitting the form.
         if (searchTerm.Length == 0)

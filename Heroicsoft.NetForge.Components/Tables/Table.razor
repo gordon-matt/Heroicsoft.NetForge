@@ -1,0 +1,16 @@
+@if (Framed)
+{
+    <div class="nf-table-wrap">
+        <table class="@TableClass">
+            @ChildContent
+        </table>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="@TableClass">
+            @ChildContent
+        </table>
+    </div>
+}

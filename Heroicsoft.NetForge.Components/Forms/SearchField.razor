@@ -1,0 +1,28 @@
+@if (OnSubmit.HasDelegate)
+{
+    <form class="nf-search @Class" role="search" @onsubmit="SubmitAsync" @onsubmit:preventDefault="true">
+        <Icon Name="search" />
+        <input type="search" id="@Id" class="@InputClass" placeholder="@Placeholder" aria-label="@AriaLabelText"
+               autocomplete="@Autocomplete" value="@Value" @oninput="OnInputAsync" @onkeydown="OnKeyDown" @onkeyup="OnKeyUp"
+               data-nf-search="@(Shortcut ? string.Empty : null)" />
+        @Trailing
+        @if (!string.IsNullOrEmpty(SubmitText))
+        {
+            <button type="submit" class="nf-button nf-button-primary">@SubmitText</button>
+        }
+    </form>
+}
+else
+{
+    <label class="nf-search @Class">
+        <Icon Name="search" />
+        <input type="search" id="@Id" class="@InputClass" placeholder="@Placeholder" aria-label="@AriaLabelText"
+               autocomplete="@Autocomplete" value="@Value" @oninput="OnInputAsync" @onkeydown="OnKeyDown" @onkeyup="OnKeyUp"
+               data-nf-search="@(Shortcut ? string.Empty : null)" />
+        @Trailing
+        @if (!string.IsNullOrEmpty(SubmitText))
+        {
+            <button type="submit" class="nf-button nf-button-primary">@SubmitText</button>
+        }
+    </label>
+}

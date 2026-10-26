@@ -4,7 +4,7 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<RootNamespace>Heroicsoft.NetForge.Abstractions</RootNamespace>
 		<Description>Contracts shared by Heroicsoft Blazor apps: auth modes, Bootswatch themes, per-area theme storage keys, navigation, setup status, and version reporting.</Description>
-		<Version>1.0.3</Version>
+		<Version>1.1.0</Version>
 	</PropertyGroup>
 
 </Project>

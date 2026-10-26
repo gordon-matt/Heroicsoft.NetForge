@@ -1,0 +1,8 @@
+@if (Href is not null)
+{
+    <a class="@CssClass" href="@Href" @onclick="OnClick">@ChildContent</a>
+}
+else
+{
+    <button type="button" class="@CssClass" @onclick="OnClick">@ChildContent</button>
+}

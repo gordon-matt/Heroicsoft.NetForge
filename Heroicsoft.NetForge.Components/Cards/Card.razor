@@ -1,0 +1,31 @@
+<article class="nf-card @Class">
+    @if (!string.IsNullOrEmpty(Title) || TitleEnd is not null)
+    {
+        <h3 class="nf-card-title">
+            @if (Href is not null)
+            {
+                <a href="@Href">@Title</a>
+            }
+            else
+            {
+                @Title
+            }
+            @TitleEnd
+        </h3>
+    }
+    @if (Description is not null)
+    {
+        <p>@Description</p>
+    }
+    @ChildContent
+    @if (Meta is not null || Actions is not null)
+    {
+        <div class="nf-card-meta">
+            @Meta
+            @if (Actions is not null)
+            {
+                <span class="nf-card-actions">@Actions</span>
+            }
+        </div>
+    }
+</article>

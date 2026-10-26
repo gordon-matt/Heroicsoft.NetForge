@@ -726,6 +726,90 @@ kbd {
 
 @keyframes nf-slide-in { from { transform: translateX(16px); opacity: 0; } }
 
+.nf-drawer.is-start {
+    right: auto;
+    left: 0;
+    border-right: 1px solid var(--nf-border);
+    border-left: 0;
+}
+.nf-drawer.is-inline {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 30;
+    width: min(360px, 92%);
+    border: 1px solid var(--nf-border);
+    border-radius: var(--nf-radius);
+    animation: none;
+}
+.nf-drawer.is-persistent { animation: none; transition: transform 0.18s ease; }
+.nf-drawer.is-closed { transform: translateX(105%); pointer-events: none; }
+.nf-drawer.is-start.is-closed { transform: translateX(-105%); }
+
+.nf-breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 0;
+    color: var(--nf-muted);
+    font-size: 13px;
+}
+.nf-breadcrumbs a,
+.nf-breadcrumbs button {
+    padding: 0;
+    color: var(--nf-muted);
+    font: inherit;
+    text-decoration: none;
+    background: none;
+    border: 0;
+}
+.nf-breadcrumbs a:hover,
+.nf-breadcrumbs button:hover { color: var(--nf-text); }
+.nf-breadcrumbs [aria-current="page"] { color: var(--nf-text); }
+
+.nf-tag-picker-tags { margin-bottom: 0.45rem; }
+.nf-tag-chip { height: auto; padding: 0.1rem 0.15rem 0.1rem 0.7rem; cursor: default; }
+.nf-tag-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    border-radius: 999px;
+}
+.nf-tag-remove:hover { background: var(--nf-hover); }
+.nf-tag-picker-field { position: relative; }
+.nf-tag-picker-menu {
+    position: absolute;
+    z-index: 30;
+    left: 0;
+    right: 0;
+    max-height: 220px;
+    overflow-y: auto;
+    margin-top: 0.25rem;
+    padding: 0.25rem;
+    background: var(--nf-surface);
+    border: 1px solid var(--nf-border);
+    border-radius: var(--nf-radius);
+    box-shadow: var(--nf-shadow);
+}
+.nf-tag-picker-menu button {
+    display: block;
+    width: 100%;
+    padding: 0.35rem 0.55rem;
+    color: var(--nf-text);
+    text-align: left;
+    background: none;
+    border: 0;
+    border-radius: var(--nf-radius-small);
+}
+.nf-tag-picker-menu button:hover { background: var(--nf-hover); }
+
 /* ---------- Dialogs ---------- */
 
 .nf-modal-backdrop {

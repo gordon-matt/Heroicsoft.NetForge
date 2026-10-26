@@ -15,13 +15,14 @@
                         {
                             <p class="text-secondary small">@description</p>
                         }
-                        <label class="form-label" for="@inputId">@label</label>
-                        <input id="@inputId" class="form-control" @ref="inputElement"
-                               @bind="Value" @bind:event="oninput" maxlength="@maxLength" autocomplete="off" />
-                        @if (error is not null)
-                        {
-                            <div class="text-danger small mt-1">@error</div>
-                        }
+                        <Field Label="@label" For="@inputId">
+                            <input id="@inputId" class="form-control" @ref="inputElement"
+                                   @bind="Value" @bind:event="oninput" maxlength="@maxLength" autocomplete="off" />
+                            @if (error is not null)
+                            {
+                                <div class="text-danger small mt-1">@error</div>
+                            }
+                        </Field>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary" @onclick="Cancel">

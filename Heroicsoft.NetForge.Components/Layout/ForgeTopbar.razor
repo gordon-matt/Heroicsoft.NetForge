@@ -55,12 +55,12 @@
     }
     else if (ShowSearch)
     {
-        <form class="nf-search" role="search" @onsubmit="SubmitSearch" @onsubmit:preventDefault="true">
-            <Icon Name="search" />
-            <input type="search" data-nf-search placeholder="@SearchPlaceholder" aria-label="@SearchPlaceholder"
-                   autocomplete="off" value="@searchTerm" @oninput="OnInput" />
-            <kbd aria-hidden="true">/</kbd>
-        </form>
+        <SearchField Placeholder="@SearchPlaceholder" AriaLabel="@SearchPlaceholder"
+                     Value="@searchTerm" ValueChanged="OnSearchChanged" OnSubmit="SubmitSearch" Shortcut="true">
+            <Trailing>
+                <kbd aria-hidden="true">/</kbd>
+            </Trailing>
+        </SearchField>
     }
 
     <div class="nf-topbar-end">

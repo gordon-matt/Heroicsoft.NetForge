@@ -1,0 +1,11 @@
+<div class="@Class">
+    @if (LabelContent is not null)
+    {
+        <label class="@ResolvedLabelClass" for="@For">@LabelContent</label>
+    }
+    else if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="@ResolvedLabelClass" for="@For">@Label</label>
+    }
+    @ChildContent
+</div>

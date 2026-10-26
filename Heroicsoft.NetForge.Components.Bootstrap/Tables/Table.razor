@@ -1,0 +1,14 @@
+@if (Responsive)
+{
+    <div class="table-responsive">
+        <table class="@TableClass">
+            @ChildContent
+        </table>
+    </div>
+}
+else
+{
+    <table class="@TableClass">
+        @ChildContent
+    </table>
+}

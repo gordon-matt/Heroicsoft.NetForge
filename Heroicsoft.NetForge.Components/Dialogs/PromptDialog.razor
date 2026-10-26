@@ -9,15 +9,14 @@
             {
                 <p class="nf-muted nf-small">@description</p>
             }
-            <div class="nf-field">
-                <label for="@inputId">@label</label>
+            <Field Label="@label" For="@inputId">
                 <input id="@inputId" class="nf-input @(error is not null ? "invalid" : null)" @ref="inputElement"
                        @bind="Value" @bind:event="oninput" maxlength="@maxLength" autocomplete="off" />
                 @if (error is not null)
                 {
                     <span class="nf-validation">@error</span>
                 }
-            </div>
+            </Field>
             <div class="nf-modal-actions">
                 <button type="button" class="nf-button" @onclick="Cancel">Cancel</button>
                 <button type="submit" class="nf-button nf-button-primary" disabled="@string.IsNullOrWhiteSpace(Value)">

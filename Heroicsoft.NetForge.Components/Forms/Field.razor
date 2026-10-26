@@ -1,0 +1,11 @@
+<div class="nf-field @Class">
+    @if (LabelContent is not null)
+    {
+        <label class="@LabelClass" for="@For">@LabelContent</label>
+    }
+    else if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="@LabelClass" for="@For">@Label</label>
+    }
+    @ChildContent
+</div>
