@@ -1,0 +1,33 @@
+---
+description: Which of my other projects this repo depends on and where their source lives. Read before using or investigating any internal library/package.
+alwaysApply: false
+---
+
+Shared coding conventions live in Blueprint/.cursor/rules/conventions.mdc (absolute path: D:\Source\GitHub\Blueprint\.cursor\rules\conventions.mdc). Read it before writing or changing code.
+
+@../../Blueprint/.cursor/rules/conventions.mdc
+
+## Internal dependencies
+
+This repo has no internal dependencies in this workspace.
+
+## Unresolved
+
+None.
+
+## Reverse dependencies
+
+- `Libraries\IdentityNexus` - Heroicsoft.NetForge.Components 1.1.0 (NuGet PackageReference)
+- `Libraries\LogVue` - Heroicsoft.NetForge.Components 1.1.1 (NuGet PackageReference)
+- `SelfHosted\ArcaFS` - Heroicsoft.NetForge.Abstractions commented-out package 1.0.3-beta (ProjectReference); Heroicsoft.NetForge.Authentication commented-out package 1.0.3-beta (ProjectReference); Heroicsoft.NetForge.Components commented-out package 1.0.3-beta (ProjectReference); Heroicsoft.NetForge.Hangfire commented-out package 1.0.3-beta (ProjectReference); Heroicsoft.NetForge.Results commented-out package 1.0.3-beta (ProjectReference)
+- `SelfHosted\Kabinet` - Heroicsoft.NetForge.Authentication 1.1.0 (NuGet PackageReference); Heroicsoft.NetForge.Components 1.1.1 (NuGet PackageReference)
+- `SelfHosted\Kinnect` - Heroicsoft.NetForge.Abstractions commented-out package 1.0.3 (ProjectReference); Heroicsoft.NetForge.Authentication commented-out package 1.0.3.1 (ProjectReference); Heroicsoft.NetForge.Components commented-out package 1.0.3 (ProjectReference); Heroicsoft.NetForge.Hangfire commented-out package 1.0.3 (ProjectReference)
+- `SelfHosted\LinkStash` - Heroicsoft.NetForge.Abstractions 1.1.0 (NuGet PackageReference); Heroicsoft.NetForge.Authentication 1.1.0 (NuGet PackageReference); Heroicsoft.NetForge.Components 1.1.1 (NuGet PackageReference); Heroicsoft.NetForge.Results 1.1.0 (NuGet PackageReference)
+- `SelfHosted\MoneyLens` - Heroicsoft.NetForge.Abstractions 1.1.0 (NuGet PackageReference); Heroicsoft.NetForge.Authentication 1.1.0 (NuGet PackageReference); Heroicsoft.NetForge.Components 1.1.1 (NuGet PackageReference); Heroicsoft.NetForge.Results 1.1.0 (NuGet PackageReference)
+- `SelfHosted\MyVideoArchive` - Heroicsoft.NetForge.Authentication commented-out package 1.0.3-beta (ProjectReference); Heroicsoft.NetForge.Hangfire commented-out package 1.0.3-beta (ProjectReference)
+- `SelfHosted\PicStashly` - Heroicsoft.NetForge.Authentication 1.1.0 (NuGet PackageReference); Heroicsoft.NetForge.Components.Bootstrap 1.1.0 (NuGet PackageReference)
+- `SelfHosted\ReelSoon` - Heroicsoft.NetForge.Abstractions 1.1.0 (NuGet PackageReference); Heroicsoft.NetForge.Authentication 1.1.0 (NuGet PackageReference); Heroicsoft.NetForge.Components 1.1.1 (NuGet PackageReference); Heroicsoft.NetForge.Hangfire 1.1.0 (NuGet PackageReference); Heroicsoft.NetForge.Results 1.1.0 (NuGet PackageReference)
+- `SelfHosted\Shelfwarden` - Heroicsoft.NetForge.Abstractions commented-out package 1.0.3-beta (ProjectReference); Heroicsoft.NetForge.Authentication commented-out package 1.0.3-beta (ProjectReference); Heroicsoft.NetForge.Components.Bootstrap commented-out package 1.0.3-beta (ProjectReference); Heroicsoft.NetForge.Hangfire commented-out package 1.0.3-beta (ProjectReference); Heroicsoft.NetForge.Results commented-out package 1.0.3-beta (ProjectReference)
+- `SelfHosted\Snippetz` - Heroicsoft.NetForge.Abstractions 1.1.0 (NuGet PackageReference); Heroicsoft.NetForge.Authentication 1.1.0 (NuGet PackageReference); Heroicsoft.NetForge.Components 1.1.1 (NuGet PackageReference); Heroicsoft.NetForge.Results 1.1.0 (NuGet PackageReference)
+
+When you need to understand an API, behavior, or bug in one of the internal packages above, read its source code at the listed location. Do NOT use reflection, decompilation, or inspect DLLs/NuGet cache. If a fix belongs in the library, say so rather than working around it in the consumer. Note that the consumer references a published package version, so local source may be newer than what the consumer actually uses; check the version.
