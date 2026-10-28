@@ -1,0 +1,54 @@
+@page "/"
+@attribute [Authorize]
+
+<PageTitle>Notes - NetForgeApp</PageTitle>
+
+@if (loading)
+{
+    <p class="nf-muted">Loading.</p>
+}
+else if (loadError is not null)
+{
+    <EmptyState Icon="alert" Title="The notes could not be read" Description="@loadError" />
+}
+else
+{
+    <div class="nf-panel">
+        <div class="nf-panel-header">New note</div>
+        <div class="nf-panel-body">
+            <form @onsubmit="SaveAsync">
+                <div class="nf-field">
+                    <label for="note-title">Title</label>
+                    <input id="note-title" class="nf-input" @bind="title" maxlength="256" />
+                </div>
+                <div class="nf-field">
+                    <label for="note-body">Body</label>
+                    <textarea id="note-body" class="nf-input" @bind="body"></textarea>
+                </div>
+                <button type="submit" class="nf-button nf-button-primary">Add note</button>
+            </form>
+        </div>
+    </div>
+
+    @if (notes.Count == 0)
+    {
+        <EmptyState Icon="library" Title="You currently don't have any notes">
+            <p>Add your first one above.</p>
+        </EmptyState>
+    }
+    else
+    {
+        <CardGrid>
+            @foreach (var note in notes)
+            {
+                <article class="nf-card">
+                    <h2 class="nf-card-title">@note.Title</h2>
+                    <p>@note.Body</p>
+                    <div class="nf-card-actions">
+                        <button type="button" class="nf-button" @onclick="() => DeleteAsync(note.Id)">Delete</button>
+                    </div>
+                </article>
+            }
+        </CardGrid>
+    }
+}

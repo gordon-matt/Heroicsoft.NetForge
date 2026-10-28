@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<RootNamespace>Heroicsoft.NetForge.Drawing</RootNamespace>
+		<Description>Image identify, resize, thumbnail, crop, rotate, and perceptual-hash helpers for Heroicsoft apps. Implemented with SkiaSharp so Windows hosts and Linux containers share one code path, without SixLabors.ImageSharp.</Description>
+		<Version>1.1.0</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.13" />
+		<PackageReference Include="SkiaSharp" Version="4.153.1" />
+		<!-- The default Linux asset expects libfontconfig and libfreetype on the host. Containers
+		     usually do not have them; this build bundles those libraries. The direct reference
+		     with ExcludeAssets drops the dependency SkiaSharp would otherwise pull in. -->
+		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="4.153.1">
+			<ExcludeAssets>all</ExcludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="4.153.1" />
+	</ItemGroup>
+
+</Project>

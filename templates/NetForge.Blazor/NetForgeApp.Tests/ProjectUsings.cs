@@ -1,0 +1,11 @@
+global using Ardalis.Result;
+global using Extenso.Data.Entity;
+global using Heroicsoft.NetForge.Abstractions.Auth;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Logging.Abstractions;
+global using NetForgeApp.Data.Entities;
+global using NetForgeApp.Data.Sqlite;
+global using NetForgeApp.Models;
+global using NetForgeApp.Services.Notes;
+global using NetForgeApp.Tests.Infrastructure;
+global using Xunit;

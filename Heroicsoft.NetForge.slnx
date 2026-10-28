@@ -3,6 +3,10 @@
   <Project Path="Heroicsoft.NetForge.Authentication/Heroicsoft.NetForge.Authentication.csproj" />
   <Project Path="Heroicsoft.NetForge.Components/Heroicsoft.NetForge.Components.csproj" />
   <Project Path="Heroicsoft.NetForge.Components.Bootstrap/Heroicsoft.NetForge.Components.Bootstrap.csproj" />
+  <Project Path="Heroicsoft.NetForge.Drawing/Heroicsoft.NetForge.Drawing.csproj" />
+  <Project Path="Heroicsoft.NetForge.Drawing.Tests/Heroicsoft.NetForge.Drawing.Tests.csproj" />
+  <Project Path="Heroicsoft.NetForge.Video/Heroicsoft.NetForge.Video.csproj" />
+  <Project Path="Heroicsoft.NetForge.Video.Tests/Heroicsoft.NetForge.Video.Tests.csproj" />
   <Project Path="Heroicsoft.NetForge.Hangfire/Heroicsoft.NetForge.Hangfire.csproj" />
   <Project Path="Heroicsoft.NetForge.Results/Heroicsoft.NetForge.Results.csproj" />
   <Project Path="Heroicsoft.NetForge.Tests/Heroicsoft.NetForge.Tests.csproj" />

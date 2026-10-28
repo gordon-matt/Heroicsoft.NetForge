@@ -1,0 +1,12 @@
+<Solution>
+  <Project Path="NetForgeApp.Core/NetForgeApp.Core.csproj" />
+  <Project Path="NetForgeApp.Data.MySql/NetForgeApp.Data.MySql.csproj" />
+  <Project Path="NetForgeApp.Data.Npgsql/NetForgeApp.Data.Npgsql.csproj" />
+  <Project Path="NetForgeApp.Data.Sql/NetForgeApp.Data.Sql.csproj" />
+  <Project Path="NetForgeApp.Data.Sqlite/NetForgeApp.Data.Sqlite.csproj" />
+  <Project Path="NetForgeApp.Data/NetForgeApp.Data.csproj" />
+  <Project Path="NetForgeApp.Models/NetForgeApp.Models.csproj" />
+  <Project Path="NetForgeApp.Services/NetForgeApp.Services.csproj" />
+  <Project Path="NetForgeApp.Tests/NetForgeApp.Tests.csproj" />
+  <Project Path="NetForgeApp/NetForgeApp.csproj" />
+</Solution>

@@ -13,6 +13,8 @@ Shared building blocks for the self-hosted MVC and Blazor apps. Authentication, 
 f- styled shell, dialogs, toasts, pager, empty states, router, and light/dark toggle. No Bootstrap. |
 | `Heroicsoft.NetForge.Components.Bootstrap` | The same set on Bootstrap/Bootswatch, with the Bootswatch theme picker. References Heroicsoft.NetForge.Components. |
 | `Heroicsoft.NetForge.Hangfire` | Administrator-only Hangfire dashboard filter |
+| `Heroicsoft.NetForge.Drawing` | Resize, crop, rotate, transcode, and difference-hash for thumbnails and other rasters. SkiaSharp, not ImageSharp |
+| `Heroicsoft.NetForge.Video` | FFmpeg bootstrap, frame capture, max-size shrink, height downscale, integrity check, and PCM-to-AAC. Xabe.FFmpeg |
 
 ## New app
 
@@ -77,6 +79,19 @@ if (auth == AuthProvider.Identity)
 Pages inject `ToastService`, `DialogService`, and `SidebarRefresh` instead of copying those types. `ShellLayout` is the default layout: set `ForgeShellOptions.Sections` for a static menu, or register `IShellNavigation` when the sidebar is loaded from data. `GetSectionsAsync` is awaited on startup and again after `SidebarRefresh.NotifyChanged()`. A search format of `/?q={0}` fills the box from that query parameter and clears it when the box is submitted empty. `TopbarEndComponent` and `SidebarFooterComponent` add a bell or a pinned footer without replacing the layout. A nav item highlights a query with `ActiveQuery` (a null value means the parameter is absent) and can set `Tooltip`, `Count`, and `TagIcon`. Set `NavigationPlacement` to `Topbar` when those links belong in the header and the app should not render a sidebar.
 
 Hangfire hosts add `Heroicsoft.NetForge.Hangfire` and pass `new AdministratorDashboardAuthorizationFilter()` in the dashboard options.
+
+Image hosts add `Heroicsoft.NetForge.Drawing` and call `AddNetForgeDrawing()`. Downscales use the Mitchell cubic resampler. `ImageScaleMode.Max` keeps the aspect ratio and can enlarge a small source, matching the previous ImageSharp behaviour. Encodes are sRGB and drop EXIF, so read GPS or orientation before processing. Animated GIF and WebP keep only the first frame once they are resized. Difference hashes of real photos will not match hashes computed by ImageSharp, so recompute any stored perceptual hashes after switching. The package references `SkiaSharp.NativeAssets.Linux.NoDependencies`, so a Linux container does not need fontconfig or FreeType. Colour-managed print work is outside this library.
+
+Video hosts add `Heroicsoft.NetForge.Video` and call `AddNetForgeVideo()`. Call `FfmpegBootstrap.EnsureAsync` at startup with the app's download directory and whether ffprobe is required. Xabe needs both `ffmpeg` and `ffprobe` in one directory when ffprobe is required. The native binaries are resolved on Windows and Linux the same way: a configured path, well-known locations, then an official download. A named size such as `Hd720` is a maximum box: a video already inside it is left as-is, unless it is stored sideways, in which case the pixels are turned upright with the bitrate capped at the source and the result kept only when it is at most 15% larger. A larger video is scaled down to fit, and a re-encode that is not smaller than the original is discarded. The height downscale does the same with the file size.
+
+A new Blazor app can start from the template in `templates/NetForge.Blazor`:
+
+```bash
+dotnet new install templates/NetForge.Blazor
+dotnet new netforge-blazor -n MyApp
+```
+
+Visual Studio lists it as **NetForge Blazor App** after that install (Visual Studio 2022 17.4 or later). The generated solution has the host, Core, Data, one project per database provider with an `InitialCreate` migration, Services, and Tests. It uses `Heroicsoft.NetForge.Components` (the `nf-` shell), the Extenso repository, and `Ardalis.Result`. A sample `Note` entity shows the service, controller, page, and test. Lowercase file names, the theme key, the SQLite file, and the seed email follow the project name.
 
 MVC hosts keep their own `/auth` controller and `IUserContextService`. Pass `IncludeAuthController = false`, `RegisterUserContext = false`, and `Identity.UseRelaxedPasswordPolicy = false`. Keycloak behind a reverse proxy also sets `RequireHttpsMetadata = false`, correlation cookies to `SameSite=None` / `Secure=Always`, and `RedirectBrowserToPublicAuthority = true`. Set `AccessDeniedPath` to `/Home/AccessDenied` and `RemoteFailurePath` to `/Home/Error`. When `Authentication:Keycloak:PublicOrigin` is set, post-logout redirects to `{PublicOrigin}/signout-callback-oidc`.
 
