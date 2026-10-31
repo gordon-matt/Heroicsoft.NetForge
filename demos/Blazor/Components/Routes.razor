@@ -1,0 +1,6 @@
+@namespace NetForge.Demo.Blazor.Components
+
+<ForgeRouter AppAssembly="typeof(Program).Assembly"
+             AdditionalAssemblies="@( [typeof(LibraryOnePage).Assembly, typeof(LibraryTwoPage).Assembly] )"
+             NotFoundPage="typeof(NotFound)"
+             DefaultLayout="typeof(ShellLayout)" />

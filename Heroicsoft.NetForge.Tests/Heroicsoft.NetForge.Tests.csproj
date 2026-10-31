@@ -29,6 +29,7 @@
 		<ProjectReference Include="..\Heroicsoft.NetForge.Results\Heroicsoft.NetForge.Results.csproj" />
 		<ProjectReference Include="..\Heroicsoft.NetForge.Authentication\Heroicsoft.NetForge.Authentication.csproj" />
 		<ProjectReference Include="..\Heroicsoft.NetForge.Components\Heroicsoft.NetForge.Components.csproj" />
+		<ProjectReference Include="..\Heroicsoft.NetForge.Components.Bootstrap\Heroicsoft.NetForge.Components.Bootstrap.csproj" />
 	</ItemGroup>
 
 </Project>

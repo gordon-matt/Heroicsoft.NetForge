@@ -283,6 +283,89 @@ kbd {
 .nf-nav-link.active .nf-nav-count,
 .nf-nav-link.is-active .nf-nav-count { color: var(--nf-accent); }
 
+/* Shared menu. The shell's own top nav uses .nf-topnav; this one is separate so a menu
+   dropped into a page is not hidden by the shell's narrow-screen rule. */
+.nf-shared-menu button.nf-nav-link,
+.nf-shared-menu button.nf-menu-item {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+.nf-shared-section + .nf-shared-section { margin-top: 0.35rem; }
+.nf-nav-sub { margin: 0.1rem 0 0.15rem 0.85rem; }
+.nf-nav-group { position: relative; }
+.nf-nav-group > summary {
+    list-style: none;
+    cursor: pointer;
+}
+.nf-nav-group > summary::-webkit-details-marker { display: none; }
+.nf-nav-chevron { margin-left: auto; color: var(--nf-muted); transition: transform 0.12s; }
+.nf-nav-group.is-open > .nf-nav-link .nf-nav-chevron,
+.nf-nav-group.is-open > button .nf-nav-chevron,
+.nf-nav-group[open] > summary .nf-nav-chevron { transform: rotate(180deg); }
+.nf-shared-menu.is-side .nf-nav-group:has(> a.nf-nav-link) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+}
+.nf-shared-menu.is-side .nf-nav-group > .nf-nav-sub { grid-column: 1 / -1; }
+.nf-nav-chevron-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--nf-muted);
+    cursor: pointer;
+    border-radius: var(--nf-radius-small);
+}
+.nf-nav-chevron-button:hover { background: var(--nf-hover); }
+.nf-shared-topnav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.nf-shared-topnav .nf-nav-link { height: 34px; padding: 0 0.7rem; }
+.nf-shared-topnav .nf-menu-list.is-start { left: 0; right: auto; }
+.nf-shared-topnav .nf-menu-list .nf-menu-list {
+    position: static;
+    min-width: 0;
+    margin-top: 0.15rem;
+    padding: 0 0 0.15rem 0.75rem;
+    border: 0;
+    box-shadow: none;
+}
+.nf-shared-collapse > summary.nf-shared-collapse-toggle { display: none; }
+
+/* A closed disclosure does not paint its contents, and the hamburger is hidden on a wide
+   screen, so the top menu would otherwise be an empty bar. */
+@media (min-width: 861px) {
+    .nf-shared-menu.is-top details.nf-shared-collapse::details-content {
+        content-visibility: visible;
+        display: block;
+    }
+
+    .nf-shared-menu.is-top details.nf-shared-collapse > .nf-shared-topnav {
+        display: flex !important;
+    }
+}
+.nf-shared-collapse-toggle {
+    list-style: none;
+    cursor: pointer;
+}
+.nf-shared-collapse-toggle::-webkit-details-marker { display: none; }
+
 .nf-user {
     display: flex;
     align-items: center;
@@ -1115,6 +1198,9 @@ kbd {
     .nf-sidebar-collapsed .nf-nav-badge,
     .nf-sidebar-collapsed .nf-nav-external,
     .nf-sidebar-collapsed .nf-nav-count,
+    .nf-sidebar-collapsed .nf-nav-chevron,
+    .nf-sidebar-collapsed .nf-nav-chevron-button,
+    .nf-sidebar-collapsed .nf-nav-sub,
     .nf-sidebar-collapsed .nf-sidebar-heading span,
     .nf-sidebar-collapsed .nf-sidebar-footer { display: none; }
     .nf-sidebar-collapsed .nf-brand-mark { display: block; }
@@ -1143,6 +1229,23 @@ kbd {
     .nf-sidebar-open .nf-scrim { position: fixed; inset: 0; z-index: 34; display: block; background: var(--nf-scrim); }
 
     .nf-content { padding: 1rem; }
+
+    .nf-shared-menu.is-top .nf-shared-collapse-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: var(--nf-radius-small);
+    }
+    .nf-shared-menu.is-top .nf-shared-topnav {
+        display: none;
+        flex-basis: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        padding-bottom: 0.4rem;
+    }
+    .nf-shared-menu.is-top .nf-shared-collapse[open] .nf-shared-topnav { display: flex; }
 
     .nf-shell-topnav .nf-topnav-toggle { display: inline-flex; }
     .nf-shell-topnav .nf-topnav {

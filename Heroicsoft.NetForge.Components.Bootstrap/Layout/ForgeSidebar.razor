@@ -25,6 +25,10 @@
     </div>
 
     <div class="bf-sidebar-scroll">
+        @if (Menu is not null)
+        {
+            @Menu
+        }
         @foreach (var section in Sections)
         {
             @if (string.IsNullOrEmpty(section.Roles))

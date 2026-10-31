@@ -18,6 +18,14 @@ public partial class ForgeTopbar
     [Parameter]
     public IReadOnlyList<ForgeNavSection> Sections { get; set; } = [];
 
+    /// <summary>Replaces <see cref="Sections"/> when the shell is showing a shared menu across the top.</summary>
+    [Parameter]
+    public RenderFragment? Menu { get; set; }
+
+    /// <summary>A menu that stays in the top bar while <see cref="Menu"/> is in the sidebar.</summary>
+    [Parameter]
+    public RenderFragment? TopbarMenu { get; set; }
+
     [Parameter]
     public string? Brand { get; set; }
 

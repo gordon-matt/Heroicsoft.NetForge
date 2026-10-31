@@ -1,0 +1,151 @@
+@inherits Heroicsoft.NetForge.Components.Navigation.NetForgeMenuNodeView
+
+@if (InDropdown)
+{
+    @if (HasChildren)
+    {
+        <li class="dropdown-item p-0">
+            <div class="bf-nav-group @(Open ? "is-open" : null)">
+                <button type="button" class="dropdown-item @(BranchCurrent ? "active" : null)" aria-expanded="@Open" @onclick="Toggle">
+                    @if (!Heading)
+                    {
+                        <i class="@Heroicsoft.NetForge.Components.Navigation.NetForgeMenuIcons.BootstrapClass(Item.Icon)" aria-hidden="true"></i>
+                    }
+                    <span>@Item.Title</span>
+                    <i class="bi bi-chevron-down ms-auto bf-nav-chevron" aria-hidden="true"></i>
+                </button>
+                @if (Open)
+                {
+                    <ul class="dropdown-menu position-static border-0 shadow-none">
+                        @foreach (var child in Item.Children)
+                        {
+                            <NetForgeMenuNode Item="child" Path="@Path" Top="true" InDropdown="true" />
+                        }
+                    </ul>
+                }
+            </div>
+        </li>
+    }
+    else
+    {
+        <li>
+            <a class="dropdown-item @(Current ? "active" : null) @Item.CssClass" href="@Item.Href" data-enhance="false" title="@Tip"
+               target="@(Item.External ? "_blank" : null)" rel="@(Item.External ? "noopener noreferrer" : null)"
+               aria-current="@(Current ? "page" : null)">
+                @Leaf
+            </a>
+        </li>
+    }
+}
+else if (Top)
+{
+    <li class="nav-item">
+        @if (HasChildren)
+        {
+            <div class="bf-nav-group @(Open ? "is-open" : null)">
+                <button type="button" class="nav-link @(BranchCurrent ? "active" : null)" aria-expanded="@Open" aria-haspopup="menu" @onclick="Toggle">
+                    @if (!Heading)
+                    {
+                        <i class="@Heroicsoft.NetForge.Components.Navigation.NetForgeMenuIcons.BootstrapClass(Item.Icon)" aria-hidden="true"></i>
+                    }
+                    <span>@Item.Title</span>
+                    <i class="bi bi-chevron-down bf-nav-chevron" aria-hidden="true"></i>
+                </button>
+                @if (Open)
+                {
+                    <div class="bf-menu-scrim" @onclick="Close"></div>
+                    <ul class="dropdown-menu show" role="menu">
+                        @foreach (var child in Item.Children)
+                        {
+                            <NetForgeMenuNode Item="child" Path="@Path" Top="true" InDropdown="true" />
+                        }
+                    </ul>
+                }
+            </div>
+        }
+        else
+        {
+            <a class="nav-link @(Current ? "active" : null) @Item.CssClass" href="@Item.Href" data-enhance="false" title="@Tip"
+               target="@(Item.External ? "_blank" : null)" rel="@(Item.External ? "noopener noreferrer" : null)"
+               aria-current="@(Current ? "page" : null)">
+                @Leaf
+            </a>
+        }
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        @if (HasChildren)
+        {
+            <div class="bf-nav-group @(Open ? "is-open" : null)">
+                @if (HasHref)
+                {
+                    <a class="nav-link @(Current ? "active" : null) @Item.CssClass" href="@Item.Href" data-enhance="false" title="@Tip"
+                       target="@(Item.External ? "_blank" : null)" rel="@(Item.External ? "noopener noreferrer" : null)"
+                       aria-current="@(Current ? "page" : null)">
+                        <i class="@Heroicsoft.NetForge.Components.Navigation.NetForgeMenuIcons.BootstrapClass(Item.Icon)" aria-hidden="true"></i>
+                        <span class="bf-truncate">@Item.Title</span>
+                    </a>
+                    <button type="button" class="bf-nav-chevron-button" aria-expanded="@Open" aria-label="@ExpandLabel" @onclick="Toggle">
+                        <i class="bi bi-chevron-down" aria-hidden="true"></i>
+                    </button>
+                }
+                else
+                {
+                    <button type="button" class="nav-link @(BranchCurrent ? "active" : null)" aria-expanded="@Open" @onclick="Toggle">
+                        @if (!Heading)
+                        {
+                            <i class="@Heroicsoft.NetForge.Components.Navigation.NetForgeMenuIcons.BootstrapClass(Item.Icon)" aria-hidden="true"></i>
+                        }
+                        <span class="bf-truncate">@Item.Title</span>
+                        <i class="bi bi-chevron-down ms-auto bf-nav-chevron" aria-hidden="true"></i>
+                    </button>
+                }
+                @if (Open)
+                {
+                    <ul class="nav flex-column bf-nav bf-nav-sub">
+                        @foreach (var child in Item.Children)
+                        {
+                            <NetForgeMenuNode Item="child" Path="@Path" />
+                        }
+                    </ul>
+                }
+            </div>
+        }
+        else
+        {
+            <a class="nav-link @(Current ? "active" : null) @Item.CssClass" href="@Item.Href" data-enhance="false" title="@Tip"
+               target="@(Item.External ? "_blank" : null)" rel="@(Item.External ? "noopener noreferrer" : null)"
+               aria-current="@(Current ? "page" : null)">
+                @Leaf
+            </a>
+        }
+    </li>
+}
+
+@code {
+    private RenderFragment Leaf => @<text>
+        @if (Item.TagIcon)
+        {
+            <i class="bi bi-circle-fill bf-tag-icon" aria-hidden="true"></i>
+        }
+        else
+        {
+            <i class="@Heroicsoft.NetForge.Components.Navigation.NetForgeMenuIcons.BootstrapClass(Item.Icon)" aria-hidden="true"></i>
+        }
+        <span class="bf-truncate">@Item.Title</span>
+        @if (Item.External)
+        {
+            <i class="bi bi-box-arrow-up-right ms-auto small" aria-hidden="true"></i>
+        }
+        else if (Item.Count is int count)
+        {
+            <span class="ms-auto small text-body-secondary">@count.ToString("N0")</span>
+        }
+        else if (!string.IsNullOrEmpty(Item.Badge))
+        {
+            <span class="badge @Item.BadgeCssClass rounded-pill ms-auto">@Item.Badge</span>
+        }
+    </text>;
+}

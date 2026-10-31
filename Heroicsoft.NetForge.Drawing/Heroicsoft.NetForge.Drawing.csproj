@@ -4,7 +4,7 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<RootNamespace>Heroicsoft.NetForge.Drawing</RootNamespace>
 		<Description>Image identify, resize, thumbnail, crop, rotate, and perceptual-hash helpers for Heroicsoft apps. Implemented with SkiaSharp so Windows hosts and Linux containers share one code path, without SixLabors.ImageSharp.</Description>
-		<Version>1.1.0</Version>
+		<Version>1.2.0-beta</Version>
 	</PropertyGroup>
 
 	<ItemGroup>

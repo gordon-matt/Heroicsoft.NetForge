@@ -1,10 +1,13 @@
+using System.Security.Claims;
+
 namespace Heroicsoft.NetForge.Abstractions.Navigation;
 
-/// <summary>One entry in the shell sidebar.</summary>
+/// <summary>One link, or a submenu when <see cref="Children"/> is not empty.</summary>
 public sealed class ForgeNavItem
 {
     public required string Title { get; init; }
 
+    /// <summary>Empty when this item only groups <see cref="Children"/> and is not itself a link.</summary>
     public required string Href { get; init; }
 
     /// <summary>Bootstrap Icons class, without the <c>bi</c> prefix is also accepted by the sidebar.</summary>
@@ -46,6 +49,18 @@ public sealed class ForgeNavItem
     /// <summary>Opens in a new tab. Use for dashboards that live outside the Blazor router, such as LogVue.</summary>
     public bool External { get; init; }
 
-    /// <summary>Comma-separated roles. Empty means every signed-in user.</summary>
+    /// <summary>Comma-separated roles. Empty means the item is shown to everyone, including anonymous visitors.</summary>
     public string? Roles { get; init; }
+
+    /// <summary>Nested links. The shared menu renders them under this item.</summary>
+    public IReadOnlyList<ForgeNavItem> Children { get; init; } = [];
+
+    /// <summary>
+    /// Extra gate checked by the shared menu, after <see cref="Roles"/>. Null adds no further restriction.
+    /// The delegate runs while the menu is rendered, so it must not depend on a disposed scope.
+    /// </summary>
+    public Func<ClaimsPrincipal, bool>? IsVisible { get; init; }
+
+    /// <summary>Added to the link element by the shared menu.</summary>
+    public string? CssClass { get; init; }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Frozen;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Heroicsoft.NetForge.Components.Icons;
@@ -197,6 +198,37 @@ public static partial class IconSet
 
     /// <summary>The SVG elements that draw a name, resolved through <see cref="Normalize"/>.</summary>
     public static IReadOnlyList<IconShape> GetShapes(string? name) => Shapes[Normalize(name)];
+
+    /// <summary>
+    /// The same drawing <see cref="Icon"/> emits, as markup for the MVC menu. Attribute values are
+    /// encoded; the shapes themselves are this set, not caller HTML.
+    /// </summary>
+    public static string ToSvg(string? name, int size = 18, string? cssClass = null)
+    {
+        string classes = string.IsNullOrWhiteSpace(cssClass) ? "nf-icon" : "nf-icon " + cssClass.Trim();
+        var builder = new StringBuilder();
+        builder.Append("<svg class=\"").Append(System.Net.WebUtility.HtmlEncode(classes))
+            .Append("\" width=\"").Append(size)
+            .Append("\" height=\"").Append(size)
+            .Append("\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">");
+
+        foreach (IconShape shape in GetShapes(name))
+        {
+            builder.Append('<').Append(shape.Tag);
+
+            foreach (KeyValuePair<string, object> attribute in shape.Attributes)
+            {
+                builder.Append(' ').Append(attribute.Key).Append("=\"")
+                    .Append(System.Net.WebUtility.HtmlEncode(attribute.Value?.ToString()))
+                    .Append('"');
+            }
+
+            builder.Append(" />");
+        }
+
+        builder.Append("</svg>");
+        return builder.ToString();
+    }
 
     // Shapes are authored as markup because that is easy to read and copy from an icon editor, but
     // they are rendered as real elements: Blazor builds SVG children reliably only that way.

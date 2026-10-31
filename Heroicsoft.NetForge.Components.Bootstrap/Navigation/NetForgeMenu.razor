@@ -1,0 +1,51 @@
+@inherits Heroicsoft.NetForge.Components.Navigation.NetForgeMenuView
+
+@if (Defined && Sections.Count > 0)
+{
+    @if (IsTop)
+    {
+        <nav class="bf-shared-menu is-top" role="@(Landmark ? null : "presentation")" aria-label="@(Landmark ? AriaLabel : null)">
+            <details class="bf-shared-collapse">
+                <summary class="bf-shared-collapse-toggle" aria-label="Menu">
+                    <i class="bi bi-list" aria-hidden="true"></i>
+                </summary>
+                <ul class="nav bf-shared-topnav">
+                    @foreach (var section in Sections)
+                    {
+                        @if (string.IsNullOrWhiteSpace(section.Heading))
+                        {
+                            @foreach (var item in section.Items)
+                            {
+                                <NetForgeMenuNode Item="item" Path="@Path" Top="true" />
+                            }
+                        }
+                        else
+                        {
+                            <NetForgeMenuNode Item="SectionItem(section)" Path="@Path" Top="true" Heading="true" />
+                        }
+                    }
+                </ul>
+            </details>
+        </nav>
+    }
+    else
+    {
+        <nav class="bf-shared-menu is-side" role="@(Landmark ? null : "presentation")" aria-label="@(Landmark ? AriaLabel : null)">
+            @foreach (var section in Sections)
+            {
+                <div class="bf-shared-section">
+                    @if (!string.IsNullOrWhiteSpace(section.Heading))
+                    {
+                        <div class="bf-sidebar-heading"><span>@section.Heading</span></div>
+                    }
+                    <ul class="nav flex-column bf-nav">
+                        @foreach (var item in section.Items)
+                        {
+                            <NetForgeMenuNode Item="item" Path="@Path" />
+                        }
+                    </ul>
+                </div>
+            }
+        </nav>
+    }
+}

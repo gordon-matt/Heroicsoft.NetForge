@@ -1,0 +1,34 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library 2</title>
+    <link rel="stylesheet" href="~/_content/Heroicsoft.NetForge.Components/css/nf.css" />
+    <style>
+        .demo-lib { margin: 1.5rem; padding: 2.5rem; border-radius: 16px; }
+        .demo-lib h1 { margin: 0 0 0.5rem; }
+        .demo-lib p { margin: 0; }
+        .demo-lib-two { background: #14532d; color: #dcfce7; }
+        .demo-shell { display: flex; min-height: 100vh; }
+        .demo-side { width: 16rem; flex: 0 0 auto; }
+        .demo-main { flex: 1 1 auto; }
+    </style>
+</head>
+<body>
+    <div class="demo-shell">
+        <aside class="demo-side">
+            @Html.NetForgeMenu("Admin")
+        </aside>
+        <main class="demo-main">
+            <section class="demo-lib demo-lib-two">
+                <h1>Hello from Razor Class Library 2</h1>
+                <p>This page is served by the second library's MVC controller.</p>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

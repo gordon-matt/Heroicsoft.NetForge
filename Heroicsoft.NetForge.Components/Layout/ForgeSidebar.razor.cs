@@ -23,6 +23,10 @@ public partial class ForgeSidebar
     [Parameter]
     public IReadOnlyList<ForgeNavSection> Sections { get; set; } = [];
 
+    /// <summary>Replaces <see cref="Sections"/>. Used by the shell when a shared menu is switched on.</summary>
+    [Parameter]
+    public RenderFragment? Menu { get; set; }
+
     [Parameter]
     public RenderFragment? BrandContent { get; set; }
 

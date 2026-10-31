@@ -24,6 +24,14 @@
         </a>
     }
 
+    @if (Menu is not null)
+    {
+        @Menu
+    }
+    @if (TopbarMenu is not null)
+    {
+        @TopbarMenu
+    }
     @if (Sections.Count > 0)
     {
         <button type="button" class="nf-icon-button nf-topnav-toggle" title="Menu" aria-expanded="@navOpen"

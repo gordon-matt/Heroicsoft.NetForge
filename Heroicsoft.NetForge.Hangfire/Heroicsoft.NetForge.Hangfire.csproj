@@ -4,7 +4,7 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<RootNamespace>Heroicsoft.NetForge.Hangfire</RootNamespace>
 		<Description>Hangfire dashboard authorization for Heroicsoft Blazor apps. Referenced only by hosts that run Hangfire.</Description>
-		<Version>1.1.0</Version>
+		<Version>1.2.0-beta</Version>
 	</PropertyGroup>
 
 	<ItemGroup>

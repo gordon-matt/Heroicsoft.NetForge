@@ -1,5 +1,7 @@
 using Heroicsoft.NetForge.Abstractions.Navigation;
 using Heroicsoft.NetForge.Components.Layout;
+using Heroicsoft.NetForge.Components.Navigation;
+using Heroicsoft.NetForge.Components.Theming;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +15,9 @@ public partial class ShellLayout : IDisposable
     private IOptions<ForgeShellOptions> ShellOptions { get; set; } = default!;
 
     [Inject]
+    private IOptions<ForgeUiOptions> UiOptions { get; set; } = default!;
+
+    [Inject]
     private IServiceProvider Services { get; set; } = default!;
 
     [Inject]
@@ -23,7 +28,9 @@ public partial class ShellLayout : IDisposable
 
     private readonly CancellationTokenSource lifetime = new();
     private ForgeShellOptions options = new();
+    private NetForgeMenuPlacement mainPlacement = NetForgeMenuPlacement.Topbar;
     private IShellNavigation? navigation;
+    private NetForgeMenuModel? sharedMenu;
     private IReadOnlyList<ForgeNavSection> sections = [];
     private string searchText = string.Empty;
     private int loadVersion;
@@ -31,6 +38,33 @@ public partial class ShellLayout : IDisposable
     private bool ShowSearch => !string.IsNullOrWhiteSpace(SearchFormat);
 
     private string? SearchFormat => navigation?.SearchUrlFormat ?? options.SearchUrlFormat;
+
+    private ForgeNavigationPlacement Placement =>
+        NetForgeMenuShell.Placement(sharedMenu, options.NavigationPlacement, mainPlacement);
+
+    private RenderFragment? SharedMenu => sharedMenu is null ? null : builder =>
+    {
+        NetForgeMenuPlacement slot = Placement == ForgeNavigationPlacement.Topbar
+            ? NetForgeMenuPlacement.Topbar
+            : NetForgeMenuPlacement.Sidebar;
+        builder.OpenComponent<Heroicsoft.NetForge.Components.Bootstrap.Navigation.NetForgeMenu>(0);
+        builder.AddAttribute(1, nameof(Heroicsoft.NetForge.Components.Navigation.NetForgeMenu.Area), sharedMenu.Area);
+        builder.AddAttribute(2, nameof(Heroicsoft.NetForge.Components.Navigation.NetForgeMenu.Placement), slot);
+        builder.AddAttribute(3, nameof(Heroicsoft.NetForge.Components.Navigation.NetForgeMenu.Landmark), slot != NetForgeMenuPlacement.Sidebar);
+        builder.CloseComponent();
+    };
+
+    private RenderFragment? TopMenu =>
+        sharedMenu is null || Placement == ForgeNavigationPlacement.Topbar
+            ? null
+            : builder =>
+            {
+                builder.OpenComponent<Heroicsoft.NetForge.Components.Bootstrap.Navigation.NetForgeMenu>(0);
+                builder.AddAttribute(1, nameof(Heroicsoft.NetForge.Components.Navigation.NetForgeMenu.Area), sharedMenu.Area);
+                builder.AddAttribute(2, nameof(Heroicsoft.NetForge.Components.Navigation.NetForgeMenu.Placement), NetForgeMenuPlacement.Topbar);
+                builder.AddAttribute(3, nameof(Heroicsoft.NetForge.Components.Navigation.NetForgeMenu.Landmark), true);
+                builder.CloseComponent();
+            };
 
     private RenderFragment? EndContent => Slot(options.TopbarEndComponent);
 
@@ -46,8 +80,10 @@ public partial class ShellLayout : IDisposable
     protected override void OnInitialized()
     {
         options = ShellOptions.Value;
+        mainPlacement = UiOptions.Value.MainMenuPlacement;
         navigation = Services.GetService<IShellNavigation>();
-        sections = navigation is null ? options.Sections : [];
+        sharedMenu = NetForgeMenuShell.Find(Services, options);
+        sections = navigation is null && sharedMenu is null ? options.Sections : [];
         searchText = CurrentTerm();
         SidebarRefresh.Changed += OnSidebarChanged;
         Navigation.LocationChanged += OnLocationChanged;

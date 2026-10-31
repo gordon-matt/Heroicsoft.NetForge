@@ -4,7 +4,7 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<RootNamespace>Heroicsoft.NetForge.Video</RootNamespace>
 		<Description>FFmpeg bootstrap, frame capture, transcode, integrity check, and PCM-to-AAC encode for Heroicsoft apps. Wraps Xabe.FFmpeg so Kinnect, MyVideoArchive, and Shelfwarden share one tools path and one set of arguments.</Description>
-		<Version>1.1.0</Version>
+		<Version>1.2.0-beta</Version>
 	</PropertyGroup>
 
 	<ItemGroup>

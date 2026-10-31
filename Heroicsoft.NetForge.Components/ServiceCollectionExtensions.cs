@@ -28,6 +28,7 @@ public static class ServiceCollectionExtensions
 
         services.AddOptions<ForgeShellOptions>();
         services.AddOptions<ForgeToastSoundOptions>();
+        services.AddNetForgeMenu();
         services.AddScoped<ToastService>();
         services.AddScoped<DialogService>();
         services.AddScoped<SidebarRefresh>();

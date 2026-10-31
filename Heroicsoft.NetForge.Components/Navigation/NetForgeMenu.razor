@@ -1,0 +1,51 @@
+@inherits NetForgeMenuView
+
+@if (Defined && Sections.Count > 0)
+{
+    @if (IsTop)
+    {
+        <nav class="nf-shared-menu is-top" role="@(Landmark ? null : "presentation")" aria-label="@(Landmark ? AriaLabel : null)">
+            <details class="nf-shared-collapse">
+                <summary class="nf-shared-collapse-toggle" aria-label="Menu">
+                    <Icon Name="menu" />
+                </summary>
+                <ul class="nf-shared-topnav">
+                    @foreach (var section in Sections)
+                    {
+                        @if (string.IsNullOrWhiteSpace(section.Heading))
+                        {
+                            @foreach (var item in section.Items)
+                            {
+                                <NetForgeMenuNode Item="item" Path="@Path" Top="true" />
+                            }
+                        }
+                        else
+                        {
+                            <NetForgeMenuNode Item="SectionItem(section)" Path="@Path" Top="true" Heading="true" />
+                        }
+                    }
+                </ul>
+            </details>
+        </nav>
+    }
+    else
+    {
+        <nav class="nf-shared-menu is-side" role="@(Landmark ? null : "presentation")" aria-label="@(Landmark ? AriaLabel : null)">
+            @foreach (var section in Sections)
+            {
+                <div class="nf-shared-section">
+                    @if (!string.IsNullOrWhiteSpace(section.Heading))
+                    {
+                        <p class="nf-sidebar-heading"><span>@section.Heading</span></p>
+                    }
+                    <ul class="nf-nav">
+                        @foreach (var item in section.Items)
+                        {
+                            <NetForgeMenuNode Item="item" Path="@Path" />
+                        }
+                    </ul>
+                </div>
+            }
+        </nav>
+    }
+}

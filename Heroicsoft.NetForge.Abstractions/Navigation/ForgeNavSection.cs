@@ -10,5 +10,10 @@ public sealed class ForgeNavSection
 
     public string? Roles { get; init; }
 
+    /// <summary>
+    /// Null follows the menu. True draws this group in the top bar. False draws it in the sidebar.
+    /// </summary>
+    public bool? InTopbar { get; init; }
+
     public IReadOnlyList<ForgeNavItem> Items { get; init; } = [];
 }

@@ -1,0 +1,147 @@
+@inherits NetForgeMenuNodeView
+
+@if (InDropdown)
+{
+    @if (HasChildren)
+    {
+        <div class="nf-nav-group @(Open ? "is-open" : null)">
+            <button type="button" class="nf-menu-item @(BranchCurrent ? "active" : null)" aria-expanded="@Open" @onclick="Toggle">
+                @if (!Heading)
+                {
+                    <NetForgeMenuIcon Name="@Item.Icon" Size="16" />
+                }
+                <span class="nf-nav-label">@Item.Title</span>
+                <Icon Name="chevron-down" Size="14" Class="nf-nav-chevron" />
+            </button>
+            @if (Open)
+            {
+                <div class="nf-menu-list">
+                    @foreach (var child in Item.Children)
+                    {
+                        <NetForgeMenuNode Item="child" Path="@Path" Top="true" InDropdown="true" />
+                    }
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <a class="nf-menu-item @(Current ? "active" : null) @Item.CssClass" role="menuitem" href="@Item.Href" data-enhance="false"
+           title="@Tip" target="@(Item.External ? "_blank" : null)" rel="@(Item.External ? "noopener noreferrer" : null)"
+           aria-current="@(Current ? "page" : null)">
+            @LeafBody
+        </a>
+    }
+}
+else if (Top)
+{
+    <li class="nf-nav-item">
+        @if (HasChildren)
+        {
+            <div class="nf-nav-group @(Open ? "is-open" : null)">
+                <button type="button" class="nf-nav-link @(BranchCurrent ? "active" : null)" aria-expanded="@Open" aria-haspopup="menu" @onclick="Toggle">
+                    @if (!Heading)
+                    {
+                        <NetForgeMenuIcon Name="@Item.Icon" />
+                    }
+                    <span class="nf-nav-label">@Item.Title</span>
+                    <Icon Name="chevron-down" Size="14" Class="nf-nav-chevron" />
+                </button>
+                @if (Open)
+                {
+                    <div class="nf-menu-scrim" @onclick="Close"></div>
+                    <div class="nf-menu-list is-start" role="menu">
+                        @foreach (var child in Item.Children)
+                        {
+                            <NetForgeMenuNode Item="child" Path="@Path" Top="true" InDropdown="true" />
+                        }
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <a class="nf-nav-link @(Current ? "active" : null) @Item.CssClass" href="@Item.Href" data-enhance="false" title="@Tip"
+               target="@(Item.External ? "_blank" : null)" rel="@(Item.External ? "noopener noreferrer" : null)"
+               aria-current="@(Current ? "page" : null)">
+                @LeafBody
+            </a>
+        }
+    </li>
+}
+else
+{
+    <li class="nf-nav-item">
+        @if (HasChildren)
+        {
+            <div class="nf-nav-group @(Open ? "is-open" : null)">
+                @if (HasHref)
+                {
+                    <a class="nf-nav-link @(Current ? "active" : null) @Item.CssClass" href="@Item.Href" data-enhance="false" title="@Tip"
+                       target="@(Item.External ? "_blank" : null)" rel="@(Item.External ? "noopener noreferrer" : null)"
+                       aria-current="@(Current ? "page" : null)">
+                        <NetForgeMenuIcon Name="@Item.Icon" />
+                        <span class="nf-nav-label">@Item.Title</span>
+                    </a>
+                    <button type="button" class="nf-nav-chevron-button" aria-expanded="@Open" aria-label="@ExpandLabel" @onclick="Toggle">
+                        <Icon Name="chevron-down" Size="14" Class="nf-nav-chevron" />
+                    </button>
+                }
+                else
+                {
+                    <button type="button" class="nf-nav-link @(BranchCurrent ? "active" : null)" aria-expanded="@Open" @onclick="Toggle">
+                        @if (!Heading)
+                        {
+                            <NetForgeMenuIcon Name="@Item.Icon" />
+                        }
+                        <span class="nf-nav-label">@Item.Title</span>
+                        <Icon Name="chevron-down" Size="14" Class="nf-nav-chevron" />
+                    </button>
+                }
+                @if (Open)
+                {
+                    <ul class="nf-nav nf-nav-sub">
+                        @foreach (var child in Item.Children)
+                        {
+                            <NetForgeMenuNode Item="child" Path="@Path" />
+                        }
+                    </ul>
+                }
+            </div>
+        }
+        else
+        {
+            <a class="nf-nav-link @(Current ? "active" : null) @Item.CssClass" href="@Item.Href" data-enhance="false" title="@Tip"
+               target="@(Item.External ? "_blank" : null)" rel="@(Item.External ? "noopener noreferrer" : null)"
+               aria-current="@(Current ? "page" : null)">
+                @LeafBody
+            </a>
+        }
+    </li>
+}
+
+@code {
+    private RenderFragment LeafBody => @<text>
+        @if (Item.TagIcon)
+        {
+            <span class="nf-tag-icon" aria-hidden="true"></span>
+        }
+        else
+        {
+            <NetForgeMenuIcon Name="@Item.Icon" />
+        }
+        <span class="nf-nav-label">@Item.Title</span>
+        @if (Item.External)
+        {
+            <Icon Name="external" Size="14" Class="nf-nav-external" />
+        }
+        else if (Item.Count is int count)
+        {
+            <span class="nf-nav-count">@count.ToString("N0")</span>
+        }
+        else if (!string.IsNullOrEmpty(Item.Badge))
+        {
+            <span class="nf-badge nf-nav-badge @ForgeBadge.ToneClass(Item.BadgeCssClass)">@Item.Badge</span>
+        }
+    </text>;
+}

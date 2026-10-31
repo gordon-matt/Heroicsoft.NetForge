@@ -411,3 +411,91 @@ body:has(.bf-shell) {
     right: 0.75rem;
     top: 0.5rem;
 }
+
+/* Shared menu. Separate from .bf-topnav so the shell's narrow-screen rule does not hide it. */
+.bf-shared-menu button.nav-link,
+.bf-shared-menu button.dropdown-item {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+}
+.bf-shared-section + .bf-shared-section { margin-top: 0.35rem; }
+.bf-nav-sub { margin-left: 0.75rem; }
+.bf-nav-group { position: relative; }
+.bf-nav-group > summary {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    list-style: none;
+    cursor: pointer;
+}
+.bf-nav-group > summary::-webkit-details-marker { display: none; }
+.bf-nav-chevron { margin-left: auto; }
+.bf-nav-group.is-open > .nav-link .bf-nav-chevron,
+.bf-nav-group.is-open > button .bf-nav-chevron,
+.bf-nav-group[open] > summary .bf-nav-chevron { transform: rotate(180deg); }
+.bf-shared-menu.is-side .bf-nav-group:has(> a.nav-link) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+}
+.bf-shared-menu.is-side .bf-nav-group > .bf-nav-sub { grid-column: 1 / -1; }
+.bf-nav-chevron-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    border: 0;
+    background: transparent;
+    color: inherit;
+}
+.bf-shared-menu .dropdown-menu { display: block; }
+.bf-shared-topnav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.bf-shared-topnav .nav-link { border-left: 0; }
+.bf-shared-topnav > .nav-item > .bf-nav-group > .dropdown-menu { position: absolute; }
+.bf-menu-scrim { position: fixed; inset: 0; z-index: 1000; }
+.bf-shared-topnav .dropdown-menu { z-index: 1001; }
+.bf-shared-collapse > summary.bf-shared-collapse-toggle { display: none; }
+
+/* A closed disclosure does not paint its contents, and the hamburger is hidden on a wide
+   screen, so the top menu would otherwise be an empty bar. */
+@media (min-width: 768px) {
+    .bf-shared-menu.is-top details.bf-shared-collapse::details-content {
+        content-visibility: visible;
+        display: block;
+    }
+
+    .bf-shared-menu.is-top details.bf-shared-collapse > .bf-shared-topnav {
+        display: flex !important;
+    }
+}
+.bf-shared-collapse-toggle { list-style: none; cursor: pointer; }
+.bf-shared-collapse-toggle::-webkit-details-marker { display: none; }
+
+@media (max-width: 767.98px) {
+    .bf-shared-menu.is-top .bf-shared-collapse-toggle {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.4rem;
+    }
+
+    .bf-shared-menu.is-top .bf-shared-topnav {
+        display: none;
+        flex-basis: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .bf-shared-menu.is-top .bf-shared-collapse[open] .bf-shared-topnav { display: flex; }
+}

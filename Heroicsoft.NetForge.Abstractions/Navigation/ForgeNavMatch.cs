@@ -5,9 +5,34 @@ public static class ForgeNavMatch
 {
     public static bool IsCurrent(ForgeNavItem item, string relativeUrl)
     {
+        // "#" and a blank address are submenu labels. Treating them as a path would light up every page.
+        if (string.IsNullOrWhiteSpace(item.Href) || item.Href.TrimStart().StartsWith('#'))
+        {
+            return false;
+        }
+
         var (path, query) = Split(relativeUrl);
 
         return PathMatches(item, path) && QueryMatches(item.ActiveQuery, query);
+    }
+
+    /// <summary>The item or any nested child is the current page.</summary>
+    public static bool IsInBranch(ForgeNavItem item, string relativeUrl)
+    {
+        if (IsCurrent(item, relativeUrl))
+        {
+            return true;
+        }
+
+        foreach (ForgeNavItem child in item.Children ?? [])
+        {
+            if (IsInBranch(child, relativeUrl))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static bool PathMatches(ForgeNavItem item, string currentPath)

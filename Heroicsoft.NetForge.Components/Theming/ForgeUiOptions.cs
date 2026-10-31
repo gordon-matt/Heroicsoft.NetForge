@@ -1,4 +1,5 @@
 using Heroicsoft.NetForge.Abstractions.Theming;
+using Heroicsoft.NetForge.Components.Navigation;
 
 namespace Heroicsoft.NetForge.Components.Theming;
 
@@ -37,4 +38,12 @@ public sealed class ForgeUiOptions
 
     /// <summary>Dark-scheme accent. Falls back to <see cref="AccentColor"/> when null.</summary>
     public string? AccentColorDark { get; set; }
+
+    /// <summary>
+    /// Where the shared menu group for the current page is drawn. Other groups in that menu go in the
+    /// top bar. <see cref="NetForgeMenuPlacement.Topbar"/> keeps the whole menu in the top bar, which
+    /// is what a library page such as LogVue wants. Set <see cref="NetForgeMenuPlacement.Sidebar"/>
+    /// on the host whose own pages should keep their menu down the side.
+    /// </summary>
+    public NetForgeMenuPlacement MainMenuPlacement { get; set; } = NetForgeMenuPlacement.Topbar;
 }

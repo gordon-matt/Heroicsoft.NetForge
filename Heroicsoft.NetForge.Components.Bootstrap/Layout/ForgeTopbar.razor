@@ -28,6 +28,14 @@
         </button>
     }
 
+    @if (Menu is not null)
+    {
+        @Menu
+    }
+    @if (TopbarMenu is not null)
+    {
+        @TopbarMenu
+    }
     @if (Sections.Count > 0)
     {
         <ul class="nav bf-topnav @(navOpen ? "is-open" : null)">

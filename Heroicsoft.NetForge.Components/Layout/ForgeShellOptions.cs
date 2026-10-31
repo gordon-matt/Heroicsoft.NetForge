@@ -5,7 +5,7 @@ namespace Heroicsoft.NetForge.Components.Layout;
 /// <summary>
 /// Static shell content, shared by the nf and Bootstrap component sets. Dynamic sidebars
 /// implement <see cref="IShellNavigation"/> instead; when that service is registered its sections
-/// replace <see cref="Sections"/>.
+/// replace <see cref="Sections"/>. <see cref="UseSharedMenu"/> draws the shared menu beside those sections.
 /// </summary>
 public sealed class ForgeShellOptions
 {
@@ -46,6 +46,16 @@ public sealed class ForgeShellOptions
     public ForgeNavigationPlacement NavigationPlacement { get; set; } = ForgeNavigationPlacement.Sidebar;
 
     public List<ForgeNavSection> Sections { get; set; } = [];
+
+    /// <summary>
+    /// Draws the shared menu. It sits beside <see cref="IShellNavigation"/> when that service is
+    /// registered, and it replaces <see cref="Sections"/> when it is not. An area that was never
+    /// built leaves the shell's own sections in place.
+    /// </summary>
+    public bool UseSharedMenu { get; set; }
+
+    /// <summary>Area passed to the shared menu. Empty is the menu built without a name.</summary>
+    public string? SharedMenuArea { get; set; }
 
     /// <summary>Component rendered at the end of the top bar, before the user menu. A notification bell, for example.</summary>
     public Type? TopbarEndComponent { get; set; }

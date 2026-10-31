@@ -78,6 +78,104 @@ if (auth == AuthProvider.Identity)
 
 Pages inject `ToastService`, `DialogService`, and `SidebarRefresh` instead of copying those types. `ShellLayout` is the default layout: set `ForgeShellOptions.Sections` for a static menu, or register `IShellNavigation` when the sidebar is loaded from data. `GetSectionsAsync` is awaited on startup and again after `SidebarRefresh.NotifyChanged()`. A search format of `/?q={0}` fills the box from that query parameter and clears it when the box is submitted empty. `TopbarEndComponent` and `SidebarFooterComponent` add a bell or a pinned footer without replacing the layout. A nav item highlights a query with `ActiveQuery` (a null value means the parameter is absent) and can set `Tooltip`, `Count`, and `TagIcon`. Set `NavigationPlacement` to `Topbar` when those links belong in the header and the app should not render a sidebar.
 
+## Shared menu
+
+A host owns the menu. Each Razor Class Library registers a contributor and, if it wants a fluent name, an extension method on `INetForgeMenuGroupBuilder`. The tree is built on first use and stored in DI, so a contributor can read its own `IOptions` (singletons only; a scoped service would be captured). Calling `BuildMenu` again for the same area appends sections. The same section title in that area appends links.
+
+```csharp
+builder.Services.AddNetForgeComponents()
+    .BuildMenu(menu =>
+    {
+        menu.AddMenu("Maintenance")
+            .AddCustom(item =>
+            {
+                item.Title = "Some host page";
+                item.Icon = "heart"; // or "fa fa-heart" for a font icon
+                item.Url = "/some-host-page";
+            });
+    })
+    .BuildMenu("Admin", menu =>
+    {
+        menu.AsTopbar();
+        menu.AddMenu("Maintenance", group => group.Roles = "Administrator")
+            .AddContributor("LogVue");
+        menu.AddMenu("Membership")
+            .AddContributor("IdentityNexus", item =>
+            {
+                item.Title = "Membership"; // omitted properties keep the library default
+                item.Icon = "user";
+            });
+        menu.AddMenu("CMS")
+            .AddSubmenu("Content", content =>
+            {
+                content.AddCustom(item =>
+                {
+                    item.Title = "Pages";
+                    item.Icon = "book";
+                    item.Url = "/pages";
+                });
+            });
+        menu.IncludeRegistered(); // contributors not placed above, in their own default section
+    });
+
+builder.Services.Configure<ForgeShellOptions>(shell =>
+{
+    shell.UseSharedMenu = true;
+    shell.SharedMenuArea = "Admin"; // empty string is the unnamed menu
+});
+```
+
+`AsTopbar` / `AsSidebar` is the placement used by the shell, `<NetForgeMenu />`, and `@Html.NetForgeMenu()` when the caller does not pass one. `UseSharedMenu` draws that menu beside `IShellNavigation` when the service is registered, and instead of `Sections` when it is not. The shell keeps `Sections` if that area was never built. The component and the HTML helper render nothing for an unknown area, so a library can always include them. Menu links do a full page load, because a library such as LogVue is its own Blazor document.
+
+`demos/` contains two Razor Class Libraries plus a Blazor host and an MVC host. Both hosts reference the libraries and build an Admin menu for them.
+
+Blazor, including a library page that should show the host menu. Links are root-relative, so they still match when the page has its own `<base href>`:
+
+```html
+<NetForgeMenu />
+<NetForgeMenu Area="Admin" />
+<NetForgeMenu Area="Admin" Placement="NetForgeMenuPlacement.Sidebar" />
+```
+
+MVC. Import `Heroicsoft.NetForge.Components`, or `Heroicsoft.NetForge.Components.Bootstrap` for Bootstrap markup. Do not import both.
+
+```html
+@Html.NetForgeMenu()
+@Html.NetForgeMenu("Admin")
+```
+
+A library contributes its links and a one-line extension. `AddLogVue()` on the menu is not part of NetForge; it lives next to the library, which is what makes the method appear only when that package is referenced.
+
+```csharp
+public sealed class LogVueMenuContributor(IOptions<LogVueOptions> options) : INetForgeMenuContributor
+{
+    public string Name => "LogVue";
+
+    public string DefaultMenu => "Maintenance";
+
+    public void Contribute(INetForgeMenuGroupBuilder group, Action<NetForgeMenuItemOptions>? configure)
+    {
+        group.AddCustom(item =>
+        {
+            item.Title = "Logs";
+            item.Icon = "logs";
+            item.Url = options.Value.BasePath;
+            configure?.Invoke(item);
+        });
+    }
+}
+
+// inside AddLogVue
+services.AddNetForgeMenuContributor<LogVueMenuContributor>();
+
+public static INetForgeMenuGroupBuilder AddLogVue(
+    this INetForgeMenuGroupBuilder menu,
+    Action<NetForgeMenuItemOptions>? configure = null) =>
+    menu.AddContributor("LogVue", configure);
+```
+
+A contributor that owns several pages adds them as children, and applies `configure` to the parent so the host can retitle that parent without listing the children again. `AddSubmenu` is the same shape for a host-defined group. Set `MatchAll` on a link to `/`, or it is treated as a prefix of every page.
+
 Hangfire hosts add `Heroicsoft.NetForge.Hangfire` and pass `new AdministratorDashboardAuthorizationFilter()` in the dashboard options.
 
 Image hosts add `Heroicsoft.NetForge.Drawing` and call `AddNetForgeDrawing()`. Downscales use the Mitchell cubic resampler. `ImageScaleMode.Max` keeps the aspect ratio and can enlarge a small source, matching the previous ImageSharp behaviour. Encodes are sRGB and drop EXIF, so read GPS or orientation before processing. Animated GIF and WebP keep only the first frame once they are resized. Difference hashes of real photos will not match hashes computed by ImageSharp, so recompute any stored perceptual hashes after switching. The package references `SkiaSharp.NativeAssets.Linux.NoDependencies`, so a Linux container does not need fontconfig or FreeType. Colour-managed print work is outside this library.

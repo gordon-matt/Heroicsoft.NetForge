@@ -37,6 +37,17 @@ public partial class AppShell : IDisposable
     [Parameter]
     public IReadOnlyList<ForgeNavSection> Sections { get; set; } = [];
 
+    /// <summary>The shared menu, drawn with <see cref="Sections"/> when both are set.</summary>
+    [Parameter]
+    public RenderFragment? Menu { get; set; }
+
+    /// <summary>
+    /// A second menu drawn in the top bar. <see cref="Menu"/> stays in the sidebar unless
+    /// <see cref="NavigationPlacement"/> is <see cref="ForgeNavigationPlacement.Topbar"/>.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? TopbarMenu { get; set; }
+
     /// <summary>Sidebar is the default. Topbar draws <see cref="Sections"/> in the header instead.</summary>
     [Parameter]
     public ForgeNavigationPlacement NavigationPlacement { get; set; } = ForgeNavigationPlacement.Sidebar;
