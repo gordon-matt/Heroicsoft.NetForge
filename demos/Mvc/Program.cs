@@ -8,12 +8,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddLibraryOne();
 builder.Services.AddLibraryTwo();
 builder.Services.AddNetForgeComponents()
-    .BuildMenu("Admin", menu =>
-    {
-        menu.AddMenu("Samples")
+    .BuildMenu("Admin", menu => menu.AddMenu("Samples")
             .AddLibraryOne()
-            .AddLibraryTwo();
-    });
+            .AddLibraryTwo());
 
 var app = builder.Build();
 

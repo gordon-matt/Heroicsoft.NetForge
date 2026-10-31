@@ -17,14 +17,11 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddAuthorization();
 builder.Services.TryAddSingleton<IAuthProviderService>(new AuthProviderService(AuthProvider.None, null));
 builder.Services.AddNetForgeComponents()
-    .BuildMenu("Admin", menu =>
-    {
-        menu
+    .BuildMenu("Admin", menu => menu
             //.AsTopbar() // Uncomment this to make the menu appear in the topbar instead of the sidebar
             .AddMenu("Samples")
             .AddLibraryOne()
-            .AddLibraryTwo();
-    });
+            .AddLibraryTwo());
 builder.Services.Configure<ForgeShellOptions>(shell =>
 {
     shell.Brand = "Menu demo";

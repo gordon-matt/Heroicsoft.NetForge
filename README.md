@@ -127,6 +127,24 @@ builder.Services.Configure<ForgeShellOptions>(shell =>
 
 `AsTopbar` / `AsSidebar` is the placement used by the shell, `<NetForgeMenu />`, and `@Html.NetForgeMenu()` when the caller does not pass one. `UseSharedMenu` draws that menu beside `IShellNavigation` when the service is registered, and instead of `Sections` when it is not. The shell keeps `Sections` if that area was never built. The component and the HTML helper render nothing for an unknown area, so a library can always include them. Menu links do a full page load, because a library such as LogVue is its own Blazor document.
 
+Two placement settings are easy to mix up:
+
+| Option | Where | What it moves |
+| --- | --- | --- |
+| `ForgeShellOptions.NavigationPlacement` | Shell | The host's own links: `Sections` or `IShellNavigation`. `Topbar` puts Library, Upload, and the rest in the header and hides the sidebar. |
+| `ForgeUiOptions.ActiveSharedMenuPlacement` | UI | The shared `BuildMenu` tree when `UseSharedMenu` is on. `Sidebar` draws the group that contains the current page in the shared-menu sidebar slot; other groups (LogVue, Queryz, and so on) go in the top bar, often as a single link. `Topbar` (the default) keeps shared groups in the top bar, which suits a library document that owns its own sidebar. |
+
+`SharedMenuAfterSections` on the shell is separate again: when the host and the shared menu share one bar, it draws LogVue and similar links after the host's own items.
+
+On a host that uses both host navigation and `UseSharedMenu`, set `ActiveSharedMenuPlacement` to `Sidebar` in `AddNetForgeComponents` so the active app's shared group can sit beside the host sidebar while inactive apps stay in the top bar:
+
+```csharp
+builder.Services.AddNetForgeComponents(ui =>
+{
+    ui.ActiveSharedMenuPlacement = NetForgeMenuPlacement.Sidebar;
+});
+```
+
 `demos/` contains two Razor Class Libraries plus a Blazor host and an MVC host. Both hosts reference the libraries and build an Admin menu for them.
 
 Blazor, including a library page that should show the host menu. Links are root-relative, so they still match when the page has its own `<base href>`:

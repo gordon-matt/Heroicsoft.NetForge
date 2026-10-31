@@ -113,12 +113,7 @@ public static class FfmpegBootstrap
         bool hasFfmpeg = File.Exists(ffmpeg);
         bool hasFfprobe = File.Exists(ffprobe);
 
-        if (!hasFfmpeg || (requireFfprobe && !hasFfprobe))
-        {
-            return null;
-        }
-
-        return new FfmpegLocation(directory, ffmpeg, hasFfprobe ? ffprobe : ffmpeg);
+        return !hasFfmpeg || (requireFfprobe && !hasFfprobe) ? null : new FfmpegLocation(directory, ffmpeg, hasFfprobe ? ffprobe : ffmpeg);
     }
 
     private static IEnumerable<string?> Candidates(FfmpegBootstrapOptions options)

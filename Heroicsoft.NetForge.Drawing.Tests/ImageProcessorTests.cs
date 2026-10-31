@@ -137,10 +137,10 @@ public sealed class ImageProcessorTests
         var decoded = await processor.TryDecodeAsync(stream);
 
         Assert.NotNull(decoded);
-        var pixel = Pixel(decoded, decoded.Width / 2, decoded.Height / 2);
-        Assert.InRange(pixel.R, 210, 230);
-        Assert.InRange(pixel.G, 20, 40);
-        Assert.InRange(pixel.B, 30, 50);
+        var (R, G, B, A) = Pixel(decoded, decoded.Width / 2, decoded.Height / 2);
+        Assert.InRange(R, 210, 230);
+        Assert.InRange(G, 20, 40);
+        Assert.InRange(B, 30, 50);
     }
 
     [Fact]
@@ -252,8 +252,8 @@ public sealed class ImageProcessorTests
         using var stream = new MemoryStream(cropped.Bytes);
         var decoded = await processor.TryDecodeAsync(stream);
         Assert.NotNull(decoded);
-        var pixel = Pixel(decoded, 0, 0);
-        Assert.True(pixel.B >= 240 && pixel.R <= 15, $"Expected blue, got R={pixel.R} G={pixel.G} B={pixel.B} A={pixel.A}");
+        var (R, G, B, A) = Pixel(decoded, 0, 0);
+        Assert.True(B >= 240 && R <= 15, $"Expected blue, got R={R} G={G} B={B} A={A}");
     }
 
     [Fact]
@@ -275,9 +275,9 @@ public sealed class ImageProcessorTests
 
         // Clockwise 90 in a Y-down bitmap sends (0, 0) to (height - 1, 0) of the new image,
         // which is (1, 0) when the source is 4×2.
-        var moved = Pixel(decoded, rotated.Width - 1, 0);
-        Assert.InRange(moved.R, 240, 255);
-        Assert.InRange(moved.G, 0, 15);
+        var (R, G, B, A) = Pixel(decoded, rotated.Width - 1, 0);
+        Assert.InRange(R, 240, 255);
+        Assert.InRange(G, 0, 15);
     }
 
     [Fact]
@@ -296,8 +296,8 @@ public sealed class ImageProcessorTests
         using var stream = new MemoryStream(rotated.Bytes);
         var decoded = await processor.TryDecodeAsync(stream);
         Assert.NotNull(decoded);
-        var moved = Pixel(decoded, 3, 1);
-        Assert.InRange(moved.R, 240, 255);
+        var (R, G, B, A) = Pixel(decoded, 3, 1);
+        Assert.InRange(R, 240, 255);
     }
 
     [Fact]

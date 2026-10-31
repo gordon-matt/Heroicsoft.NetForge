@@ -15,12 +15,9 @@ public static class NetForgeMenuIcons
 
         string value = icon.Trim();
 
-        if (value.Contains(' '))
-        {
-            return !IsBootstrapClassList(value);
-        }
-
-        return value.StartsWith("fa-", StringComparison.OrdinalIgnoreCase)
+        return value.Contains(' ')
+            ? !IsBootstrapClassList(value)
+            : value.StartsWith("fa-", StringComparison.OrdinalIgnoreCase)
             || value.StartsWith("fas", StringComparison.OrdinalIgnoreCase)
             || value.StartsWith("far", StringComparison.OrdinalIgnoreCase)
             || value.StartsWith("fal", StringComparison.OrdinalIgnoreCase)
@@ -37,17 +34,9 @@ public static class NetForgeMenuIcons
 
         string value = icon.Trim();
 
-        if (IsFontClass(value))
-        {
-            return value;
-        }
-
-        if (value.StartsWith("bi-", StringComparison.Ordinal) || value.StartsWith("bi ", StringComparison.Ordinal))
-        {
-            return value;
-        }
-
-        return "bi-" + value;
+        return IsFontClass(value)
+            ? value
+            : value.StartsWith("bi-", StringComparison.Ordinal) || value.StartsWith("bi ", StringComparison.Ordinal) ? value : "bi-" + value;
     }
 
     private static bool IsBootstrapClassList(string value) =>

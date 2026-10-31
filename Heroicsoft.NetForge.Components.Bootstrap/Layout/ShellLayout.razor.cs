@@ -28,7 +28,7 @@ public partial class ShellLayout : IDisposable
 
     private readonly CancellationTokenSource lifetime = new();
     private ForgeShellOptions options = new();
-    private NetForgeMenuPlacement mainPlacement = NetForgeMenuPlacement.Topbar;
+    private NetForgeMenuPlacement activeSharedMenuPlacement = NetForgeMenuPlacement.Topbar;
     private IShellNavigation? navigation;
     private NetForgeMenuModel? sharedMenu;
     private IReadOnlyList<ForgeNavSection> sections = [];
@@ -40,11 +40,11 @@ public partial class ShellLayout : IDisposable
     private string? SearchFormat => navigation?.SearchUrlFormat ?? options.SearchUrlFormat;
 
     private ForgeNavigationPlacement Placement =>
-        NetForgeMenuShell.Placement(sharedMenu, options.NavigationPlacement, mainPlacement);
+        NetForgeMenuShell.Placement(sharedMenu, options.NavigationPlacement, activeSharedMenuPlacement);
 
     private RenderFragment? SharedMenu => sharedMenu is null ? null : builder =>
     {
-        NetForgeMenuPlacement slot = Placement == ForgeNavigationPlacement.Topbar
+        var slot = Placement == ForgeNavigationPlacement.Topbar
             ? NetForgeMenuPlacement.Topbar
             : NetForgeMenuPlacement.Sidebar;
         builder.OpenComponent<Heroicsoft.NetForge.Components.Bootstrap.Navigation.NetForgeMenu>(0);
@@ -80,7 +80,7 @@ public partial class ShellLayout : IDisposable
     protected override void OnInitialized()
     {
         options = ShellOptions.Value;
-        mainPlacement = UiOptions.Value.MainMenuPlacement;
+        activeSharedMenuPlacement = UiOptions.Value.ActiveSharedMenuPlacement;
         navigation = Services.GetService<IShellNavigation>();
         sharedMenu = NetForgeMenuShell.Find(Services, options);
         sections = navigation is null ? options.Sections : [];

@@ -38,8 +38,8 @@ public static class NetForgeMenuHtmlExtensions
 
         var http = html.ViewContext.HttpContext;
         string path = $"{http.Request.PathBase}{http.Request.Path}{http.Request.QueryString}";
-        ClaimsPrincipal user = http.User ?? new ClaimsPrincipal(new ClaimsIdentity());
-        NetForgeMenuPlacement main = http.RequestServices.GetService<IOptions<ForgeUiOptions>>()?.Value.MainMenuPlacement
+        var user = http.User ?? new ClaimsPrincipal(new ClaimsIdentity());
+        var main = http.RequestServices.GetService<IOptions<ForgeUiOptions>>()?.Value.ActiveSharedMenuPlacement
             ?? NetForgeMenuPlacement.Topbar;
         return NetForgeMenuHtml.Render(catalog.Get(area), user, path, placement, main);
     }

@@ -55,7 +55,7 @@ public sealed class NetForgeMenuModel
             return sections;
         }
 
-        NetForgeMenuPlacement slot = requested ?? Placement;
+        var slot = requested ?? Placement;
         return sections.Where(section => PlacementOf(section) == slot).ToList();
     }
 
@@ -64,25 +64,13 @@ public sealed class NetForgeMenuModel
     /// top bar when <paramref name="main"/> is the sidebar. A group that called <c>AsTopbar</c> or
     /// <c>AsSidebar</c> keeps that choice.
     /// </summary>
-    public NetForgeMenuPlacement SlotOf(ForgeNavSection section, NetForgeMenuPlacement main, string path)
-    {
-        if (section.InTopbar == true)
-        {
-            return NetForgeMenuPlacement.Topbar;
-        }
-
-        if (section.InTopbar == false)
-        {
-            return NetForgeMenuPlacement.Sidebar;
-        }
-
-        if (main == NetForgeMenuPlacement.Topbar || !IsActive(section, path))
-        {
-            return NetForgeMenuPlacement.Topbar;
-        }
-
-        return NetForgeMenuPlacement.Sidebar;
-    }
+    public NetForgeMenuPlacement SlotOf(ForgeNavSection section, NetForgeMenuPlacement main, string path) => section.InTopbar == true
+            ? NetForgeMenuPlacement.Topbar
+            : section.InTopbar == false
+            ? NetForgeMenuPlacement.Sidebar
+            : main == NetForgeMenuPlacement.Topbar || !IsActive(section, path)
+            ? NetForgeMenuPlacement.Topbar
+            : NetForgeMenuPlacement.Sidebar;
 
     public IReadOnlyList<ForgeNavSection> ForSlot(
         NetForgeMenuPlacement slot,
@@ -114,7 +102,7 @@ public sealed class NetForgeMenuModel
             return item;
         }
 
-        ForgeNavItem? home = string.IsNullOrWhiteSpace(item.Href) ? FirstLink(item.Children) : null;
+        var home = string.IsNullOrWhiteSpace(item.Href) ? FirstLink(item.Children) : null;
 
         return new ForgeNavItem
         {
@@ -132,7 +120,7 @@ public sealed class NetForgeMenuModel
 
     private static ForgeNavItem? FirstLink(IReadOnlyList<ForgeNavItem> items)
     {
-        foreach (ForgeNavItem item in items)
+        foreach (var item in items)
         {
             if (!string.IsNullOrWhiteSpace(item.Href))
             {
@@ -141,7 +129,7 @@ public sealed class NetForgeMenuModel
 
             if (item.Children is { Count: > 0 })
             {
-                ForgeNavItem? nested = FirstLink(item.Children);
+                var nested = FirstLink(item.Children);
                 if (nested is not null)
                 {
                     return nested;

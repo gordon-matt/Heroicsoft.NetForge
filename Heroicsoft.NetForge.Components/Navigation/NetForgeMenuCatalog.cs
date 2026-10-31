@@ -19,7 +19,7 @@ public sealed class NetForgeMenuCatalog : INetForgeMenuCatalog
     {
         string key = string.IsNullOrWhiteSpace(area) ? NetForgeMenus.DefaultArea : area.Trim();
 
-        return menus.TryGetValue(key, out NetForgeMenuModel? menu) ? menu : NetForgeMenuModel.Empty(key);
+        return menus.TryGetValue(key, out var menu) ? menu : NetForgeMenuModel.Empty(key);
     }
 
     internal static NetForgeMenuCatalog Create(
@@ -29,7 +29,7 @@ public sealed class NetForgeMenuCatalog : INetForgeMenuCatalog
     {
         var state = new MenuBuildState(services, contributors.ToList());
 
-        foreach (NetForgeMenuRegistration registration in registrations)
+        foreach (var registration in registrations)
         {
             var builder = new NetForgeMenuBuilder(state, registration.Area);
             registration.Configure(builder);
@@ -62,7 +62,7 @@ internal sealed class MenuBuildState
         Contributors = contributors;
         byName = new Dictionary<string, INetForgeMenuContributor>(StringComparer.OrdinalIgnoreCase);
 
-        foreach (INetForgeMenuContributor contributor in contributors)
+        foreach (var contributor in contributors)
         {
             if (string.IsNullOrWhiteSpace(contributor.Name))
             {
@@ -93,7 +93,7 @@ internal sealed class MenuBuildState
     {
         var areas = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        foreach (PendingSection section in Sections)
+        foreach (var section in Sections)
         {
             areas.Add(section.Area);
         }
@@ -107,7 +107,7 @@ internal sealed class MenuBuildState
 
         foreach (string area in areas)
         {
-            List<ForgeNavSection> sections = Sections
+            var sections = Sections
                 .Select((section, index) => (section, index))
                 .Where(pair => string.Equals(pair.section.Area, area, StringComparison.OrdinalIgnoreCase))
                 .OrderBy(pair => pair.section.Options.Order)
@@ -126,7 +126,7 @@ internal sealed class MenuBuildState
                 })
                 .ToList();
 
-            NetForgeMenuPlacement placement = Placements.TryGetValue(area, out NetForgeMenuPlacement set)
+            var placement = Placements.TryGetValue(area, out var set)
                 ? set
                 : NetForgeMenuPlacement.Sidebar;
 
@@ -136,13 +136,10 @@ internal sealed class MenuBuildState
         return menus;
     }
 
-    private static IReadOnlyList<ForgeNavItem> Freeze(List<NetForgeMenuItemOptions> items, string? section)
-    {
-        return items
+    private static IReadOnlyList<ForgeNavItem> Freeze(List<NetForgeMenuItemOptions> items, string? section) => items
             .OrderBy(item => item.Order)
             .Select(item => FreezeItem(item, section))
             .ToList();
-    }
 
     private static ForgeNavItem FreezeItem(NetForgeMenuItemOptions item, string? section)
     {
@@ -163,30 +160,27 @@ internal sealed class MenuBuildState
             url = string.Empty;
         }
 
-        if (url.Length == 0 && item.ChildItems.Count == 0)
-        {
-            throw new InvalidOperationException($"Menu item '{title}' needs a url or child items.");
-        }
-
-        return new ForgeNavItem
-        {
-            Title = title,
-            Href = url,
-            Icon = string.IsNullOrWhiteSpace(item.Icon) ? "circle" : item.Icon.Trim(),
-            Tooltip = item.Tooltip,
-            TagIcon = item.TagIcon,
-            Count = item.Count,
-            Badge = item.Badge,
-            BadgeCssClass = string.IsNullOrWhiteSpace(item.BadgeCssClass) ? "text-bg-secondary" : item.BadgeCssClass,
-            MatchAll = item.MatchAll,
-            ActivePaths = item.ActivePaths,
-            ActiveQuery = item.ActiveQuery,
-            External = item.External,
-            Roles = item.Roles,
-            Children = Freeze(item.ChildItems, title),
-            IsVisible = item.IsVisible,
-            CssClass = item.CssClass,
-        };
+        return url.Length == 0 && item.ChildItems.Count == 0
+            ? throw new InvalidOperationException($"Menu item '{title}' needs a url or child items.")
+            : new ForgeNavItem
+            {
+                Title = title,
+                Href = url,
+                Icon = string.IsNullOrWhiteSpace(item.Icon) ? "circle" : item.Icon.Trim(),
+                Tooltip = item.Tooltip,
+                TagIcon = item.TagIcon,
+                Count = item.Count,
+                Badge = item.Badge,
+                BadgeCssClass = string.IsNullOrWhiteSpace(item.BadgeCssClass) ? "text-bg-secondary" : item.BadgeCssClass,
+                MatchAll = item.MatchAll,
+                ActivePaths = item.ActivePaths,
+                ActiveQuery = item.ActiveQuery,
+                External = item.External,
+                Roles = item.Roles,
+                Children = Freeze(item.ChildItems, title),
+                IsVisible = item.IsVisible,
+                CssClass = item.CssClass,
+            };
     }
 }
 
@@ -229,15 +223,9 @@ internal sealed class NetForgeMenuBuilder : INetForgeMenuBuilder
     public INetForgeMenuGroupBuilder AddMenu(string title, Action<NetForgeMenuGroupOptions>? configure = null) =>
         AddMenu(title, area, configure);
 
-    public INetForgeMenuGroupBuilder AddMenu(string title, string area, Action<NetForgeMenuGroupOptions>? configure = null)
-    {
-        if (string.IsNullOrWhiteSpace(title))
-        {
-            throw new ArgumentException("A menu needs a title.", nameof(title));
-        }
-
-        return AddSection(title.Trim(), ResolveArea(area), configure);
-    }
+    public INetForgeMenuGroupBuilder AddMenu(string title, string area, Action<NetForgeMenuGroupOptions>? configure = null) => string.IsNullOrWhiteSpace(title)
+            ? throw new ArgumentException("A menu needs a title.", nameof(title))
+            : AddSection(title.Trim(), ResolveArea(area), configure);
 
     public INetForgeMenuGroupBuilder AddItems(Action<NetForgeMenuGroupOptions>? configure = null) =>
         AddSection(null, area, configure);
@@ -247,7 +235,7 @@ internal sealed class NetForgeMenuBuilder : INetForgeMenuBuilder
 
     public INetForgeMenuBuilder IncludeRegistered()
     {
-        foreach (INetForgeMenuContributor contributor in state.Contributors)
+        foreach (var contributor in state.Contributors)
         {
             if (!state.Contributed.Add(contributor.Name))
             {
@@ -258,7 +246,7 @@ internal sealed class NetForgeMenuBuilder : INetForgeMenuBuilder
                 ? area
                 : contributor.DefaultArea.Trim();
             string title = contributor.DefaultMenu?.Trim() ?? string.Empty;
-            INetForgeMenuGroupBuilder group = title.Length == 0
+            var group = title.Length == 0
                 ? AddSection(null, targetArea, null)
                 : AddSection(title, targetArea, null);
             contributor.Contribute(group, null);
@@ -269,7 +257,7 @@ internal sealed class NetForgeMenuBuilder : INetForgeMenuBuilder
 
     private INetForgeMenuGroupBuilder AddSection(string? title, string area, Action<NetForgeMenuGroupOptions>? configure)
     {
-        PendingSection? existing = state.Sections.FirstOrDefault(section =>
+        var existing = state.Sections.FirstOrDefault(section =>
             string.Equals(section.Area, area, StringComparison.OrdinalIgnoreCase)
             && string.Equals(section.Title, title, StringComparison.Ordinal));
 
@@ -351,7 +339,7 @@ internal sealed class NetForgeMenuGroupBuilder : INetForgeMenuGroupBuilder
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
-        if (!state.TryGetContributor(name, out INetForgeMenuContributor? contributor) || contributor is null)
+        if (!state.TryGetContributor(name, out var contributor) || contributor is null)
         {
             throw new InvalidOperationException(
                 $"No menu contributor named '{name}' is registered. The library that owns it should call AddNetForgeMenuContributor from its own service registration.");
@@ -364,7 +352,7 @@ internal sealed class NetForgeMenuGroupBuilder : INetForgeMenuGroupBuilder
 
     public INetForgeMenuGroupBuilder AddContributors()
     {
-        foreach (INetForgeMenuContributor contributor in state.Contributors)
+        foreach (var contributor in state.Contributors)
         {
             if (!state.Contributed.Add(contributor.Name))
             {

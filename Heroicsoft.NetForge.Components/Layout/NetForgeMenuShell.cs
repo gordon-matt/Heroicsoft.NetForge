@@ -14,7 +14,7 @@ public static class NetForgeMenuShell
         }
 
         var catalog = services.GetService<INetForgeMenuCatalog>();
-        NetForgeMenuModel? menu = catalog?.Get(options.SharedMenuArea);
+        var menu = catalog?.Get(options.SharedMenuArea);
 
         // An area that was never built leaves the shell's own sections in place.
         return menu is { IsDefined: true } ? menu : null;
@@ -34,12 +34,9 @@ public static class NetForgeMenuShell
             return fallback;
         }
 
-        // The host asked for its current app down the side, or a group was pinned there.
-        if (main == NetForgeMenuPlacement.Sidebar || menu.Sections.Any(section => section.InTopbar == false))
-        {
-            return ForgeNavigationPlacement.Sidebar;
-        }
-
-        return ForgeNavigationPlacement.Topbar;
+        // ActiveSharedMenuPlacement is Sidebar, or a group was pinned to the sidebar.
+        return main == NetForgeMenuPlacement.Sidebar || menu.Sections.Any(section => section.InTopbar == false)
+            ? ForgeNavigationPlacement.Sidebar
+            : ForgeNavigationPlacement.Topbar;
     }
 }

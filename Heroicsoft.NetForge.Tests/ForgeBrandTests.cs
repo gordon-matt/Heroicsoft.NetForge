@@ -12,10 +12,7 @@ public class ForgeBrandTests
     [InlineData("~/brand/logo.png", "/brand/logo.png")]
     [InlineData("brand/logo.png", "/brand/logo.png")]
     [InlineData("https://cdn.example.com/logo.png", "https://cdn.example.com/logo.png")]
-    public void Url_NormalizesThePath(string? path, string? expected)
-    {
-        Assert.Equal(expected, ForgeBrand.Url(path));
-    }
+    public void Url_NormalizesThePath(string? path, string? expected) => Assert.Equal(expected, ForgeBrand.Url(path));
 
     [Fact]
     public void FromShell_ReadsTheHostLogoAndName()
@@ -42,8 +39,5 @@ public class ForgeBrandTests
     [InlineData("movies", "/movies")]
     [InlineData("/movies", "/movies")]
     [InlineData("~/movies", "/movies")]
-    public void Home_IsTheHostAddress(string? href, string expected)
-    {
-        Assert.Equal(expected, ForgeBrand.Home(new ForgeShellOptions { BrandHref = href! }));
-    }
+    public void Home_IsTheHostAddress(string? href, string expected) => Assert.Equal(expected, ForgeBrand.Home(new ForgeShellOptions { BrandHref = href! }));
 }

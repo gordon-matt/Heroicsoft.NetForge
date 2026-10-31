@@ -28,7 +28,7 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
     public string? Area { get; set; }
 
     /// <summary>
-    /// Which slot to draw. Null uses <see cref="ForgeUiOptions.MainMenuPlacement"/>.
+    /// Which slot to draw. Null uses <see cref="ForgeUiOptions.ActiveSharedMenuPlacement"/>.
     /// The top bar is the groups that are not the current page. The sidebar is that page's group
     /// when the main placement is the sidebar.
     /// </summary>
@@ -58,10 +58,7 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
 
     protected override void OnInitialized() => Navigation.LocationChanged += OnLocationChanged;
 
-    protected override async Task OnParametersSetAsync()
-    {
-        await LoadAsync();
-    }
+    protected override async Task OnParametersSetAsync() => await LoadAsync();
 
     protected static ForgeNavItem SectionItem(ForgeNavSection section) =>
         new()
@@ -78,14 +75,14 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
 
         if (AuthenticationState is not null)
         {
-            AuthenticationState state = await AuthenticationState;
+            var state = await AuthenticationState;
             user = state.User;
         }
 
-        NetForgeMenuModel menu = Catalog.Get(Area);
+        var menu = Catalog.Get(Area);
         Defined = menu.IsDefined;
         Path = CurrentPath();
-        NetForgeMenuPlacement main = UiOptions.Value.MainMenuPlacement;
+        var main = UiOptions.Value.ActiveSharedMenuPlacement;
         ResolvedPlacement = Placement ?? main;
         Sections = menu.ForSlot(ResolvedPlacement, main, Path, NetForgeMenuFilter.Apply(menu.Sections, user));
     }

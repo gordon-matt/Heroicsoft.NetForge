@@ -25,8 +25,12 @@ public partial class Chip
     {
         get
         {
-            var classes = new List<string> { "btn", "btn-sm" };
-            classes.Add(Selected ? "btn-primary" : "btn-outline-secondary");
+            var classes = new List<string>
+            {
+                "btn",
+                "btn-sm",
+                Selected ? "btn-primary" : "btn-outline-secondary"
+            };
             if (!string.IsNullOrWhiteSpace(Class))
             {
                 classes.Add(Class);

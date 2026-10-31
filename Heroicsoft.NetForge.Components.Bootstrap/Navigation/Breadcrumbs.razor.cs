@@ -48,7 +48,7 @@ public partial class Breadcrumbs<TItem>
 
     private string ItemClass(bool last)
     {
-        var classes = last ? "breadcrumb-item active" : "breadcrumb-item";
+        string classes = last ? "breadcrumb-item active" : "breadcrumb-item";
         if (last && !string.IsNullOrWhiteSpace(CurrentClass))
         {
             classes = $"{classes} {CurrentClass}";

@@ -43,10 +43,7 @@ public sealed class ImageProcessor : IImageProcessor
         }
     }
 
-    public Task<ProcessedImage> ResizeAsync(string path, ImageTransform transform, CancellationToken cancellationToken = default)
-    {
-        return WithFileAsync(path, stream => ResizeAsync(stream, transform, cancellationToken), cancellationToken);
-    }
+    public Task<ProcessedImage> ResizeAsync(string path, ImageTransform transform, CancellationToken cancellationToken = default) => WithFileAsync(path, stream => ResizeAsync(stream, transform, cancellationToken), cancellationToken);
 
     public async Task<ProcessedImage> ResizeAsync(ReadOnlyMemory<byte> source, ImageTransform transform, CancellationToken cancellationToken = default)
     {
@@ -59,7 +56,7 @@ public sealed class ImageProcessor : IImageProcessor
         byte[] bytes = await ReadBytesAsync(source, cancellationToken);
         using var bitmap = Decode(bytes, transform.MaxPixels, TargetBox(transform));
         using var transformed = Scale(bitmap, transform);
-        RasterFormat format = transform.Format is { } requested && requested != RasterFormat.Unknown
+        var format = transform.Format is { } requested && requested != RasterFormat.Unknown
             ? requested
             : DetectFormat(bytes);
         return Encode(transformed, format, transform.Quality);
@@ -141,16 +138,13 @@ public sealed class ImageProcessor : IImageProcessor
         byte[] bytes = await ReadBytesAsync(source, cancellationToken);
         using var bitmap = Decode(bytes, ImageFormats.DefaultMaxPixels, target: null);
         using var rotated = RotateBitmap(bitmap, degrees);
-        RasterFormat format = encode?.Format is { } requested && requested != RasterFormat.Unknown
+        var format = encode?.Format is { } requested && requested != RasterFormat.Unknown
             ? requested
             : DetectFormat(bytes);
         return Encode(rotated, format, encode?.Quality ?? 75);
     }
 
-    public Task<ProcessedImage> TranscodeAsync(string path, ImageEncode encode, CancellationToken cancellationToken = default)
-    {
-        return WithFileAsync(path, stream => TranscodeAsync(stream, encode, cancellationToken), cancellationToken);
-    }
+    public Task<ProcessedImage> TranscodeAsync(string path, ImageEncode encode, CancellationToken cancellationToken = default) => WithFileAsync(path, stream => TranscodeAsync(stream, encode, cancellationToken), cancellationToken);
 
     public async Task<ProcessedImage> TranscodeAsync(Stream source, ImageEncode encode, CancellationToken cancellationToken = default)
     {
@@ -193,10 +187,7 @@ public sealed class ImageProcessor : IImageProcessor
         }
     }
 
-    public Task<long> ComputeDifferenceHashAsync(string path, CancellationToken cancellationToken = default)
-    {
-        return WithFileAsync(path, stream => ComputeDifferenceHashAsync(stream, cancellationToken), cancellationToken);
-    }
+    public Task<long> ComputeDifferenceHashAsync(string path, CancellationToken cancellationToken = default) => WithFileAsync(path, stream => ComputeDifferenceHashAsync(stream, cancellationToken), cancellationToken);
 
     public async Task<long> ComputeDifferenceHashAsync(Stream source, CancellationToken cancellationToken = default)
     {
@@ -263,12 +254,7 @@ public sealed class ImageProcessor : IImageProcessor
         using var data = SKData.CreateCopy(bytes);
         using var codec = SKCodec.Create(data);
 
-        if (codec is null)
-        {
-            return null;
-        }
-
-        return new RasterInfo(codec.Info.Width, codec.Info.Height, MapFormat(codec.EncodedFormat));
+        return codec is null ? null : new RasterInfo(codec.Info.Width, codec.Info.Height, MapFormat(codec.EncodedFormat));
     }
 
     private static SKBitmap Decode(byte[] bytes, long maxPixels, SKSizeI? target)
@@ -303,7 +289,7 @@ public sealed class ImageProcessor : IImageProcessor
 
         var decodeInfo = new SKImageInfo(width, height, SKColorType.Rgba8888, SKAlphaType.Unpremul);
         var bitmap = new SKBitmap(decodeInfo);
-        SKCodecResult result = codec.GetPixels(decodeInfo, bitmap.GetPixels());
+        var result = codec.GetPixels(decodeInfo, bitmap.GetPixels());
 
         if (result is not (SKCodecResult.Success or SKCodecResult.IncompleteInput))
         {
@@ -364,12 +350,7 @@ public sealed class ImageProcessor : IImageProcessor
 
         var resized = bitmap.Resize(destination, sampling);
 
-        if (resized is null)
-        {
-            throw new RasterDecodeException($"Could not resize the image to {width}x{height}.");
-        }
-
-        return resized;
+        return resized is null ? throw new RasterDecodeException($"Could not resize the image to {width}x{height}.") : resized;
     }
 
     private static SKBitmap CropBitmap(SKBitmap bitmap, int x, int y, int width, int height)
@@ -456,7 +437,7 @@ public sealed class ImageProcessor : IImageProcessor
 
     private static ProcessedImage Encode(SKBitmap bitmap, RasterFormat format, int quality)
     {
-        RasterFormat output = format == RasterFormat.Unknown ? RasterFormat.Png : format;
+        var output = format == RasterFormat.Unknown ? RasterFormat.Png : format;
         using var image = SKImage.FromBitmap(bitmap);
         using var data = image.Encode(ToEncodedFormat(output), Math.Clamp(quality, 1, 100))
             ?? throw new RasterDecodeException($"Could not encode {output}.");
@@ -505,15 +486,9 @@ public sealed class ImageProcessor : IImageProcessor
         _ => SKEncodedImageFormat.Png,
     };
 
-    private static SKSizeI? TargetBox(ImageTransform transform)
-    {
-        if (transform.Mode == ImageScaleMode.Stretch || transform.Width <= 0 || transform.Height <= 0)
-        {
-            return null;
-        }
-
-        return new SKSizeI(transform.Width, transform.Height);
-    }
+    private static SKSizeI? TargetBox(ImageTransform transform) => transform.Mode == ImageScaleMode.Stretch || transform.Width <= 0 || transform.Height <= 0
+            ? null
+            : new SKSizeI(transform.Width, transform.Height);
 
     private static int Luminance(SKColor color) =>
         (int)Math.Round((0.2126 * color.Red) + (0.7152 * color.Green) + (0.0722 * color.Blue));

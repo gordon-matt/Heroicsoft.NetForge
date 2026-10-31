@@ -77,9 +77,9 @@ public class NetForgeMenuTests
             shell.SharedMenuArea = "Admin";
         });
 
-        using ServiceProvider provider = services.BuildServiceProvider();
-        ForgeShellOptions options = provider.GetRequiredService<IOptions<ForgeShellOptions>>().Value;
-        NetForgeMenuModel? menu = NetForgeMenuShell.Find(provider, options);
+        using var provider = services.BuildServiceProvider();
+        var options = provider.GetRequiredService<IOptions<ForgeShellOptions>>().Value;
+        var menu = NetForgeMenuShell.Find(provider, options);
 
         Assert.NotNull(menu);
         Assert.Equal("Admin", menu.Area);
@@ -106,22 +106,19 @@ public class NetForgeMenuTests
     [Fact]
     public void ForSlot_KeepsTheCurrentAppInTheSidebarAndTheOthersOnTop()
     {
-        NetForgeMenuModel menu = Catalog(services =>
-        {
-            services.BuildMenu("Admin", menu =>
+        NetForgeMenuModel menu = Catalog(services => services.BuildMenu("Admin", menu =>
             {
                 menu.AddMenu("Reports").AddCustom(Link("Reports", "/reports"));
                 menu.AddMenu("Maintenance").AddCustom(Link("Logs", "/logvue"));
-            });
-        }).Get("Admin");
+            })).Get("Admin");
 
-        IReadOnlyList<ForgeNavSection> side = menu.ForSlot(
+        var side = menu.ForSlot(
             NetForgeMenuPlacement.Sidebar, NetForgeMenuPlacement.Sidebar, "/reports", menu.Sections);
-        IReadOnlyList<ForgeNavSection> top = menu.ForSlot(
+        var top = menu.ForSlot(
             NetForgeMenuPlacement.Topbar, NetForgeMenuPlacement.Sidebar, "/reports", menu.Sections);
-        IReadOnlyList<ForgeNavSection> away = menu.ForSlot(
+        var away = menu.ForSlot(
             NetForgeMenuPlacement.Topbar, NetForgeMenuPlacement.Sidebar, "/logvue", menu.Sections);
-        IReadOnlyList<ForgeNavSection> allTop = menu.ForSlot(
+        var allTop = menu.ForSlot(
             NetForgeMenuPlacement.Topbar, NetForgeMenuPlacement.Topbar, "/logvue", menu.Sections);
 
         Assert.Equal("Reports", side.Single().Heading);
@@ -133,9 +130,7 @@ public class NetForgeMenuTests
     [Fact]
     public void ForSlot_CollapsesAnotherAppToASingleLink()
     {
-        NetForgeMenuModel menu = Catalog(services =>
-        {
-            services.BuildMenu("Admin", menu =>
+        NetForgeMenuModel menu = Catalog(services => services.BuildMenu("Admin", menu =>
             {
                 menu.AddMenu("Reports").AddSubmenu("Queryz", children =>
                 {
@@ -148,13 +143,12 @@ public class NetForgeMenuTests
                     children.AddCustom(Link("Groups", "/groups"));
                 });
                 menu.AddMenu("Maintenance").AddCustom(Link("Logs", "/logvue"));
-            });
-        }).Get("Admin");
+            })).Get("Admin");
 
-        ForgeNavItem outside = menu.ForSlot(
+        var outside = menu.ForSlot(
             NetForgeMenuPlacement.Topbar, NetForgeMenuPlacement.Sidebar, "/logvue", menu.Sections)
             .Single(section => section.Heading == "Reports").Items.Single();
-        ForgeNavItem inside = menu.ForSlot(
+        var inside = menu.ForSlot(
             NetForgeMenuPlacement.Sidebar, NetForgeMenuPlacement.Sidebar, "/groups", menu.Sections)
             .Single().Items.Single();
 
@@ -168,14 +162,11 @@ public class NetForgeMenuTests
     [Fact]
     public void Build_FilesASectionIntoAnotherArea()
     {
-        INetForgeMenuCatalog catalog = Catalog(services =>
-        {
-            services.BuildMenu(menu =>
+        var catalog = Catalog(services => services.BuildMenu(menu =>
             {
                 menu.AddMenu("Maintenance", "Admin").AddCustom(Link("Logs", "/logvue"));
                 menu.AsSidebar("Admin");
-            });
-        });
+            }));
 
         Assert.False(catalog.Get(null).IsDefined);
         Assert.Equal("Logs", catalog.Get("Admin").Sections.Single().Items.Single().Title);
@@ -185,7 +176,7 @@ public class NetForgeMenuTests
     [Fact]
     public void IncludeRegistered_UsesTheContributorDefaultAndSkipsOneAlreadyPlaced()
     {
-        INetForgeMenuCatalog catalog = Catalog(services =>
+        var catalog = Catalog(services =>
         {
             services.AddNetForgeMenuContributor(new LogsContributor());
             services.AddNetForgeMenuContributor(new PeopleContributor());
@@ -216,15 +207,12 @@ public class NetForgeMenuTests
     [Fact]
     public void Submenu_NestsChildrenAndLetsTheHostRetitleTheParent()
     {
-        ForgeNavItem content = Catalog(services =>
-        {
-            services.BuildMenu(menu => menu.AddMenu("CMS").AddSubmenu("Content", children =>
+        var content = Catalog(services => services.BuildMenu(menu => menu.AddMenu("CMS").AddSubmenu("Content", children =>
             {
                 children.AddCustom(Link("Pages", "/pages"));
                 children.AddCustom(Link("Posts", "/posts"));
             },
-            item => item.Title = "Publishing"));
-        }).Get(null).Sections.Single().Items.Single();
+            item => item.Title = "Publishing"))).Get(null).Sections.Single().Items.Single();
 
         Assert.Equal("Publishing", content.Title);
         Assert.Equal("", content.Href);
@@ -234,21 +222,18 @@ public class NetForgeMenuTests
     [Fact]
     public void AddItems_UsesTheMenuBeingBuiltUnlessAnAreaIsPassed()
     {
-        INetForgeMenuCatalog catalog = Catalog(services =>
-        {
-            services.BuildMenu("Admin", menu =>
+        var catalog = Catalog(services => services.BuildMenu("Admin", menu =>
             {
                 menu.AddItems(group => group.Roles = "Administrator").AddCustom(Link("Logs", "/logvue"));
                 menu.AddItems("Reports", group => group.Roles = "Editor").AddCustom(Link("Queryz", "/"));
-            });
-        });
+            }));
 
-        ForgeNavSection admin = catalog.Get("Admin").Sections.Single();
+        var admin = catalog.Get("Admin").Sections.Single();
         Assert.Null(admin.Heading);
         Assert.Equal("Administrator", admin.Roles);
         Assert.Equal("Logs", admin.Items.Single().Title);
 
-        ForgeNavSection reports = catalog.Get("Reports").Sections.Single();
+        var reports = catalog.Get("Reports").Sections.Single();
         Assert.Equal("Editor", reports.Roles);
         Assert.Equal("Queryz", reports.Items.Single().Title);
     }
@@ -256,9 +241,7 @@ public class NetForgeMenuTests
     [Fact]
     public void Order_SortsAndKeepsRegistrationOrderForTies()
     {
-        IReadOnlyList<ForgeNavItem> items = Catalog(services =>
-        {
-            services.BuildMenu(menu => menu.AddItems().AddCustom(item =>
+        var items = Catalog(services => services.BuildMenu(menu => menu.AddItems().AddCustom(item =>
             {
                 item.Title = "A";
                 item.Url = "/a";
@@ -271,8 +254,7 @@ public class NetForgeMenuTests
             {
                 item.Title = "C";
                 item.Url = "/c";
-            }));
-        }).Get(null).Sections.Single().Items;
+            }))).Get(null).Sections.Single().Items;
 
         Assert.Equal(["A", "C", "B"], items.Select(item => item.Title));
     }
@@ -280,7 +262,7 @@ public class NetForgeMenuTests
     [Fact]
     public void MissingContributor_FailsWhenTheMenuIsFirstBuilt()
     {
-        InvalidOperationException error = Assert.Throws<InvalidOperationException>(() =>
+        var error = Assert.Throws<InvalidOperationException>(() =>
             Catalog(services => services.BuildMenu(menu => menu.AddMenu("Site").AddContributor("Missing"))));
 
         Assert.Contains("Missing", error.Message, StringComparison.Ordinal);
@@ -289,7 +271,7 @@ public class NetForgeMenuTests
     [Fact]
     public void DuplicateContributorName_FailsWhenTheMenuIsFirstBuilt()
     {
-        InvalidOperationException error = Assert.Throws<InvalidOperationException>(() => Catalog(services =>
+        var error = Assert.Throws<InvalidOperationException>(() => Catalog(services =>
         {
             services.AddNetForgeMenuContributor(new LogsContributor());
             services.AddNetForgeMenuContributor(new DuplicateLogsContributor());
@@ -300,18 +282,13 @@ public class NetForgeMenuTests
     }
 
     [Fact]
-    public void ItemWithoutTitleOrDestination_FailsWhenTheMenuIsFirstBuilt()
-    {
-        Assert.Throws<InvalidOperationException>(() =>
-            Catalog(services => services.BuildMenu(menu => menu.AddItems().AddCustom(item => item.Url = "/x"))));
-    }
+    public void ItemWithoutTitleOrDestination_FailsWhenTheMenuIsFirstBuilt() => Assert.Throws<InvalidOperationException>(() =>
+                                                                                             Catalog(services => services.BuildMenu(menu => menu.AddItems().AddCustom(item => item.Url = "/x"))));
 
     [Fact]
     public void Filter_HidesRolesVisibilityAndEmptyGroups()
     {
-        NetForgeMenuModel menu = Catalog(services =>
-        {
-            services.BuildMenu(menu =>
+        NetForgeMenuModel menu = Catalog(services => services.BuildMenu(menu =>
             {
                 menu.AddMenu("Secret", group => group.Roles = "Administrator")
                     .AddCustom(Link("Keys", "/keys"));
@@ -328,10 +305,9 @@ public class NetForgeMenuTests
                         item.Url = "/hidden";
                         item.Roles = "Administrator";
                     }));
-            });
-        }).Get(null);
+            })).Get(null);
 
-        IReadOnlyList<Heroicsoft.NetForge.Abstractions.Navigation.ForgeNavSection> visible =
+        var visible =
             NetForgeMenuFilter.Apply(menu.Sections, User("Staff"));
 
         Assert.Equal("Open", visible.Single().Heading);
@@ -341,17 +317,14 @@ public class NetForgeMenuTests
     [Fact]
     public void Html_RendersTheActiveBranchAndSkipsHiddenLinks()
     {
-        NetForgeMenuModel menu = Catalog(services =>
-        {
-            services.BuildMenu(menu => menu.AddMenu("Work")
+        NetForgeMenuModel menu = Catalog(services => services.BuildMenu(menu => menu.AddMenu("Work")
                 .AddSubmenu("Content", children => children.AddCustom(Link("Pages", "/pages/drafts")))
                 .AddCustom(item =>
                 {
                     item.Title = "Keys";
                     item.Url = "/keys";
                     item.Roles = "Administrator";
-                }));
-        }).Get(null);
+                }))).Get(null);
 
         string html = Text(NetForgeMenuHtml.Render(menu, User("Staff"), "/pages/drafts"));
 
@@ -369,15 +342,12 @@ public class NetForgeMenuTests
     [Fact]
     public void BootstrapHtml_UsesNavLinksAndFontIcons()
     {
-        NetForgeMenuModel menu = Catalog(services =>
-        {
-            services.BuildMenu(menu => menu.AddItems().AddCustom(item =>
+        NetForgeMenuModel menu = Catalog(services => services.BuildMenu(menu => menu.AddItems().AddCustom(item =>
             {
                 item.Title = "Liked";
                 item.Url = "/liked";
                 item.Icon = "fa fa-heart";
-            }));
-        }).Get(null);
+            }))).Get(null);
 
         string html = Text(BootstrapNetForgeMenuHtml.Render(menu, new ClaimsPrincipal(new ClaimsIdentity()), "/liked"));
 
@@ -456,32 +426,26 @@ public class NetForgeMenuTests
 
         public string? DefaultArea => "Admin";
 
-        public void Contribute(INetForgeMenuGroupBuilder group, Action<NetForgeMenuItemOptions>? configure)
-        {
-            group.AddCustom(item =>
-            {
-                item.Title = "Logs";
-                item.Icon = "logs";
-                item.Url = "/logvue";
-                configure?.Invoke(item);
-            });
-        }
+        public void Contribute(INetForgeMenuGroupBuilder group, Action<NetForgeMenuItemOptions>? configure) => group.AddCustom(item =>
+                                                                                                                        {
+                                                                                                                            item.Title = "Logs";
+                                                                                                                            item.Icon = "logs";
+                                                                                                                            item.Url = "/logvue";
+                                                                                                                            configure?.Invoke(item);
+                                                                                                                        });
     }
 
     private sealed class PeopleContributor : INetForgeMenuContributor
     {
         public string Name => "People";
 
-        public void Contribute(INetForgeMenuGroupBuilder group, Action<NetForgeMenuItemOptions>? configure)
-        {
-            group.AddCustom(item =>
-            {
-                item.Title = "People";
-                item.Icon = "people";
-                item.Url = "/people";
-                configure?.Invoke(item);
-            });
-        }
+        public void Contribute(INetForgeMenuGroupBuilder group, Action<NetForgeMenuItemOptions>? configure) => group.AddCustom(item =>
+                                                                                                                        {
+                                                                                                                            item.Title = "People";
+                                                                                                                            item.Icon = "people";
+                                                                                                                            item.Url = "/people";
+                                                                                                                            configure?.Invoke(item);
+                                                                                                                        });
     }
 
     private sealed class DuplicateLogsContributor : INetForgeMenuContributor

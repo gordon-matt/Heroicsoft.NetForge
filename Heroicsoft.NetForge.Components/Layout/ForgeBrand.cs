@@ -26,12 +26,7 @@ public static class ForgeBrand
             path = path[1..];
         }
 
-        if (path.StartsWith('/') || Uri.TryCreate(path, UriKind.Absolute, out _))
-        {
-            return path;
-        }
-
-        return "/" + path;
+        return path.StartsWith('/') || Uri.TryCreate(path, UriKind.Absolute, out _) ? path : "/" + path;
     }
 
     public static string? Logo(ForgeShellOptions options) => Url(options.LogoUrl);
@@ -52,11 +47,6 @@ public static class ForgeBrand
     {
         string? href = options.BrandHref?.Trim();
 
-        if (string.IsNullOrEmpty(href) || href is "." or "./")
-        {
-            return "/";
-        }
-
-        return Url(href) ?? "/";
+        return string.IsNullOrEmpty(href) || href is "." or "./" ? "/" : Url(href) ?? "/";
     }
 }

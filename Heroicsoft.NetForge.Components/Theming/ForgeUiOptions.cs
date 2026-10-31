@@ -40,10 +40,13 @@ public sealed class ForgeUiOptions
     public string? AccentColorDark { get; set; }
 
     /// <summary>
-    /// Where the shared menu group for the current page is drawn. Other groups in that menu go in the
-    /// top bar. <see cref="NetForgeMenuPlacement.Topbar"/> keeps the whole menu in the top bar, which
-    /// is what a library page such as LogVue wants. Set <see cref="NetForgeMenuPlacement.Sidebar"/>
-    /// on the host whose own pages should keep their menu down the side.
+    /// Where the shared menu draws the group that contains the current page. Other groups in that
+    /// menu go in the top bar. This is not <see cref="Layout.ForgeShellOptions.NavigationPlacement"/>,
+    /// which places the host's own <c>Sections</c> or <see cref="Layout.IShellNavigation"/> links.
+    /// <see cref="NetForgeMenuPlacement.Topbar"/> (the default) keeps every shared group in the top
+    /// bar, which suits a library document such as LogVue. Set
+    /// <see cref="NetForgeMenuPlacement.Sidebar"/> on a host that uses <c>UseSharedMenu</c> so the
+    /// active app's shared group can sit beside that host navigation.
     /// </summary>
-    public NetForgeMenuPlacement MainMenuPlacement { get; set; } = NetForgeMenuPlacement.Topbar;
+    public NetForgeMenuPlacement ActiveSharedMenuPlacement { get; set; } = NetForgeMenuPlacement.Topbar;
 }

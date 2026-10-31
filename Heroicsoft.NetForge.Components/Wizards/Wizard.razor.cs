@@ -98,12 +98,7 @@ public partial class Wizard
             return true;
         }
 
-        Func<Task<bool>>? onLeaving = steps[ActiveIndex].OnLeaving;
-        if (onLeaving is null)
-        {
-            return true;
-        }
-
-        return await onLeaving();
+        var onLeaving = steps[ActiveIndex].OnLeaving;
+        return onLeaving is null || await onLeaving();
     }
 }

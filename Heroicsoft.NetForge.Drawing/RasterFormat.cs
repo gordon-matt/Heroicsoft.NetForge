@@ -62,17 +62,12 @@ public static class ImageFormats
     /// Reads the leading magic bytes only. A matching header is not proof the rest of the file
     /// decodes; use <see cref="IImageProcessor.TryIdentifyAsync(Stream, CancellationToken)"/> for that.
     /// </summary>
-    public static RasterFormat Detect(ReadOnlySpan<byte> header)
-    {
-        if (header.Length >= 3
+    public static RasterFormat Detect(ReadOnlySpan<byte> header) => header.Length >= 3
             && header[0] == 0xFF
             && header[1] == 0xD8
-            && header[2] == 0xFF)
-        {
-            return RasterFormat.Jpeg;
-        }
-
-        if (header.Length >= 8
+            && header[2] == 0xFF
+            ? RasterFormat.Jpeg
+            : header.Length >= 8
             && header[0] == 0x89
             && header[1] == 0x50
             && header[2] == 0x4E
@@ -80,23 +75,17 @@ public static class ImageFormats
             && header[4] == 0x0D
             && header[5] == 0x0A
             && header[6] == 0x1A
-            && header[7] == 0x0A)
-        {
-            return RasterFormat.Png;
-        }
-
-        if (header.Length >= 6
+            && header[7] == 0x0A
+            ? RasterFormat.Png
+            : header.Length >= 6
             && header[0] == (byte)'G'
             && header[1] == (byte)'I'
             && header[2] == (byte)'F'
             && header[3] == (byte)'8'
             && (header[4] == (byte)'7' || header[4] == (byte)'9')
-            && header[5] == (byte)'a')
-        {
-            return RasterFormat.Gif;
-        }
-
-        if (header.Length >= 12
+            && header[5] == (byte)'a'
+            ? RasterFormat.Gif
+            : header.Length >= 12
             && header[0] == (byte)'R'
             && header[1] == (byte)'I'
             && header[2] == (byte)'F'
@@ -104,23 +93,13 @@ public static class ImageFormats
             && header[8] == (byte)'W'
             && header[9] == (byte)'E'
             && header[10] == (byte)'B'
-            && header[11] == (byte)'P')
-        {
-            return RasterFormat.Webp;
-        }
-
-        if (header.Length >= 2 && header[0] == (byte)'B' && header[1] == (byte)'M')
-        {
-            return RasterFormat.Bmp;
-        }
-
-        if (header.Length >= 4
+            && header[11] == (byte)'P'
+            ? RasterFormat.Webp
+            : header.Length >= 2 && header[0] == (byte)'B' && header[1] == (byte)'M'
+            ? RasterFormat.Bmp
+            : header.Length >= 4
             && ((header[0] == (byte)'I' && header[1] == (byte)'I' && header[2] == 0x2A && header[3] == 0x00)
-                || (header[0] == (byte)'M' && header[1] == (byte)'M' && header[2] == 0x00 && header[3] == 0x2A)))
-        {
-            return RasterFormat.Tiff;
-        }
-
-        return RasterFormat.Unknown;
-    }
+                || (header[0] == (byte)'M' && header[1] == (byte)'M' && header[2] == 0x00 && header[3] == 0x2A))
+            ? RasterFormat.Tiff
+            : RasterFormat.Unknown;
 }

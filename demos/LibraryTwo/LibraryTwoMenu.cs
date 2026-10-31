@@ -11,16 +11,13 @@ public sealed class LibraryTwoMenuContributor : INetForgeMenuContributor
 
     public string DefaultMenu => "Samples";
 
-    public void Contribute(INetForgeMenuGroupBuilder group, Action<NetForgeMenuItemOptions>? configure)
-    {
-        group.AddCustom(item =>
-        {
-            item.Title = "Library 2";
-            item.Icon = "star";
-            item.Url = "/admin/library-two";
-            configure?.Invoke(item);
-        });
-    }
+    public void Contribute(INetForgeMenuGroupBuilder group, Action<NetForgeMenuItemOptions>? configure) => group.AddCustom(item =>
+                                                                                                                {
+                                                                                                                    item.Title = "Library 2";
+                                                                                                                    item.Icon = "star";
+                                                                                                                    item.Url = "/admin/library-two";
+                                                                                                                    configure?.Invoke(item);
+                                                                                                                });
 }
 
 /// <summary>Service and menu extensions for the second sample library.</summary>

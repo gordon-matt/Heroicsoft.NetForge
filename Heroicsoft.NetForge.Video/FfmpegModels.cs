@@ -94,7 +94,7 @@ public static class VideoFit
     /// </summary>
     public static (int Width, int Height) DisplaySize(int width, int height, int? rotationDegrees)
     {
-        int turns = ((rotationDegrees ?? 0) % 360 + 360) % 360;
+        int turns = (((rotationDegrees ?? 0) % 360) + 360) % 360;
         return turns is 90 or 270 ? (height, width) : (width, height);
     }
 
@@ -120,7 +120,7 @@ public static class VideoFit
     /// </param>
     public static string? UprightTranspose(int? degrees, bool clockwise)
     {
-        int turns = ((degrees ?? 0) % 360 + 360) % 360;
+        int turns = (((degrees ?? 0) % 360) + 360) % 360;
 
         if (turns is not (90 or 180 or 270))
         {
@@ -145,7 +145,6 @@ public static class VideoFit
         };
     }
 }
-
 
 /// <summary>
 /// Where ffmpeg and ffprobe were found. Xabe refuses to run unless both binaries sit in the

@@ -10,14 +10,14 @@ public static class NetForgeMenuFilter
     {
         var visible = new List<ForgeNavSection>();
 
-        foreach (ForgeNavSection section in sections)
+        foreach (var section in sections)
         {
             if (!CanSeeRoles(user, section.Roles))
             {
                 continue;
             }
 
-            List<ForgeNavItem> items = section.Items
+            var items = section.Items
                 .Select(item => FilterItem(item, user))
                 .Where(item => item is not null)
                 .Cast<ForgeNavItem>()
@@ -40,27 +40,11 @@ public static class NetForgeMenuFilter
         return visible;
     }
 
-    public static bool CanSee(ForgeNavItem item, ClaimsPrincipal user)
-    {
-        if (!CanSeeRoles(user, item.Roles))
-        {
-            return false;
-        }
+    public static bool CanSee(ForgeNavItem item, ClaimsPrincipal user) => CanSeeRoles(user, item.Roles) && (item.IsVisible is null || item.IsVisible(user));
 
-        return item.IsVisible is null || item.IsVisible(user);
-    }
-
-    public static bool CanSeeRoles(ClaimsPrincipal user, string? roles)
-    {
-        if (string.IsNullOrWhiteSpace(roles))
-        {
-            return true;
-        }
-
-        return roles
+    public static bool CanSeeRoles(ClaimsPrincipal user, string? roles) => string.IsNullOrWhiteSpace(roles) || roles
             .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Any(user.IsInRole);
-    }
 
     private static ForgeNavItem? FilterItem(ForgeNavItem item, ClaimsPrincipal user)
     {
@@ -69,37 +53,34 @@ public static class NetForgeMenuFilter
             return null;
         }
 
-        List<ForgeNavItem> children = (item.Children ?? [])
+        var children = (item.Children ?? [])
             .Select(child => FilterItem(child, user))
             .Where(child => child is not null)
             .Cast<ForgeNavItem>()
             .ToList();
 
-        if (children.Count == 0 && string.IsNullOrWhiteSpace(item.Href))
-        {
-            return null;
-        }
-
-        return new ForgeNavItem
-        {
-            Title = item.Title,
-            Href = item.Href,
-            Icon = item.Icon,
-            Tooltip = item.Tooltip,
-            TagIcon = item.TagIcon,
-            Count = item.Count,
-            Badge = item.Badge,
-            BadgeCssClass = item.BadgeCssClass,
-            BadgeComponent = item.BadgeComponent,
-            BadgeParameters = item.BadgeParameters,
-            MatchAll = item.MatchAll,
-            ActivePaths = item.ActivePaths,
-            ActiveQuery = item.ActiveQuery,
-            External = item.External,
-            Roles = item.Roles,
-            Children = children,
-            IsVisible = item.IsVisible,
-            CssClass = item.CssClass,
-        };
+        return children.Count == 0 && string.IsNullOrWhiteSpace(item.Href)
+            ? null
+            : new ForgeNavItem
+            {
+                Title = item.Title,
+                Href = item.Href,
+                Icon = item.Icon,
+                Tooltip = item.Tooltip,
+                TagIcon = item.TagIcon,
+                Count = item.Count,
+                Badge = item.Badge,
+                BadgeCssClass = item.BadgeCssClass,
+                BadgeComponent = item.BadgeComponent,
+                BadgeParameters = item.BadgeParameters,
+                MatchAll = item.MatchAll,
+                ActivePaths = item.ActivePaths,
+                ActiveQuery = item.ActiveQuery,
+                External = item.External,
+                Roles = item.Roles,
+                Children = children,
+                IsVisible = item.IsVisible,
+                CssClass = item.CssClass,
+            };
     }
 }

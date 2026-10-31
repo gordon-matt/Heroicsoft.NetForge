@@ -24,7 +24,7 @@ public static class ForgeNavMatch
             return true;
         }
 
-        foreach (ForgeNavItem child in item.Children ?? [])
+        foreach (var child in item.Children ?? [])
         {
             if (IsInBranch(child, relativeUrl))
             {

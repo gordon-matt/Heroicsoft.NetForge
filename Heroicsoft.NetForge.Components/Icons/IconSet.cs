@@ -212,11 +212,11 @@ public static partial class IconSet
             .Append("\" height=\"").Append(size)
             .Append("\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">");
 
-        foreach (IconShape shape in GetShapes(name))
+        foreach (var shape in GetShapes(name))
         {
             builder.Append('<').Append(shape.Tag);
 
-            foreach (KeyValuePair<string, object> attribute in shape.Attributes)
+            foreach (var attribute in shape.Attributes)
             {
                 builder.Append(' ').Append(attribute.Key).Append("=\"")
                     .Append(System.Net.WebUtility.HtmlEncode(attribute.Value?.ToString()))

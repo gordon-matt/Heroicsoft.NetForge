@@ -40,18 +40,12 @@ public sealed class VideoFitTests
     [InlineData(270, true, "transpose=2")]
     [InlineData(180, true, "transpose=1,transpose=1")]
     [InlineData(180, false, "transpose=1,transpose=1")]
-    public void Upright_transpose_matches_the_rotation_convention(int degrees, bool clockwise, string expected)
-    {
-        Assert.Equal(expected, VideoFit.UprightTranspose(degrees, clockwise));
-    }
+    public void Upright_transpose_matches_the_rotation_convention(int degrees, bool clockwise, string expected) => Assert.Equal(expected, VideoFit.UprightTranspose(degrees, clockwise));
 
     [Theory]
     [InlineData(0, true)]
     [InlineData(null, false)]
-    public void An_upright_frame_has_no_transpose(int? degrees, bool clockwise)
-    {
-        Assert.Null(VideoFit.UprightTranspose(degrees, clockwise));
-    }
+    public void An_upright_frame_has_no_transpose(int? degrees, bool clockwise) => Assert.Null(VideoFit.UprightTranspose(degrees, clockwise));
 
     [Fact]
     public void An_upright_file_may_grow_by_fifteen_percent_and_no_more()

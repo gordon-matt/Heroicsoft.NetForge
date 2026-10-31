@@ -22,9 +22,9 @@ public static class BootstrapNetForgeMenuHtml
             return HtmlString.Empty;
         }
 
-        NetForgeMenuPlacement chosen = placement ?? mainPlacement ?? menu.Placement;
-        IReadOnlyList<ForgeNavSection> visible = NetForgeMenuFilter.Apply(menu.Sections, user);
-        IReadOnlyList<ForgeNavSection> sections = mainPlacement is null
+        var chosen = placement ?? mainPlacement ?? menu.Placement;
+        var visible = NetForgeMenuFilter.Apply(menu.Sections, user);
+        var sections = mainPlacement is null
             ? menu.SectionsFor(placement, visible)
             : menu.ForSlot(chosen, mainPlacement.Value, requestPath, visible);
 
@@ -51,7 +51,7 @@ public static class BootstrapNetForgeMenuHtml
     {
         html.Append("<nav class=\"bf-shared-menu is-side\" aria-label=\"Navigation\">");
 
-        foreach (ForgeNavSection section in sections)
+        foreach (var section in sections)
         {
             html.Append("<div class=\"bf-shared-section\">");
 
@@ -64,7 +64,7 @@ public static class BootstrapNetForgeMenuHtml
 
             html.Append("<ul class=\"nav flex-column bf-nav\">");
 
-            foreach (ForgeNavItem item in section.Items)
+            foreach (var item in section.Items)
             {
                 WriteSideItem(html, item, requestPath);
             }
@@ -81,11 +81,11 @@ public static class BootstrapNetForgeMenuHtml
         html.Append("<details class=\"bf-shared-collapse\"><summary class=\"bf-shared-collapse-toggle\" aria-label=\"Menu\">");
         html.Append("<i class=\"bi bi-list\" aria-hidden=\"true\"></i></summary><ul class=\"nav bf-shared-topnav\">");
 
-        foreach (ForgeNavSection section in sections)
+        foreach (var section in sections)
         {
             if (string.IsNullOrWhiteSpace(section.Heading))
             {
-                foreach (ForgeNavItem item in section.Items)
+                foreach (var item in section.Items)
                 {
                     WriteTopItem(html, item, requestPath, inDropdown: false);
                 }
@@ -126,7 +126,7 @@ public static class BootstrapNetForgeMenuHtml
             html.Append("<i class=\"bi bi-chevron-down ms-auto bf-nav-chevron\" aria-hidden=\"true\"></i>");
             html.Append("</summary><ul class=\"nav flex-column bf-nav bf-nav-sub\">");
 
-            foreach (ForgeNavItem child in item.Children)
+            foreach (var child in item.Children)
             {
                 WriteSideItem(html, child, requestPath);
             }
@@ -161,7 +161,7 @@ public static class BootstrapNetForgeMenuHtml
             html.Append("<i class=\"bi bi-chevron-down bf-nav-chevron\" aria-hidden=\"true\"></i></summary>");
             html.Append("<ul class=\"dropdown-menu\">");
 
-            foreach (ForgeNavItem child in item.Children)
+            foreach (var child in item.Children)
             {
                 WriteTopItem(html, child, requestPath, inDropdown: true);
             }
