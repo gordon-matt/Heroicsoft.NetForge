@@ -1,0 +1,44 @@
+<CascadingValue Value="this" IsFixed="true">
+    <div class="nf-wizard @(Orientation == WizardOrientation.Horizontal ? "nf-wizard-horizontal" : "nf-wizard-vertical")">
+        <ol class="nf-wizard-steps" role="tablist">
+            @for (int index = 0; index < steps.Count; index++)
+            {
+                int stepIndex = index;
+                var step = steps[index];
+                string state = stepIndex == ActiveIndex ? "is-current" : stepIndex < ActiveIndex ? "is-done" : "is-upcoming";
+                <li>
+                    <button type="button"
+                            class="nf-wizard-step @state"
+                            role="tab"
+                            aria-selected="@(stepIndex == ActiveIndex)"
+                            disabled="@Busy"
+                            @onclick="() => GoToAsync(stepIndex)">
+                        <span class="nf-wizard-index">@(stepIndex + 1)</span>
+                        <span class="nf-wizard-title">@step.Title</span>
+                    </button>
+                </li>
+            }
+        </ol>
+
+        <div class="nf-wizard-body">
+            @ChildContent
+
+            <div class="nf-wizard-actions">
+                @if (ShowCancel && OnCancel.HasDelegate)
+                {
+                    <button type="button" class="nf-button" disabled="@Busy" @onclick="OnCancel">Cancel</button>
+                }
+                <span class="nf-wizard-actions-spacer"></span>
+                <button type="button" class="nf-button" disabled="@(Busy || ActiveIndex == 0)" @onclick="PreviousAsync">Previous</button>
+                @if (ActiveIndex < steps.Count - 1)
+                {
+                    <button type="button" class="nf-button nf-button-primary" disabled="@Busy" @onclick="NextAsync">Next</button>
+                }
+                else
+                {
+                    <button type="button" class="nf-button nf-button-primary" disabled="@Busy" @onclick="FinishAsync">@FinishText</button>
+                }
+            </div>
+        </div>
+    </div>
+</CascadingValue>

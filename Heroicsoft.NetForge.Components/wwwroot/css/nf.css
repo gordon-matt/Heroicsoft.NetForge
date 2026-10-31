@@ -1031,6 +1031,53 @@ kbd {
 .nf-notice p { margin: 0.2rem 0 0.25rem; color: var(--nf-muted); }
 .nf-notice-actions { display: flex; align-items: center; gap: 0.35rem; }
 
+/* ---------- Wizard ---------- */
+
+.nf-wizard { display: grid; gap: 1.25rem; align-items: start; }
+.nf-wizard-vertical { grid-template-columns: 220px minmax(0, 1fr); }
+.nf-wizard-horizontal { grid-template-columns: minmax(0, 1fr); }
+.nf-wizard-steps { display: flex; gap: 0.35rem; margin: 0; padding: 0; list-style: none; }
+.nf-wizard-vertical .nf-wizard-steps { flex-direction: column; }
+.nf-wizard-horizontal .nf-wizard-steps { flex-direction: row; flex-wrap: wrap; }
+.nf-wizard-step {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--nf-radius);
+    color: var(--nf-muted);
+    text-align: left;
+    cursor: pointer;
+}
+.nf-wizard-step:hover:not(:disabled) { background: var(--nf-hover); color: var(--nf-text); }
+.nf-wizard-step.is-current { background: var(--nf-accent-soft); color: var(--nf-text); font-weight: 650; }
+.nf-wizard-step.is-done { color: var(--nf-text); }
+.nf-wizard-step:disabled { cursor: default; }
+.nf-wizard-index {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 999px;
+    background: var(--nf-surface-2);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+}
+.nf-wizard-step.is-current .nf-wizard-index { background: var(--nf-accent); color: var(--nf-accent-text); }
+.nf-wizard-step.is-done .nf-wizard-index { background: var(--nf-success-soft); color: var(--nf-success); }
+.nf-wizard-body { min-width: 0; }
+.nf-wizard-panel { min-height: 12rem; }
+.nf-wizard-actions { display: flex; align-items: center; gap: 0.5rem; margin-top: 1.25rem; }
+.nf-wizard-actions-spacer { flex: 1; }
+
+@media (max-width: 860px) {
+    .nf-wizard-vertical { grid-template-columns: minmax(0, 1fr); }
+}
+
 /* ---------- Pager ---------- */
 
 .nf-pager { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem 1rem; }

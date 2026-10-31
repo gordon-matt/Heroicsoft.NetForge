@@ -89,6 +89,9 @@ public static partial class IconSet
         ["globe"] = """<circle cx="12" cy="12" r="8" /><path d="M12 4a12 12 0 0 1 0 16 12 12 0 0 1 0-16M4 12h16" />""",
         ["help"] = """<circle cx="12" cy="12" r="8" /><path d="M9.5 9.5a2.5 2.5 0 1 1 3.2 2.4c-.6.3-1.2.8-1.2 1.6V14M12 17h.01" />""",
         ["refresh"] = """<path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5" />""",
+        ["grip"] = """<circle cx="9" cy="8" r="1" fill="currentColor" stroke="none" /><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none" /><circle cx="9" cy="16" r="1" fill="currentColor" stroke="none" /><circle cx="15" cy="8" r="1" fill="currentColor" stroke="none" /><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none" /><circle cx="15" cy="16" r="1" fill="currentColor" stroke="none" />""",
+        ["play"] = """<polygon points="8 5 19 12 8 19" fill="currentColor" stroke="none" />""",
+        ["download"] = """<path d="M12 4v11M8 11l4 4 4-4" /><path d="M5 19h14" />""",
     }.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
 
     private static readonly FrozenDictionary<string, IReadOnlyList<IconShape>> Shapes =
@@ -150,6 +153,10 @@ public static partial class IconSet
         ["pin-angle"] = "pin",
         ["chevron-double-left"] = "chevrons-left",
         ["chevron-double-right"] = "chevrons-right",
+        ["grip-vertical"] = "grip",
+        ["play-fill"] = "play",
+        ["play-circle"] = "play",
+        ["cloud-download"] = "download",
     }.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>Every icon name that has its own drawing, sorted.</summary>
