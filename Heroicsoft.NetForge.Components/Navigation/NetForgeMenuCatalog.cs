@@ -239,7 +239,10 @@ internal sealed class NetForgeMenuBuilder : INetForgeMenuBuilder
         return AddSection(title.Trim(), ResolveArea(area), configure);
     }
 
-    public INetForgeMenuGroupBuilder AddItems(string? area = null, Action<NetForgeMenuGroupOptions>? configure = null) =>
+    public INetForgeMenuGroupBuilder AddItems(Action<NetForgeMenuGroupOptions>? configure = null) =>
+        AddSection(null, area, configure);
+
+    public INetForgeMenuGroupBuilder AddItems(string area, Action<NetForgeMenuGroupOptions>? configure = null) =>
         AddSection(null, ResolveArea(area), configure);
 
     public INetForgeMenuBuilder IncludeRegistered()

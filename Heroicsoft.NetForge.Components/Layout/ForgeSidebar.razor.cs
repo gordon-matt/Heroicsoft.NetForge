@@ -12,6 +12,9 @@ public partial class ForgeSidebar
     public string BrandHref { get; set; } = "/";
 
     [Parameter]
+    public bool EnhanceBrandNavigation { get; set; } = true;
+
+    [Parameter]
     public string? LogoUrl { get; set; }
 
     [Parameter]
@@ -26,6 +29,10 @@ public partial class ForgeSidebar
     /// <summary>Replaces <see cref="Sections"/>. Used by the shell when a shared menu is switched on.</summary>
     [Parameter]
     public RenderFragment? Menu { get; set; }
+
+    /// <summary>Draws <see cref="Menu"/> after <see cref="Sections"/>.</summary>
+    [Parameter]
+    public bool SharedMenuAfterSections { get; set; }
 
     [Parameter]
     public RenderFragment? BrandContent { get; set; }

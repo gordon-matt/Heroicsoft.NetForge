@@ -232,6 +232,28 @@ public class NetForgeMenuTests
     }
 
     [Fact]
+    public void AddItems_UsesTheMenuBeingBuiltUnlessAnAreaIsPassed()
+    {
+        INetForgeMenuCatalog catalog = Catalog(services =>
+        {
+            services.BuildMenu("Admin", menu =>
+            {
+                menu.AddItems(group => group.Roles = "Administrator").AddCustom(Link("Logs", "/logvue"));
+                menu.AddItems("Reports", group => group.Roles = "Editor").AddCustom(Link("Queryz", "/"));
+            });
+        });
+
+        ForgeNavSection admin = catalog.Get("Admin").Sections.Single();
+        Assert.Null(admin.Heading);
+        Assert.Equal("Administrator", admin.Roles);
+        Assert.Equal("Logs", admin.Items.Single().Title);
+
+        ForgeNavSection reports = catalog.Get("Reports").Sections.Single();
+        Assert.Equal("Editor", reports.Roles);
+        Assert.Equal("Queryz", reports.Items.Single().Title);
+    }
+
+    [Fact]
     public void Order_SortsAndKeepsRegistrationOrderForTies()
     {
         IReadOnlyList<ForgeNavItem> items = Catalog(services =>

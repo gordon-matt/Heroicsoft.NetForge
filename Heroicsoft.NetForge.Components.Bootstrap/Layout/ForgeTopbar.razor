@@ -28,31 +28,15 @@
         </button>
     }
 
-    @if (Menu is not null)
+    @if (SharedMenuAfterSections)
     {
-        @Menu
+        @HostSections
+        @SharedMenus
     }
-    @if (TopbarMenu is not null)
+    else
     {
-        @TopbarMenu
-    }
-    @if (Sections.Count > 0)
-    {
-        <ul class="nav bf-topnav @(navOpen ? "is-open" : null)">
-            @foreach (var section in Sections)
-            {
-                @if (string.IsNullOrEmpty(section.Roles))
-                {
-                    <Heroicsoft.NetForge.Components.Bootstrap.Layout.ForgeNavMenu Section="section" />
-                }
-                else
-                {
-                    <AuthorizeView Roles="@section.Roles">
-                        <Heroicsoft.NetForge.Components.Bootstrap.Layout.ForgeNavMenu Section="section" />
-                    </AuthorizeView>
-                }
-            }
-        </ul>
+        @SharedMenus
+        @HostSections
     }
 
     @if (ShowSearch)
@@ -116,3 +100,39 @@
         }
     </div>
 </header>
+
+@code {
+    private RenderFragment SharedMenus =>
+    @<text>
+        @if (Menu is not null)
+        {
+            @Menu
+        }
+        @if (TopbarMenu is not null)
+        {
+            @TopbarMenu
+        }
+    </text>;
+
+    private RenderFragment HostSections =>
+    @<text>
+        @if (Sections.Count > 0)
+        {
+            <ul class="nav bf-topnav @(navOpen ? "is-open" : null)">
+                @foreach (var section in Sections)
+                {
+                    @if (string.IsNullOrEmpty(section.Roles))
+                    {
+                        <Heroicsoft.NetForge.Components.Bootstrap.Layout.ForgeNavMenu Section="section" />
+                    }
+                    else
+                    {
+                        <AuthorizeView Roles="@section.Roles">
+                            <Heroicsoft.NetForge.Components.Bootstrap.Layout.ForgeNavMenu Section="section" />
+                        </AuthorizeView>
+                    }
+                }
+            </ul>
+        }
+    </text>;
+}

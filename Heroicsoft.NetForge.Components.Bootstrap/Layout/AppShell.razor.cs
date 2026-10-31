@@ -33,6 +33,10 @@ public partial class AppShell
     [Parameter]
     public RenderFragment? Menu { get; set; }
 
+    /// <summary>Draws <see cref="Menu"/> after <see cref="Sections"/> when both share a bar.</summary>
+    [Parameter]
+    public bool SharedMenuAfterSections { get; set; }
+
     /// <summary>
     /// A second menu drawn in the top bar. <see cref="Menu"/> stays in the sidebar unless
     /// <see cref="NavigationPlacement"/> is <see cref="ForgeNavigationPlacement.Topbar"/>.

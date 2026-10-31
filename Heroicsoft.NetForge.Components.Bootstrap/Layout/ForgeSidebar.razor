@@ -25,10 +25,37 @@
     </div>
 
     <div class="bf-sidebar-scroll">
+        @if (SharedMenuAfterSections)
+        {
+            @HostSections
+            @SharedMenus
+        }
+        else
+        {
+            @SharedMenus
+            @HostSections
+        }
+    </div>
+
+    @if (SidebarFooter is not null)
+    {
+        <div class="bf-sidebar-footer border-top p-2">
+            @SidebarFooter
+        </div>
+    }
+</nav>
+
+@code {
+    private RenderFragment SharedMenus =>
+    @<text>
         @if (Menu is not null)
         {
             @Menu
         }
+    </text>;
+
+    private RenderFragment HostSections =>
+    @<text>
         @foreach (var section in Sections)
         {
             @if (string.IsNullOrEmpty(section.Roles))
@@ -42,12 +69,5 @@
                 </AuthorizeView>
             }
         }
-    </div>
-
-    @if (SidebarFooter is not null)
-    {
-        <div class="bf-sidebar-footer border-top p-2">
-            @SidebarFooter
-        </div>
-    }
-</nav>
+    </text>;
+}

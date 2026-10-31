@@ -7,7 +7,9 @@
         }
         else
         {
-            <ForgeSidebar Sections="Sections" Menu="@Menu" Brand="@Brand" BrandHref="@BrandHref"
+            <ForgeSidebar Sections="Sections" Menu="@Menu" SharedMenuAfterSections="@SharedMenuAfterSections"
+                          Brand="@Brand" BrandHref="@BrandHref"
+                          EnhanceBrandNavigation="@EnhanceBrandNavigation"
                           LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl" MarkUrl="@MarkUrl"
                           BrandContent="BrandContent" SidebarFooter="SidebarFooter" />
         }
@@ -23,7 +25,9 @@
                      Sections="@(NavigationPlacement == ForgeNavigationPlacement.Topbar ? Sections : [])"
                      Menu="@(NavigationPlacement == ForgeNavigationPlacement.Topbar ? Menu : null)"
                      TopbarMenu="@TopbarMenu"
-                     Brand="@Brand" BrandHref="@BrandHref" LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl"
+                     SharedMenuAfterSections="@SharedMenuAfterSections"
+                     Brand="@Brand" BrandHref="@BrandHref" EnhanceBrandNavigation="@EnhanceBrandNavigation"
+                     LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl"
                      ShowUserMenu="ShowUserMenu" UserMenuItems="UserMenuItems" CenterContent="TopbarCenter">
             @TopbarEnd
         </ForgeTopbar>

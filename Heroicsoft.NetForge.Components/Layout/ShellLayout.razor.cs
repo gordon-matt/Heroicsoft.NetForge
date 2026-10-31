@@ -82,7 +82,7 @@ public partial class ShellLayout : IDisposable
         mainPlacement = UiOptions.Value.MainMenuPlacement;
         navigation = Services.GetService<IShellNavigation>();
         sharedMenu = NetForgeMenuShell.Find(Services, options);
-        sections = navigation is null && sharedMenu is null ? options.Sections : [];
+        sections = navigation is null ? options.Sections : [];
         searchText = CurrentTerm();
         SidebarRefresh.Changed += OnSidebarChanged;
         Navigation.LocationChanged += OnLocationChanged;

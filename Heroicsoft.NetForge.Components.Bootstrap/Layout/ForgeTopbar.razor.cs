@@ -26,6 +26,10 @@ public partial class ForgeTopbar
     [Parameter]
     public RenderFragment? TopbarMenu { get; set; }
 
+    /// <summary>Draws <see cref="Menu"/> after <see cref="Sections"/>.</summary>
+    [Parameter]
+    public bool SharedMenuAfterSections { get; set; }
+
     [Parameter]
     public string? Brand { get; set; }
 

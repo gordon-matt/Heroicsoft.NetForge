@@ -8,7 +8,7 @@
     }
     else if (LogoUrl is not null || !string.IsNullOrWhiteSpace(Brand))
     {
-        <a class="nf-brand-link nf-topbar-brand" href="@BrandHref">
+        <a class="nf-brand-link nf-topbar-brand" href="@BrandHref" data-enhance="@(EnhanceBrandNavigation ? null : "false")">
             @if (LogoUrl is not null)
             {
                 <img class="nf-brand-logo @(LogoDarkUrl is not null ? "nf-has-dark" : null)" src="@LogoUrl" alt="@Brand" />
@@ -24,35 +24,15 @@
         </a>
     }
 
-    @if (Menu is not null)
+    @if (SharedMenuAfterSections)
     {
-        @Menu
+        @HostSections
+        @SharedMenus
     }
-    @if (TopbarMenu is not null)
+    else
     {
-        @TopbarMenu
-    }
-    @if (Sections.Count > 0)
-    {
-        <button type="button" class="nf-icon-button nf-topnav-toggle" title="Menu" aria-expanded="@navOpen"
-                @onclick="() => navOpen = !navOpen">
-            <Icon Name="menu" />
-        </button>
-        <ul class="nf-topnav @(navOpen ? "is-open" : null)">
-            @foreach (var section in Sections)
-            {
-                @if (string.IsNullOrEmpty(section.Roles))
-                {
-                    <ForgeNavMenu Section="section" />
-                }
-                else
-                {
-                    <AuthorizeView Roles="@section.Roles">
-                        <ForgeNavMenu Section="section" />
-                    </AuthorizeView>
-                }
-            }
-        </ul>
+        @SharedMenus
+        @HostSections
     }
 
     @if (CenterContent is not null)
@@ -124,3 +104,43 @@
         }
     </div>
 </header>
+
+@code {
+    private RenderFragment SharedMenus =>
+    @<text>
+        @if (Menu is not null)
+        {
+            @Menu
+        }
+        @if (TopbarMenu is not null)
+        {
+            @TopbarMenu
+        }
+    </text>;
+
+    private RenderFragment HostSections =>
+    @<text>
+        @if (Sections.Count > 0)
+        {
+            <button type="button" class="nf-icon-button nf-topnav-toggle" title="Menu" aria-expanded="@navOpen"
+                    @onclick="() => navOpen = !navOpen">
+                <Icon Name="menu" />
+            </button>
+            <ul class="nf-topnav @(navOpen ? "is-open" : null)">
+                @foreach (var section in Sections)
+                {
+                    @if (string.IsNullOrEmpty(section.Roles))
+                    {
+                        <ForgeNavMenu Section="section" />
+                    }
+                    else
+                    {
+                        <AuthorizeView Roles="@section.Roles">
+                            <ForgeNavMenu Section="section" />
+                        </AuthorizeView>
+                    }
+                }
+            </ul>
+        }
+    </text>;
+}

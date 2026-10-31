@@ -7,7 +7,8 @@
         }
         else
         {
-            <Heroicsoft.NetForge.Components.Bootstrap.Layout.ForgeSidebar Sections="Sections" Menu="@Menu" Brand="@Brand" BrandHref="@BrandHref"
+            <Heroicsoft.NetForge.Components.Bootstrap.Layout.ForgeSidebar Sections="Sections" Menu="@Menu"
+                          SharedMenuAfterSections="@SharedMenuAfterSections" Brand="@Brand" BrandHref="@BrandHref"
                           LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl" MarkUrl="@MarkUrl"
                           BrandContent="BrandContent" SidebarFooter="SidebarFooter" />
         }
@@ -21,6 +22,7 @@
                      Sections="@(NavigationPlacement == ForgeNavigationPlacement.Topbar ? Sections : [])"
                      Menu="@(NavigationPlacement == ForgeNavigationPlacement.Topbar ? Menu : null)"
                      TopbarMenu="@TopbarMenu"
+                     SharedMenuAfterSections="@SharedMenuAfterSections"
                      Brand="@Brand" BrandHref="@BrandHref" LogoUrl="@LogoUrl" LogoDarkUrl="@LogoDarkUrl"
                      ShowThemePicker="ShowThemePicker"
                      ShowUserMenu="ShowUserMenu" UserMenuItems="UserMenuItems">

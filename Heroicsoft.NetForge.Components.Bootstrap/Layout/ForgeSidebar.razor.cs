@@ -27,6 +27,10 @@ public partial class ForgeSidebar
     [Parameter]
     public RenderFragment? Menu { get; set; }
 
+    /// <summary>Draws <see cref="Menu"/> after <see cref="Sections"/>.</summary>
+    [Parameter]
+    public bool SharedMenuAfterSections { get; set; }
+
     [Parameter]
     public RenderFragment? BrandContent { get; set; }
 

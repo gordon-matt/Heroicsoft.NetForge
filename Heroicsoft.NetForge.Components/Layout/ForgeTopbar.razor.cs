@@ -27,11 +27,18 @@ public partial class ForgeTopbar
     [Parameter]
     public RenderFragment? TopbarMenu { get; set; }
 
+    /// <summary>Draws <see cref="Menu"/> after <see cref="Sections"/>.</summary>
+    [Parameter]
+    public bool SharedMenuAfterSections { get; set; }
+
     [Parameter]
     public string? Brand { get; set; }
 
     [Parameter]
     public string BrandHref { get; set; } = "/";
+
+    [Parameter]
+    public bool EnhanceBrandNavigation { get; set; } = true;
 
     [Parameter]
     public string? LogoUrl { get; set; }

@@ -1,6 +1,6 @@
 <nav class="nf-sidebar" id="nf-sidebar" aria-label="Navigation">
     <div class="nf-sidebar-brand">
-        <a href="@BrandHref" class="nf-brand-link">
+        <a href="@BrandHref" class="nf-brand-link" data-enhance="@(EnhanceBrandNavigation ? null : "false")">
             @if (BrandContent is not null)
             {
                 @BrandContent
@@ -25,10 +25,37 @@
     </div>
 
     <div class="nf-sidebar-scroll">
+        @if (SharedMenuAfterSections)
+        {
+            @HostSections
+            @SharedMenus
+        }
+        else
+        {
+            @SharedMenus
+            @HostSections
+        }
+    </div>
+
+    @if (SidebarFooter is not null)
+    {
+        <div class="nf-sidebar-footer">
+            @SidebarFooter
+        </div>
+    }
+</nav>
+
+@code {
+    private RenderFragment SharedMenus =>
+    @<text>
         @if (Menu is not null)
         {
             @Menu
         }
+    </text>;
+
+    private RenderFragment HostSections =>
+    @<text>
         @foreach (var section in Sections)
         {
             @if (string.IsNullOrEmpty(section.Roles))
@@ -42,12 +69,5 @@
                 </AuthorizeView>
             }
         }
-    </div>
-
-    @if (SidebarFooter is not null)
-    {
-        <div class="nf-sidebar-footer">
-            @SidebarFooter
-        </div>
-    }
-</nav>
+    </text>;
+}

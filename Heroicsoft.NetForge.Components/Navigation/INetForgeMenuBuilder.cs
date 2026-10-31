@@ -30,8 +30,13 @@ public interface INetForgeMenuBuilder
     /// </summary>
     INetForgeMenuGroupBuilder AddMenu(string title, string area, Action<NetForgeMenuGroupOptions>? configure = null);
 
-    /// <summary>Links with no heading, in <paramref name="area"/> or the menu currently being built.</summary>
-    INetForgeMenuGroupBuilder AddItems(string? area = null, Action<NetForgeMenuGroupOptions>? configure = null);
+    /// <summary>
+    /// Links with no heading, in the menu currently being built. A second call appends to that same section.
+    /// </summary>
+    INetForgeMenuGroupBuilder AddItems(Action<NetForgeMenuGroupOptions>? configure = null);
+
+    /// <summary>Links with no heading, filed under <paramref name="area"/> instead of the menu currently being built.</summary>
+    INetForgeMenuGroupBuilder AddItems(string area, Action<NetForgeMenuGroupOptions>? configure = null);
 
     /// <summary>
     /// Places every registered contributor that has not already been placed. A contributor's

@@ -48,14 +48,20 @@ public sealed class ForgeShellOptions
     public List<ForgeNavSection> Sections { get; set; } = [];
 
     /// <summary>
-    /// Draws the shared menu. It sits beside <see cref="IShellNavigation"/> when that service is
-    /// registered, and it replaces <see cref="Sections"/> when it is not. An area that was never
-    /// built leaves the shell's own sections in place.
+    /// Draws the shared menu beside <see cref="Sections"/>, or beside <see cref="IShellNavigation"/>
+    /// when that service is registered (its sections replace <see cref="Sections"/>). An area that
+    /// was never built leaves the shell's own sections in place.
     /// </summary>
     public bool UseSharedMenu { get; set; }
 
     /// <summary>Area passed to the shared menu. Empty is the menu built without a name.</summary>
     public string? SharedMenuArea { get; set; }
+
+    /// <summary>
+    /// Draws the shared menu after <see cref="Sections"/> when both share a bar. The default draws
+    /// the shared menu first. <c>Order</c> on a menu group only sorts links inside the shared menu.
+    /// </summary>
+    public bool SharedMenuAfterSections { get; set; }
 
     /// <summary>Component rendered at the end of the top bar, before the user menu. A notification bell, for example.</summary>
     public Type? TopbarEndComponent { get; set; }

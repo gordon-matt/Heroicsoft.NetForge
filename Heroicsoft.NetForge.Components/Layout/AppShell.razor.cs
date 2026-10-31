@@ -22,6 +22,13 @@ public partial class AppShell : IDisposable
     [Parameter]
     public string BrandHref { get; set; } = "/";
 
+    /// <summary>
+    /// False makes the brand link a full page load. A library document sets this so the host
+    /// address is not handled by the library's own router.
+    /// </summary>
+    [Parameter]
+    public bool EnhanceBrandNavigation { get; set; } = true;
+
     [Parameter]
     public string? LogoUrl { get; set; }
 
@@ -40,6 +47,10 @@ public partial class AppShell : IDisposable
     /// <summary>The shared menu, drawn with <see cref="Sections"/> when both are set.</summary>
     [Parameter]
     public RenderFragment? Menu { get; set; }
+
+    /// <summary>Draws <see cref="Menu"/> after <see cref="Sections"/> when both share a bar.</summary>
+    [Parameter]
+    public bool SharedMenuAfterSections { get; set; }
 
     /// <summary>
     /// A second menu drawn in the top bar. <see cref="Menu"/> stays in the sidebar unless
