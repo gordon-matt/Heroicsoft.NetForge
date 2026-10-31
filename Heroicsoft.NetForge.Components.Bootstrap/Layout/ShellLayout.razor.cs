@@ -48,7 +48,7 @@ public partial class ShellLayout : IDisposable
             ? NetForgeMenuPlacement.Topbar
             : NetForgeMenuPlacement.Sidebar;
         builder.OpenComponent<Heroicsoft.NetForge.Components.Bootstrap.Navigation.NetForgeMenu>(0);
-        builder.AddAttribute(1, nameof(Heroicsoft.NetForge.Components.Navigation.NetForgeMenu.Area), sharedMenu.Area);
+        builder.AddAttribute(1, nameof(Heroicsoft.NetForge.Components.Navigation.NetForgeMenu.Name), sharedMenu.Name);
         builder.AddAttribute(2, nameof(Heroicsoft.NetForge.Components.Navigation.NetForgeMenu.Placement), slot);
         builder.AddAttribute(3, nameof(Heroicsoft.NetForge.Components.Navigation.NetForgeMenu.Landmark), slot != NetForgeMenuPlacement.Sidebar);
         builder.CloseComponent();
@@ -60,7 +60,7 @@ public partial class ShellLayout : IDisposable
             : builder =>
             {
                 builder.OpenComponent<Heroicsoft.NetForge.Components.Bootstrap.Navigation.NetForgeMenu>(0);
-                builder.AddAttribute(1, nameof(Heroicsoft.NetForge.Components.Navigation.NetForgeMenu.Area), sharedMenu.Area);
+                builder.AddAttribute(1, nameof(Heroicsoft.NetForge.Components.Navigation.NetForgeMenu.Name), sharedMenu.Name);
                 builder.AddAttribute(2, nameof(Heroicsoft.NetForge.Components.Navigation.NetForgeMenu.Placement), NetForgeMenuPlacement.Topbar);
                 builder.AddAttribute(3, nameof(Heroicsoft.NetForge.Components.Navigation.NetForgeMenu.Landmark), true);
                 builder.CloseComponent();

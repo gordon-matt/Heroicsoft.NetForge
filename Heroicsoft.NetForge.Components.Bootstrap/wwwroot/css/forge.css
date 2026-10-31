@@ -462,7 +462,18 @@ body:has(.bf-shell) {
     padding: 0;
     list-style: none;
 }
-.bf-shared-topnav .nav-link { border-left: 0; }
+.bf-shared-topnav > .nav-item > .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border-left: 0;
+}
+
+/* ms-auto only pushes the icon out in a stretched sidebar row. In the top bar the link
+   is as wide as its contents, so that margin collapses and the icon sits on the label. */
+.bf-shared-topnav > .nav-item > .nav-link .ms-auto {
+    margin-left: 0 !important;
+}
 .bf-shared-topnav > .nav-item > .bf-nav-group > .dropdown-menu { position: absolute; }
 .bf-menu-scrim { position: fixed; inset: 0; z-index: 1000; }
 .bf-shared-topnav .dropdown-menu { z-index: 1001; }

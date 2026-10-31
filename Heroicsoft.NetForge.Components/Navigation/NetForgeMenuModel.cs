@@ -6,20 +6,20 @@ namespace Heroicsoft.NetForge.Components.Navigation;
 public sealed class NetForgeMenuModel
 {
     public NetForgeMenuModel(
-        string area,
+        string name,
         bool isDefined,
         NetForgeMenuPlacement placement,
         IReadOnlyList<ForgeNavSection> sections)
     {
-        Area = area;
+        Name = name;
         IsDefined = isDefined;
         Placement = placement;
         Sections = sections;
     }
 
-    public string Area { get; }
+    public string Name { get; }
 
-    /// <summary>False when nothing was registered for <see cref="Area"/>. Renderers draw nothing.</summary>
+    /// <summary>False when nothing was registered for <see cref="Name"/>. Renderers draw nothing.</summary>
     public bool IsDefined { get; }
 
     public NetForgeMenuPlacement Placement { get; }
@@ -143,6 +143,6 @@ public sealed class NetForgeMenuModel
     public static bool IsActive(ForgeNavSection section, string path) =>
         section.Items.Any(item => ForgeNavMatch.IsInBranch(item, path));
 
-    public static NetForgeMenuModel Empty(string? area) =>
-        new(string.IsNullOrWhiteSpace(area) ? NetForgeMenus.DefaultArea : area.Trim(), false, NetForgeMenuPlacement.Sidebar, []);
+    public static NetForgeMenuModel Empty(string? name) =>
+        new(string.IsNullOrWhiteSpace(name) ? NetForgeMenus.DefaultName : name.Trim(), false, NetForgeMenuPlacement.Sidebar, []);
 }

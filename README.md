@@ -80,7 +80,7 @@ Pages inject `ToastService`, `DialogService`, and `SidebarRefresh` instead of co
 
 ## Shared menu
 
-A host owns the menu. Each Razor Class Library registers a contributor and, if it wants a fluent name, an extension method on `INetForgeMenuGroupBuilder`. The tree is built on first use and stored in DI, so a contributor can read its own `IOptions` (singletons only; a scoped service would be captured). Calling `BuildMenu` again for the same area appends sections. The same section title in that area appends links.
+A host owns the menu. Each Razor Class Library registers a contributor and, if it wants a fluent name, an extension method on `INetForgeMenuGroupBuilder`. The tree is built on first use and stored in DI, so a contributor can read its own `IOptions` (singletons only; a scoped service would be captured). Calling `BuildMenu` again for the same name appends sections. The same section title in that menu appends links.
 
 ```csharp
 builder.Services.AddNetForgeComponents()
@@ -121,11 +121,28 @@ builder.Services.AddNetForgeComponents()
 builder.Services.Configure<ForgeShellOptions>(shell =>
 {
     shell.UseSharedMenu = true;
-    shell.SharedMenuArea = "Admin"; // empty string is the unnamed menu
+    shell.SharedMenuName = "Admin";
 });
 ```
 
-`AsTopbar` / `AsSidebar` is the placement used by the shell, `<NetForgeMenu />`, and `@Html.NetForgeMenu()` when the caller does not pass one. `UseSharedMenu` draws that menu beside `IShellNavigation` when the service is registered, and instead of `Sections` when it is not. The shell keeps `Sections` if that area was never built. The component and the HTML helper render nothing for an unknown area, so a library can always include them. Menu links do a full page load, because a library such as LogVue is its own Blazor document.
+`BuildMenu("Admin")` and `SharedMenuName` select which menu to draw. They do not filter by URL, so `UseSharedMenu` shows that menu on every page whose layout is the shell. A public site and an admin site are two layouts: put the shell, or `<NetForgeMenu Name="Admin" />`, only in the admin layout. The public layout omits it. A group with no `AsTopbar` still lands in the top bar on every page that is not one of that group's own URLs, which is why Logs stays in Shelfwarden's top bar until you open LogVue.
+
+A link that is not a NetForge library is `AddCustom`. Hangfire is the usual one:
+
+```csharp
+menu.AddItems(group => group.Roles = "Administrator")
+    .AsTopbar()
+    .AddLogVue(item => item.External = true)
+    .AddCustom(item =>
+    {
+        item.Title = "Jobs";
+        item.Icon = "bi-speedometer2";
+        item.Url = "/hangfire";
+        item.External = true;
+    });
+```
+
+`AsTopbar` / `AsSidebar` is the placement used by the shell, `<NetForgeMenu />`, and `@Html.NetForgeMenu()` when the caller does not pass one. `UseSharedMenu` draws that menu beside `IShellNavigation` when the service is registered, and beside `Sections` when it is not. The shell keeps `Sections` if that menu was never built. The component and the HTML helper render nothing for an unknown name, so a library can always include them. Menu links do a full page load, because a library such as LogVue is its own Blazor document.
 
 Two placement settings are easy to mix up:
 
@@ -151,8 +168,8 @@ Blazor, including a library page that should show the host menu. Links are root-
 
 ```html
 <NetForgeMenu />
-<NetForgeMenu Area="Admin" />
-<NetForgeMenu Area="Admin" Placement="NetForgeMenuPlacement.Sidebar" />
+<NetForgeMenu Name="Admin" />
+<NetForgeMenu Name="Admin" Placement="NetForgeMenuPlacement.Sidebar" />
 ```
 
 MVC. Import `Heroicsoft.NetForge.Components`, or `Heroicsoft.NetForge.Components.Bootstrap` for Bootstrap markup. Do not import both.

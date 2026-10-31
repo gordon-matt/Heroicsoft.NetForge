@@ -14,9 +14,9 @@ public interface INetForgeMenuContributor
     string DefaultMenu => Name;
 
     /// <summary>
-    /// Area used by <c>IncludeRegistered</c>. Null uses the menu the host is building.
+    /// Menu name used by <c>IncludeRegistered</c>. Null uses the menu the host is building.
     /// </summary>
-    string? DefaultArea => null;
+    string? DefaultName => null;
 
     /// <summary>
     /// Adds this library's links to <paramref name="group"/>. Apply <paramref name="configure"/>

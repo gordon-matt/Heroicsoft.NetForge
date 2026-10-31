@@ -49,13 +49,16 @@ public sealed class ForgeShellOptions
 
     /// <summary>
     /// Draws the shared menu beside <see cref="Sections"/>, or beside <see cref="IShellNavigation"/>
-    /// when that service is registered (its sections replace <see cref="Sections"/>). An area that
+    /// when that service is registered (its sections replace <see cref="Sections"/>). A menu that
     /// was never built leaves the shell's own sections in place.
     /// </summary>
     public bool UseSharedMenu { get; set; }
 
-    /// <summary>Area passed to the shared menu. Empty is the menu built without a name.</summary>
-    public string? SharedMenuArea { get; set; }
+    /// <summary>
+    /// Which <c>BuildMenu</c> to draw. Empty is the menu built without a name. The shell shows
+    /// that menu on every page that uses this layout; the value does not filter by URL.
+    /// </summary>
+    public string? SharedMenuName { get; set; }
 
     /// <summary>
     /// Draws the shared menu after <see cref="Sections"/> when both share a bar. The default draws

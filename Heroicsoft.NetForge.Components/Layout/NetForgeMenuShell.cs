@@ -14,13 +14,13 @@ public static class NetForgeMenuShell
         }
 
         var catalog = services.GetService<INetForgeMenuCatalog>();
-        var menu = catalog?.Get(options.SharedMenuArea);
+        var menu = catalog?.Get(options.SharedMenuName);
 
-        // An area that was never built leaves the shell's own sections in place.
+        // A menu that was never built leaves the shell's own sections in place.
         return menu is { IsDefined: true } ? menu : null;
     }
 
-    /// <summary>True when one area has groups on the side and groups in the top bar.</summary>
+    /// <summary>True when one menu has groups on the side and groups in the top bar.</summary>
     public static bool Splits(NetForgeMenuModel? menu) =>
         menu is { HasSidebarSections: true, HasTopbarSections: true };
 

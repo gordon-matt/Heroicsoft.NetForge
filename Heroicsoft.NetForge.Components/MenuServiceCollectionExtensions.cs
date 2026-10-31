@@ -24,26 +24,28 @@ public static class MenuServiceCollectionExtensions
         return services;
     }
 
-    /// <summary>Builds the unnamed menu. A later call for the same area appends sections.</summary>
+    /// <summary>Builds the unnamed menu. A later call for the same name appends sections.</summary>
     public static IServiceCollection BuildMenu(
         this IServiceCollection services,
         Action<INetForgeMenuBuilder> configure) =>
-        services.BuildMenu(NetForgeMenus.DefaultArea, configure);
+        services.BuildMenu(NetForgeMenus.DefaultName, configure);
 
     /// <summary>
-    /// Builds the menu addressed by <paramref name="area"/>. The callback runs on first use, so
-    /// extensions can read <c>IOptions</c> and other singletons. Do not resolve a scoped service from it.
+    /// Builds the menu addressed by <paramref name="name"/>, the same string as
+    /// <c>ForgeShellOptions.SharedMenuName</c> and <c>NetForgeMenu.Name</c>. The value selects
+    /// the menu. It does not filter by URL. The callback runs on first use, so extensions can
+    /// read <c>IOptions</c> and other singletons. Do not resolve a scoped service from it.
     /// </summary>
     public static IServiceCollection BuildMenu(
         this IServiceCollection services,
-        string area,
+        string name,
         Action<INetForgeMenuBuilder> configure)
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(configure);
 
         services.AddNetForgeMenu();
-        services.AddSingleton(new NetForgeMenuRegistration(Normalize(area), configure));
+        services.AddSingleton(new NetForgeMenuRegistration(Normalize(name), configure));
         return services;
     }
 
@@ -71,6 +73,6 @@ public static class MenuServiceCollectionExtensions
         return services;
     }
 
-    private static string Normalize(string? area) =>
-        string.IsNullOrWhiteSpace(area) ? NetForgeMenus.DefaultArea : area.Trim();
+    private static string Normalize(string? name) =>
+        string.IsNullOrWhiteSpace(name) ? NetForgeMenus.DefaultName : name.Trim();
 }

@@ -62,7 +62,7 @@ public class NetForgeMenuTests
     }
 
     [Fact]
-    public void Build_PutsOneGroupInTheTopBarOfTheSameArea()
+    public void Build_PutsOneGroupInTheTopBarOfTheSameMenu()
     {
         var services = new ServiceCollection();
         services.AddNetForgeComponents();
@@ -74,7 +74,7 @@ public class NetForgeMenuTests
         services.Configure<ForgeShellOptions>(shell =>
         {
             shell.UseSharedMenu = true;
-            shell.SharedMenuArea = "Admin";
+            shell.SharedMenuName = "Admin";
         });
 
         using var provider = services.BuildServiceProvider();
@@ -82,7 +82,7 @@ public class NetForgeMenuTests
         var menu = NetForgeMenuShell.Find(provider, options);
 
         Assert.NotNull(menu);
-        Assert.Equal("Admin", menu.Area);
+        Assert.Equal("Admin", menu.Name);
         Assert.Equal(NetForgeMenuPlacement.Sidebar, menu.Placement);
         Assert.Equal("Reports", menu.Sections[0].Heading);
         Assert.Equal("Maintenance", menu.Sections[1].Heading);
@@ -160,7 +160,7 @@ public class NetForgeMenuTests
     }
 
     [Fact]
-    public void Build_FilesASectionIntoAnotherArea()
+    public void Build_FilesASectionIntoAnotherMenu()
     {
         var catalog = Catalog(services => services.BuildMenu(menu =>
             {
@@ -220,7 +220,7 @@ public class NetForgeMenuTests
     }
 
     [Fact]
-    public void AddItems_UsesTheMenuBeingBuiltUnlessAnAreaIsPassed()
+    public void AddItems_UsesTheMenuBeingBuiltUnlessANameIsPassed()
     {
         var catalog = Catalog(services => services.BuildMenu("Admin", menu =>
             {
@@ -424,7 +424,7 @@ public class NetForgeMenuTests
 
         public string DefaultMenu => "Maintenance";
 
-        public string? DefaultArea => "Admin";
+        public string? DefaultName => "Admin";
 
         public void Contribute(INetForgeMenuGroupBuilder group, Action<NetForgeMenuItemOptions>? configure) => group.AddCustom(item =>
                                                                                                                         {

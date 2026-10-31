@@ -6,9 +6,9 @@ namespace Heroicsoft.NetForge.Components.Navigation;
 /// </summary>
 public interface INetForgeMenuCatalog
 {
-    /// <summary>Every area that was mentioned while building. The default area is an empty string.</summary>
-    IReadOnlyCollection<string> Areas { get; }
+    /// <summary>Every menu name that was mentioned while building. The default menu is an empty string.</summary>
+    IReadOnlyCollection<string> Names { get; }
 
-    /// <summary>The menu for <paramref name="area"/>. An unknown area is an empty menu.</summary>
-    NetForgeMenuModel Get(string? area);
+    /// <summary>The menu for <paramref name="name"/>. An unknown name is an empty menu.</summary>
+    NetForgeMenuModel Get(string? name);
 }

@@ -337,6 +337,7 @@ kbd {
     list-style: none;
 }
 .nf-shared-topnav .nf-nav-link { height: 34px; padding: 0 0.7rem; }
+.nf-shared-topnav .nf-nav-link .nf-nav-external { margin-left: 0.15rem; }
 .nf-shared-topnav .nf-menu-list.is-start { left: 0; right: auto; }
 .nf-shared-topnav .nf-menu-list .nf-menu-list {
     position: static;

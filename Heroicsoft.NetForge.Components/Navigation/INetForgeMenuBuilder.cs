@@ -1,7 +1,7 @@
 namespace Heroicsoft.NetForge.Components.Navigation;
 
 /// <summary>
-/// Builds one area's sections. Extension methods such as <c>AddLogVue</c> belong on
+/// Builds one menu's sections. Extension methods such as <c>AddLogVue</c> belong on
 /// <see cref="INetForgeMenuGroupBuilder"/>, in the library that owns the links.
 /// </summary>
 public interface INetForgeMenuBuilder
@@ -10,37 +10,37 @@ public interface INetForgeMenuBuilder
     IServiceProvider Services { get; }
 
     /// <summary>
-    /// Draws this area down the side. A group can still call <see cref="INetForgeMenuGroupBuilder.AsTopbar"/>.
-    /// <paramref name="area"/> null means the menu currently being built.
+    /// Draws this menu down the side. A group can still call <see cref="INetForgeMenuGroupBuilder.AsTopbar"/>.
+    /// <paramref name="name"/> null means the menu currently being built.
     /// </summary>
-    INetForgeMenuBuilder AsSidebar(string? area = null);
+    INetForgeMenuBuilder AsSidebar(string? name = null);
 
     /// <summary>
-    /// Draws this area across the top. A group can still call <see cref="INetForgeMenuGroupBuilder.AsSidebar"/>.
-    /// <paramref name="area"/> null means the menu currently being built.
+    /// Draws this menu across the top. A group can still call <see cref="INetForgeMenuGroupBuilder.AsSidebar"/>.
+    /// <paramref name="name"/> null means the menu currently being built.
     /// </summary>
-    INetForgeMenuBuilder AsTopbar(string? area = null);
+    INetForgeMenuBuilder AsTopbar(string? name = null);
 
     /// <summary>A labelled group of links in the menu currently being built.</summary>
     INetForgeMenuGroupBuilder AddMenu(string title, Action<NetForgeMenuGroupOptions>? configure = null);
 
     /// <summary>
-    /// A labelled group filed under <paramref name="area"/>. The same title in the same area appends
+    /// A labelled group filed under <paramref name="name"/>. The same title in the same menu appends
     /// links to the group that is already there.
     /// </summary>
-    INetForgeMenuGroupBuilder AddMenu(string title, string area, Action<NetForgeMenuGroupOptions>? configure = null);
+    INetForgeMenuGroupBuilder AddMenu(string title, string name, Action<NetForgeMenuGroupOptions>? configure = null);
 
     /// <summary>
     /// Links with no heading, in the menu currently being built. A second call appends to that same section.
     /// </summary>
     INetForgeMenuGroupBuilder AddItems(Action<NetForgeMenuGroupOptions>? configure = null);
 
-    /// <summary>Links with no heading, filed under <paramref name="area"/> instead of the menu currently being built.</summary>
-    INetForgeMenuGroupBuilder AddItems(string area, Action<NetForgeMenuGroupOptions>? configure = null);
+    /// <summary>Links with no heading, filed under <paramref name="name"/> instead of the menu currently being built.</summary>
+    INetForgeMenuGroupBuilder AddItems(string name, Action<NetForgeMenuGroupOptions>? configure = null);
 
     /// <summary>
     /// Places every registered contributor that has not already been placed. A contributor's
-    /// <see cref="INetForgeMenuContributor.DefaultMenu"/> and <see cref="INetForgeMenuContributor.DefaultArea"/>
+    /// <see cref="INetForgeMenuContributor.DefaultMenu"/> and <see cref="INetForgeMenuContributor.DefaultName"/>
     /// choose the section. Call this after the explicit <c>AddContributor</c> lines.
     /// </summary>
     INetForgeMenuBuilder IncludeRegistered();
@@ -69,9 +69,9 @@ public interface INetForgeMenuGroupBuilder
     /// <summary>Places every contributor that has not already been placed, into this group.</summary>
     INetForgeMenuGroupBuilder AddContributors();
 
-    /// <summary>Draws this group in the sidebar. Other groups in the area are unchanged.</summary>
+    /// <summary>Draws this group in the sidebar. Other groups in the menu are unchanged.</summary>
     INetForgeMenuGroupBuilder AsSidebar();
 
-    /// <summary>Draws this group in the top bar. Other groups in the area stay where the area put them.</summary>
+    /// <summary>Draws this group in the top bar. Other groups stay where the menu put them.</summary>
     INetForgeMenuGroupBuilder AsTopbar();
 }

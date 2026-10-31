@@ -47,7 +47,7 @@ public partial class ShellLayout : IDisposable
             ? NetForgeMenuPlacement.Topbar
             : NetForgeMenuPlacement.Sidebar;
         builder.OpenComponent<NetForgeMenu>(0);
-        builder.AddAttribute(1, nameof(NetForgeMenu.Area), sharedMenu.Area);
+        builder.AddAttribute(1, nameof(NetForgeMenu.Name), sharedMenu.Name);
         builder.AddAttribute(2, nameof(NetForgeMenu.Placement), slot);
         builder.AddAttribute(3, nameof(NetForgeMenu.Landmark), slot != NetForgeMenuPlacement.Sidebar);
         builder.CloseComponent();
@@ -59,7 +59,7 @@ public partial class ShellLayout : IDisposable
             : builder =>
             {
                 builder.OpenComponent<NetForgeMenu>(0);
-                builder.AddAttribute(1, nameof(NetForgeMenu.Area), sharedMenu.Area);
+                builder.AddAttribute(1, nameof(NetForgeMenu.Name), sharedMenu.Name);
                 builder.AddAttribute(2, nameof(NetForgeMenu.Placement), NetForgeMenuPlacement.Topbar);
                 builder.AddAttribute(3, nameof(NetForgeMenu.Landmark), true);
                 builder.CloseComponent();

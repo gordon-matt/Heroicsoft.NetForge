@@ -26,7 +26,7 @@ builder.Services.Configure<ForgeShellOptions>(shell =>
 {
     shell.Brand = "Menu demo";
     shell.UseSharedMenu = true;
-    shell.SharedMenuArea = "Admin";
+    shell.SharedMenuName = "Admin";
     shell.ShowUserMenu = false;
     shell.ShowVersion = false;
 });

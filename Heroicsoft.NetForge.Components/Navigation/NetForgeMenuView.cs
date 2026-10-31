@@ -23,9 +23,9 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
     [CascadingParameter]
     protected Task<AuthenticationState>? AuthenticationState { get; set; }
 
-    /// <summary>Empty selects the menu built without an area name.</summary>
+    /// <summary>Which <c>BuildMenu</c> to draw. Empty selects the menu built without a name.</summary>
     [Parameter]
-    public string? Area { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
     /// Which slot to draw. Null uses <see cref="ForgeUiOptions.ActiveSharedMenuPlacement"/>.
@@ -79,7 +79,7 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
             user = state.User;
         }
 
-        var menu = Catalog.Get(Area);
+        var menu = Catalog.Get(Name);
         Defined = menu.IsDefined;
         Path = CurrentPath();
         var main = UiOptions.Value.ActiveSharedMenuPlacement;

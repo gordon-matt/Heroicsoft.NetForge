@@ -10,14 +10,14 @@ public sealed class NetForgeMenuCatalog : INetForgeMenuCatalog
     private NetForgeMenuCatalog(Dictionary<string, NetForgeMenuModel> menus)
     {
         this.menus = menus;
-        Areas = menus.Keys.ToList();
+        Names = menus.Keys.ToList();
     }
 
-    public IReadOnlyCollection<string> Areas { get; }
+    public IReadOnlyCollection<string> Names { get; }
 
-    public NetForgeMenuModel Get(string? area)
+    public NetForgeMenuModel Get(string? name)
     {
-        string key = string.IsNullOrWhiteSpace(area) ? NetForgeMenus.DefaultArea : area.Trim();
+        string key = string.IsNullOrWhiteSpace(name) ? NetForgeMenus.DefaultName : name.Trim();
 
         return menus.TryGetValue(key, out var menu) ? menu : NetForgeMenuModel.Empty(key);
     }
@@ -31,7 +31,7 @@ public sealed class NetForgeMenuCatalog : INetForgeMenuCatalog
 
         foreach (var registration in registrations)
         {
-            var builder = new NetForgeMenuBuilder(state, registration.Area);
+            var builder = new NetForgeMenuBuilder(state, registration.Name);
             registration.Configure(builder);
         }
 
@@ -41,13 +41,13 @@ public sealed class NetForgeMenuCatalog : INetForgeMenuCatalog
 
 internal sealed class NetForgeMenuRegistration
 {
-    public NetForgeMenuRegistration(string area, Action<INetForgeMenuBuilder> configure)
+    public NetForgeMenuRegistration(string name, Action<INetForgeMenuBuilder> configure)
     {
-        Area = area;
+        Name = name;
         Configure = configure;
     }
 
-    public string Area { get; }
+    public string Name { get; }
 
     public Action<INetForgeMenuBuilder> Configure { get; }
 }
@@ -91,25 +91,25 @@ internal sealed class MenuBuildState
 
     public Dictionary<string, NetForgeMenuModel> ToMenus()
     {
-        var areas = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         foreach (var section in Sections)
         {
-            areas.Add(section.Area);
+            names.Add(section.Name);
         }
 
-        foreach (string area in Placements.Keys)
+        foreach (string name in Placements.Keys)
         {
-            areas.Add(area);
+            names.Add(name);
         }
 
         var menus = new Dictionary<string, NetForgeMenuModel>(StringComparer.OrdinalIgnoreCase);
 
-        foreach (string area in areas)
+        foreach (string name in names)
         {
             var sections = Sections
                 .Select((section, index) => (section, index))
-                .Where(pair => string.Equals(pair.section.Area, area, StringComparison.OrdinalIgnoreCase))
+                .Where(pair => string.Equals(pair.section.Name, name, StringComparison.OrdinalIgnoreCase))
                 .OrderBy(pair => pair.section.Options.Order)
                 .ThenBy(pair => pair.index)
                 .Select(pair => new ForgeNavSection
@@ -126,11 +126,11 @@ internal sealed class MenuBuildState
                 })
                 .ToList();
 
-            var placement = Placements.TryGetValue(area, out var set)
+            var placement = Placements.TryGetValue(name, out var set)
                 ? set
                 : NetForgeMenuPlacement.Sidebar;
 
-            menus.Add(area, new NetForgeMenuModel(area, true, placement, sections));
+            menus.Add(name, new NetForgeMenuModel(name, true, placement, sections));
         }
 
         return menus;
@@ -186,7 +186,7 @@ internal sealed class MenuBuildState
 
 internal sealed class PendingSection
 {
-    public required string Area { get; init; }
+    public required string Name { get; init; }
 
     public string? Title { get; init; }
 
@@ -198,40 +198,40 @@ internal sealed class PendingSection
 internal sealed class NetForgeMenuBuilder : INetForgeMenuBuilder
 {
     private readonly MenuBuildState state;
-    private readonly string area;
+    private readonly string name;
 
-    public NetForgeMenuBuilder(MenuBuildState state, string area)
+    public NetForgeMenuBuilder(MenuBuildState state, string name)
     {
         this.state = state;
-        this.area = area;
+        this.name = name;
     }
 
     public IServiceProvider Services => state.Services;
 
-    public INetForgeMenuBuilder AsSidebar(string? area = null)
+    public INetForgeMenuBuilder AsSidebar(string? name = null)
     {
-        state.Placements[ResolveArea(area)] = NetForgeMenuPlacement.Sidebar;
+        state.Placements[ResolveName(name)] = NetForgeMenuPlacement.Sidebar;
         return this;
     }
 
-    public INetForgeMenuBuilder AsTopbar(string? area = null)
+    public INetForgeMenuBuilder AsTopbar(string? name = null)
     {
-        state.Placements[ResolveArea(area)] = NetForgeMenuPlacement.Topbar;
+        state.Placements[ResolveName(name)] = NetForgeMenuPlacement.Topbar;
         return this;
     }
 
     public INetForgeMenuGroupBuilder AddMenu(string title, Action<NetForgeMenuGroupOptions>? configure = null) =>
-        AddMenu(title, area, configure);
+        AddMenu(title, name, configure);
 
-    public INetForgeMenuGroupBuilder AddMenu(string title, string area, Action<NetForgeMenuGroupOptions>? configure = null) => string.IsNullOrWhiteSpace(title)
+    public INetForgeMenuGroupBuilder AddMenu(string title, string name, Action<NetForgeMenuGroupOptions>? configure = null) => string.IsNullOrWhiteSpace(title)
             ? throw new ArgumentException("A menu needs a title.", nameof(title))
-            : AddSection(title.Trim(), ResolveArea(area), configure);
+            : AddSection(title.Trim(), ResolveName(name), configure);
 
     public INetForgeMenuGroupBuilder AddItems(Action<NetForgeMenuGroupOptions>? configure = null) =>
-        AddSection(null, area, configure);
+        AddSection(null, name, configure);
 
-    public INetForgeMenuGroupBuilder AddItems(string area, Action<NetForgeMenuGroupOptions>? configure = null) =>
-        AddSection(null, ResolveArea(area), configure);
+    public INetForgeMenuGroupBuilder AddItems(string name, Action<NetForgeMenuGroupOptions>? configure = null) =>
+        AddSection(null, ResolveName(name), configure);
 
     public INetForgeMenuBuilder IncludeRegistered()
     {
@@ -242,30 +242,30 @@ internal sealed class NetForgeMenuBuilder : INetForgeMenuBuilder
                 continue;
             }
 
-            string targetArea = string.IsNullOrWhiteSpace(contributor.DefaultArea)
-                ? area
-                : contributor.DefaultArea.Trim();
+            string targetName = string.IsNullOrWhiteSpace(contributor.DefaultName)
+                ? name
+                : contributor.DefaultName.Trim();
             string title = contributor.DefaultMenu?.Trim() ?? string.Empty;
             var group = title.Length == 0
-                ? AddSection(null, targetArea, null)
-                : AddSection(title, targetArea, null);
+                ? AddSection(null, targetName, null)
+                : AddSection(title, targetName, null);
             contributor.Contribute(group, null);
         }
 
         return this;
     }
 
-    private INetForgeMenuGroupBuilder AddSection(string? title, string area, Action<NetForgeMenuGroupOptions>? configure)
+    private INetForgeMenuGroupBuilder AddSection(string? title, string name, Action<NetForgeMenuGroupOptions>? configure)
     {
         var existing = state.Sections.FirstOrDefault(section =>
-            string.Equals(section.Area, area, StringComparison.OrdinalIgnoreCase)
+            string.Equals(section.Name, name, StringComparison.OrdinalIgnoreCase)
             && string.Equals(section.Title, title, StringComparison.Ordinal));
 
         if (existing is null)
         {
             existing = new PendingSection
             {
-                Area = area,
+                Name = name,
                 Title = title,
             };
             state.Sections.Add(existing);
@@ -275,8 +275,8 @@ internal sealed class NetForgeMenuBuilder : INetForgeMenuBuilder
         return new NetForgeMenuGroupBuilder(state, existing.Items, existing);
     }
 
-    private string ResolveArea(string? area) =>
-        string.IsNullOrWhiteSpace(area) ? this.area : area.Trim();
+    private string ResolveName(string? name) =>
+        string.IsNullOrWhiteSpace(name) ? this.name : name.Trim();
 }
 
 internal sealed class NetForgeMenuGroupBuilder : INetForgeMenuGroupBuilder
