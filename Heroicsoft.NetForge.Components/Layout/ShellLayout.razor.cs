@@ -10,6 +10,13 @@ namespace Heroicsoft.NetForge.Components.Layout;
 
 public partial class ShellLayout : IDisposable
 {
+    /// <summary>
+    /// Set when another layout hosts the shell and supplies the page body. A route that uses
+    /// <see cref="ShellLayout"/> directly leaves this empty and <see cref="LayoutComponentBase.Body"/> is shown.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
     [Inject]
     private IOptions<ForgeShellOptions> ShellOptions { get; set; } = default!;
 

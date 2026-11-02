@@ -21,5 +21,12 @@
           Version="@options.Version"
           TopbarEnd="@EndContent"
           SidebarFooter="@FooterContent">
-    @Body
+    @if (ChildContent is not null)
+    {
+        @ChildContent
+    }
+    else
+    {
+        @Body
+    }
 </AppShell>

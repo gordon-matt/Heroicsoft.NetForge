@@ -29,7 +29,7 @@
     else
     {
         <li>
-            <a class="dropdown-item @(Current ? "active" : null) @Item.CssClass" href="@Item.Href" data-enhance="false" title="@Tip"
+            <a class="dropdown-item @(Current ? "active" : null) @Item.CssClass" href="@Item.Href" data-enhance-nav="false" title="@Tip"
                target="@(Item.External ? "_blank" : null)" rel="@(Item.External ? "noopener noreferrer" : null)"
                aria-current="@(Current ? "page" : null)">
                 @Leaf
@@ -65,7 +65,7 @@ else if (Top)
         }
         else
         {
-            <a class="nav-link @(Current ? "active" : null) @Item.CssClass" href="@Item.Href" data-enhance="false" title="@Tip"
+            <a class="nav-link @(Current ? "active" : null) @Item.CssClass" href="@Item.Href" data-enhance-nav="false" title="@Tip"
                target="@(Item.External ? "_blank" : null)" rel="@(Item.External ? "noopener noreferrer" : null)"
                aria-current="@(Current ? "page" : null)">
                 @Leaf
@@ -81,7 +81,7 @@ else
             <div class="bf-nav-group @(Open ? "is-open" : null)">
                 @if (HasHref)
                 {
-                    <a class="nav-link @(Current ? "active" : null) @Item.CssClass" href="@Item.Href" data-enhance="false" title="@Tip"
+                    <a class="nav-link @(Current ? "active" : null) @Item.CssClass" href="@Item.Href" data-enhance-nav="false" title="@Tip"
                        target="@(Item.External ? "_blank" : null)" rel="@(Item.External ? "noopener noreferrer" : null)"
                        aria-current="@(Current ? "page" : null)">
                         <i class="@Heroicsoft.NetForge.Components.Navigation.NetForgeMenuIcons.BootstrapClass(Item.Icon)" aria-hidden="true"></i>
@@ -115,7 +115,7 @@ else
         }
         else
         {
-            <a class="nav-link @(Current ? "active" : null) @Item.CssClass" href="@Item.Href" data-enhance="false" title="@Tip"
+            <a class="nav-link @(Current ? "active" : null) @Item.CssClass" href="@Item.Href" data-enhance-nav="false" title="@Tip"
                target="@(Item.External ? "_blank" : null)" rel="@(Item.External ? "noopener noreferrer" : null)"
                aria-current="@(Current ? "page" : null)">
                 @Leaf

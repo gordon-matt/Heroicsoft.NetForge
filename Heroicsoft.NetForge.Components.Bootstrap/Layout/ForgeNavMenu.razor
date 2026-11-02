@@ -40,7 +40,29 @@ else
 }
 
 @code {
-    private RenderFragment MenuItem(ForgeNavItem item) => @<li>
+    private RenderFragment MenuItem(ForgeNavItem item) => @<text>
+        @if (item.Children is { Count: > 0 })
+        {
+            @if (string.IsNullOrWhiteSpace(item.Href))
+            {
+                <li><h6 class="dropdown-header">@item.Title</h6></li>
+            }
+            else
+            {
+                @Leaf(item)
+            }
+            @foreach (var child in item.Children)
+            {
+                @Leaf(child)
+            }
+        }
+        else
+        {
+            @Leaf(item)
+        }
+    </text>;
+
+    private RenderFragment Leaf(ForgeNavItem item) => @<li>
         <a class="dropdown-item @(ForgeNavMatch.IsCurrent(item, RelativeUrl) ? "active" : null)"
            href="@item.Href"
            target="@(item.External ? "_blank" : null)"

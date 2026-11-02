@@ -79,6 +79,40 @@ window.netForge = {
     }
 };
 
+// Interactive Server intercepts same-origin clicks while the event is bubbling and does not look
+// at data-enhance-nav. A capture listener on window runs before that, including for a click whose
+// target is text inside the link. Stopping it lets the browser navigate or download normally.
+window.addEventListener('click', function (event) {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+    }
+
+    var link = null;
+    var path = event.composedPath ? event.composedPath() : [];
+    for (var i = 0; i < path.length; i++) {
+        var node = path[i];
+        if (node && node.tagName === 'A' && node.hasAttribute('href')) {
+            link = node;
+            break;
+        }
+    }
+
+    if (!link && event.target && event.target.closest) {
+        link = event.target.closest('a[href]');
+    }
+
+    if (!link) {
+        return;
+    }
+
+    var optedOut = (link.getAttribute('data-enhance-nav') || '').toLowerCase() === 'false';
+    if (!optedOut && !link.hasAttribute('download')) {
+        return;
+    }
+
+    event.stopPropagation();
+}, true);
+
 document.addEventListener('click', function (event) {
     var toggle = event.target.closest && event.target.closest('[data-nf-theme-toggle]');
     if (toggle) {

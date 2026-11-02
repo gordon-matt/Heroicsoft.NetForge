@@ -46,7 +46,7 @@ public sealed class ForgeNavItem
     /// </summary>
     public IReadOnlyDictionary<string, string?>? ActiveQuery { get; init; }
 
-    /// <summary>Opens in a new tab. Use for dashboards that live outside the Blazor router, such as LogVue.</summary>
+    /// <summary>Opens in a new tab. Use for a page outside this app's router, such as LogVue or Hangfire.</summary>
     public bool External { get; init; }
 
     /// <summary>Comma-separated roles. Empty means the item is shown to everyone, including anonymous visitors.</summary>

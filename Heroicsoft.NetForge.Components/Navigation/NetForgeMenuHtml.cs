@@ -186,7 +186,7 @@ public static class NetForgeMenuHtml
             html.Append(' ').Append(Encode(item.CssClass));
         }
 
-        html.Append("\" href=\"").Append(Encode(item.Href)).Append("\" data-enhance=\"false\"");
+        html.Append("\" href=\"").Append(Encode(item.Href)).Append("\" data-enhance-nav=\"false\" onclick=\"event.stopPropagation()\"");
 
         if (!string.IsNullOrWhiteSpace(item.Tooltip))
         {
@@ -220,7 +220,7 @@ public static class NetForgeMenuHtml
         if (allowLink && !string.IsNullOrWhiteSpace(item.Href))
         {
             bool current = ForgeNavMatch.IsCurrent(item, requestPath);
-            html.Append("<a class=\"nf-nav-label\" href=\"").Append(Encode(item.Href)).Append("\" data-enhance=\"false\"");
+            html.Append("<a class=\"nf-nav-label\" href=\"").Append(Encode(item.Href)).Append("\" data-enhance-nav=\"false\" onclick=\"event.stopPropagation()\"");
 
             if (current)
             {

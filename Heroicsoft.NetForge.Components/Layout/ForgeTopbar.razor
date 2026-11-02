@@ -8,7 +8,7 @@
     }
     else if (LogoUrl is not null || !string.IsNullOrWhiteSpace(Brand))
     {
-        <a class="nf-brand-link nf-topbar-brand" href="@BrandHref" data-enhance="@(EnhanceBrandNavigation ? null : "false")">
+        <a class="nf-brand-link nf-topbar-brand" href="@BrandHref" data-enhance-nav="@(EnhanceBrandNavigation ? null : "false")">
             @if (LogoUrl is not null)
             {
                 <img class="nf-brand-logo @(LogoDarkUrl is not null ? "nf-has-dark" : null)" src="@LogoUrl" alt="@Brand" />

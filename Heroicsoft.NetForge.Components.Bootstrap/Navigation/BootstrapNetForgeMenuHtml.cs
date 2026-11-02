@@ -183,7 +183,7 @@ public static class BootstrapNetForgeMenuHtml
             html.Append(' ').Append(Encode(item.CssClass));
         }
 
-        html.Append("\" href=\"").Append(Encode(item.Href)).Append("\" data-enhance=\"false\"");
+        html.Append("\" href=\"").Append(Encode(item.Href)).Append("\" data-enhance-nav=\"false\"");
 
         if (!string.IsNullOrWhiteSpace(item.Tooltip))
         {
@@ -228,7 +228,7 @@ public static class BootstrapNetForgeMenuHtml
     {
         if (!string.IsNullOrWhiteSpace(item.Href))
         {
-            html.Append("<a class=\"bf-truncate\" href=\"").Append(Encode(item.Href)).Append("\" data-enhance=\"false\"");
+            html.Append("<a class=\"bf-truncate\" href=\"").Append(Encode(item.Href)).Append("\" data-enhance-nav=\"false\"");
 
             if (item.External)
             {

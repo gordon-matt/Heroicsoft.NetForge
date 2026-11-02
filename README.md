@@ -142,7 +142,7 @@ menu.AddItems(group => group.Roles = "Administrator")
     });
 ```
 
-`AsTopbar` / `AsSidebar` is the placement used by the shell, `<NetForgeMenu />`, and `@Html.NetForgeMenu()` when the caller does not pass one. `UseSharedMenu` draws that menu beside `IShellNavigation` when the service is registered, and beside `Sections` when it is not. The shell keeps `Sections` if that menu was never built. The component and the HTML helper render nothing for an unknown name, so a library can always include them. Menu links do a full page load, because a library such as LogVue is its own Blazor document.
+`AsTopbar` / `AsSidebar` is the placement used by the shell, `<NetForgeMenu />`, and `@Html.NetForgeMenu()` when the caller does not pass one. `UseSharedMenu` draws that menu beside `IShellNavigation` when the service is registered, and beside `Sections` when it is not. It does not merge into a host dropdown. Admin in Kinnect comes from `IShellNavigation`, so Logs is one of that section's links; `AddMenu("Admin")` would draw a second menu of the same name. The shell keeps `Sections` if that menu was never built. The component and the HTML helper render nothing for an unknown name, so a library can always include them. Menu links do a full page load, because a library such as LogVue is its own Blazor document.
 
 Two placement settings are easy to mix up:
 

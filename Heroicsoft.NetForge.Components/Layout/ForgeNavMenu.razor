@@ -47,7 +47,31 @@ else
 }
 
 @code {
-    private RenderFragment MenuItem(ForgeNavItem item) => @<a class="nf-menu-item @(ForgeNavMatch.IsCurrent(item, RelativeUrl) ? "is-active" : null)"
+    private RenderFragment MenuItem(ForgeNavItem item) => @<text>
+        @if (item.Children is { Count: > 0 } && string.IsNullOrWhiteSpace(item.Href))
+        {
+            <button type="button" class="nf-menu-item" @onclick="() => ToggleChild(item.Title)" @onclick:stopPropagation="true">
+                <Icon Name="@item.Icon" />
+                <span>@item.Title</span>
+                <Icon Name="@(openChild == item.Title ? "chevron-down" : "chevron-right")" Size="14" />
+            </button>
+            @if (openChild == item.Title)
+            {
+                <div class="nf-menu-list" role="menu">
+                    @foreach (var child in item.Children)
+                    {
+                        @Leaf(child)
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            @Leaf(item)
+        }
+    </text>;
+
+    private RenderFragment Leaf(ForgeNavItem item) => @<a class="nf-menu-item @(ForgeNavMatch.IsCurrent(item, RelativeUrl) ? "is-active" : null)"
         role="menuitem" href="@item.Href" target="@(item.External ? "_blank" : null)"
         rel="@(item.External ? "noopener" : null)" @onclick="Close">
         <Icon Name="@item.Icon" />

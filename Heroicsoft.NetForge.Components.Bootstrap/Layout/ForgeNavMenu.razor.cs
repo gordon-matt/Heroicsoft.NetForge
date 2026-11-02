@@ -14,7 +14,9 @@ public partial class ForgeNavMenu : IDisposable
 
     private string RelativeUrl => Navigation.ToBaseRelativePath(Navigation.Uri);
 
-    private bool AnyCurrent => Section.Items.Any(item => ForgeNavMatch.IsCurrent(item, RelativeUrl));
+    private bool AnyCurrent => Section.Items.Any(item =>
+        ForgeNavMatch.IsCurrent(item, RelativeUrl)
+        || item.Children.Any(child => ForgeNavMatch.IsCurrent(child, RelativeUrl)));
 
     private static string IconClass(ForgeNavItem item) =>
         item.Icon.StartsWith("bi-", StringComparison.Ordinal) || item.Icon.StartsWith("bi ", StringComparison.Ordinal)

@@ -14,16 +14,25 @@ public partial class ForgeNavMenu : IDisposable
     public ForgeNavSection Section { get; set; } = default!;
 
     private bool open;
+    private string? openChild;
 
     private string RelativeUrl => Navigation.ToBaseRelativePath(Navigation.Uri);
 
-    private bool AnyCurrent => Section.Items.Any(item => ForgeNavMatch.IsCurrent(item, RelativeUrl));
+    private bool AnyCurrent => Section.Items.Any(item =>
+        ForgeNavMatch.IsCurrent(item, RelativeUrl)
+        || item.Children.Any(child => ForgeNavMatch.IsCurrent(child, RelativeUrl)));
 
     protected override void OnInitialized() => Navigation.LocationChanged += OnLocationChanged;
 
     private void Toggle() => open = !open;
 
-    private void Close() => open = false;
+    private void ToggleChild(string title) => openChild = openChild == title ? null : title;
+
+    private void Close()
+    {
+        open = false;
+        openChild = null;
+    }
 
     private void OnKeyDown(KeyboardEventArgs args)
     {
@@ -37,6 +46,7 @@ public partial class ForgeNavMenu : IDisposable
         InvokeAsync(() =>
         {
             open = false;
+            openChild = null;
             StateHasChanged();
         });
 
