@@ -1,7 +1,5 @@
-using Heroicsoft.NetForge.Abstractions.Auth;
 using Heroicsoft.NetForge.Components;
 using Heroicsoft.NetForge.Components.Layout;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using NetForge.Demo.Blazor.Components;
 using NetForge.Demo.LibraryOne;
 using NetForge.Demo.LibraryOne.Components;
@@ -15,7 +13,6 @@ builder.Services.AddLibraryTwo();
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddAuthorization();
-builder.Services.TryAddSingleton<IAuthProviderService>(new AuthProviderService(AuthProvider.None, null));
 builder.Services.AddNetForgeComponents()
     .BuildMenu("Admin", menu => menu
             //.AsTopbar() // Uncomment this to make the menu appear in the topbar instead of the sidebar

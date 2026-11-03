@@ -1,8 +1,10 @@
+using Heroicsoft.NetForge.Abstractions.Auth;
 using Heroicsoft.NetForge.Components.Dialogs;
 using Heroicsoft.NetForge.Components.Layout;
 using Heroicsoft.NetForge.Components.Theming;
 using Heroicsoft.NetForge.Components.Toasts;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Heroicsoft.NetForge.Components;
 
@@ -32,6 +34,11 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ToastService>();
         services.AddScoped<DialogService>();
         services.AddScoped<SidebarRefresh>();
+
+        // The top bar and the sign-in redirect inject this. A host that never calls the authentication
+        // package has no sign-in of its own, so the shell shows no sign-in menu. TryAdd keeps a mode
+        // the host already chose, and a registration added afterwards still wins.
+        services.TryAddSingleton<IAuthProviderService>(new AuthProviderService(AuthProvider.None, null));
 
         return services;
     }
