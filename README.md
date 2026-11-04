@@ -78,6 +78,46 @@ if (auth == AuthProvider.Identity)
 
 Pages inject `ToastService`, `DialogService`, and `SidebarRefresh` instead of copying those types. `ShellLayout` is the default layout: set `ForgeShellOptions.Sections` for a static menu, or register `IShellNavigation` when the sidebar is loaded from data. `GetSectionsAsync` is awaited on startup and again after `SidebarRefresh.NotifyChanged()`. A search format of `/?q={0}` fills the box from that query parameter and clears it when the box is submitted empty. `TopbarEndComponent` and `SidebarFooterComponent` add a bell or a pinned footer without replacing the layout. A nav item highlights a query with `ActiveQuery` (a null value means the parameter is absent) and can set `Tooltip`, `Count`, and `TagIcon`. Set `NavigationPlacement` to `Topbar` when those links belong in the header and the app should not render a sidebar.
 
+## Admin screens (nf set)
+
+The nf set has a few pieces for list-and-edit screens that the Bootstrap set does not, like `Wizard` and `Chart`: `TabSet` and `Tab` (`Heroicsoft.NetForge.Components.Tabs`), `Switch` (Forms), `SortHeader`, `TableSort`, `TreeTable<TItem>` and `TreeToggle` (Tables), and `ActionMenu`, `ActionMenuItem` and `ActionMenuDivider` (`Heroicsoft.NetForge.Components.Menus`).
+
+```razor
+<div class="nf-toolbar">
+    <SearchField Value="@search" ValueChanged="SearchChangedAsync" Placeholder="Search…" />
+</div>
+
+<TreeTable Items="roots" ChildrenOf="page => page.Children" KeyOf="page => page.Id">
+    <Header>
+        <tr>
+            <SortHeader Field="Name" @bind-Sort="sort">Name</SortHeader>
+            <th class="nf-cell-actions"><span class="nf-sr-only">Actions</span></th>
+        </tr>
+    </Header>
+    <RowTemplate>
+        <tr @key="context.Item.Id">
+            <td><TreeToggle Row="context">@context.Item.Name</TreeToggle></td>
+            <td class="nf-cell-actions">
+                <ActionMenu Label="Page actions">
+                    <ActionMenuItem Icon="edit" Text="Edit" OnClick="() => Edit(context.Item)" />
+                    <ActionMenuDivider />
+                    <ActionMenuItem Icon="trash" Text="Delete" Danger="true" OnClick="() => DeleteAsync(context.Item)" />
+                </ActionMenu>
+            </td>
+        </tr>
+    </RowTemplate>
+</TreeTable>
+
+<Drawer Open="editing is not null" Scrim="true" Title="Edit" OnClose="Close">
+    <TabSet KeepPanelsMounted="true">
+        <Tab Title="Details"><Switch @bind-Value="model.Enabled" Label="Enabled" /></Tab>
+        <Tab Title="Advanced">…</Tab>
+    </TabSet>
+</Drawer>
+```
+
+`ActionMenu` positions its list against the viewport through `netForge.placeMenu` in `nf.js`, so it is not clipped by the table's scroll wrapper. `TabSet.KeepPanelsMounted` keeps closed panels in the DOM, which matters when a panel holds a component whose state would otherwise be lost. `Switch` notifies a surrounding `EditForm` when it has a `ValueExpression`, which `@bind-Value` supplies.
+
 ## Shared menu
 
 A host owns the menu. Each Razor Class Library registers a contributor and, if it wants a fluent name, an extension method on `INetForgeMenuGroupBuilder`. The tree is built on first use and stored in DI, so a contributor can read its own `IOptions` (singletons only; a scoped service would be captured). Calling `BuildMenu` again for the same name appends sections. The same section title in that menu appends links.

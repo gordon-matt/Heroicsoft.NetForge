@@ -1,0 +1,30 @@
+<div class="nf-action-menu @Class" @onkeydown="OnKeyDown">
+    <button type="button"
+            @ref="trigger"
+            class="@(TriggerClass ?? "nf-icon-button") @(open ? "is-active" : null)"
+            title="@Label"
+            aria-label="@Label"
+            aria-haspopup="menu"
+            aria-expanded="@(open ? "true" : "false")"
+            disabled="@Disabled"
+            @onclick="Toggle">
+        @if (Trigger is not null)
+        {
+            @Trigger
+        }
+        else
+        {
+            <Icon Name="@Icon" Size="18" />
+        }
+    </button>
+
+    @if (open)
+    {
+        <div class="nf-menu-scrim" @onclick="Close"></div>
+        <div class="nf-menu-list nf-action-menu-list" role="menu" @ref="menu">
+            <CascadingValue Value="this" IsFixed="true">
+                @ChildContent
+            </CascadingValue>
+        </div>
+    }
+</div>

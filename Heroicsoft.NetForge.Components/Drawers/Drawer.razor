@@ -26,5 +26,11 @@
         <div class="nf-drawer-body @BodyClass">
             @ChildContent
         </div>
+        @if (Footer is not null)
+        {
+            <footer class="nf-drawer-foot">
+                @Footer
+            </footer>
+        }
     </aside>
 }

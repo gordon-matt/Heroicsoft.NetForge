@@ -1,0 +1,23 @@
+<label class="nf-switch @(Disabled ? "is-disabled" : null) @Class">
+    <input type="checkbox" role="switch" id="@Id" checked="@Value" disabled="@Disabled" @onchange="OnChangeAsync" />
+    <span class="nf-switch-track" aria-hidden="true"></span>
+    @if (ChildContent is not null || !string.IsNullOrEmpty(Label) || !string.IsNullOrEmpty(Description))
+    {
+        <span class="nf-switch-text">
+            <span class="nf-switch-label">
+                @if (ChildContent is not null)
+                {
+                    @ChildContent
+                }
+                else
+                {
+                    @Label
+                }
+            </span>
+            @if (!string.IsNullOrEmpty(Description))
+            {
+                <span class="nf-hint">@Description</span>
+            }
+        </span>
+    }
+</label>

@@ -1,0 +1,20 @@
+@if (!string.IsNullOrEmpty(Href) && !Disabled)
+{
+    <a class="nf-menu-item @(Danger ? "is-danger" : null) @Class" role="menuitem" href="@Href" target="@Target" @attributes="AdditionalAttributes" @onclick="() => Parent?.Close()">
+        @if (!string.IsNullOrEmpty(Icon))
+        {
+            <Icon Name="@Icon" Size="16" />
+        }
+        <span>@if (ChildContent is not null) { @ChildContent } else { @Text }</span>
+    </a>
+}
+else
+{
+    <button type="button" class="nf-menu-item @(Danger ? "is-danger" : null) @Class" role="menuitem" disabled="@Disabled" @attributes="AdditionalAttributes" @onclick="ClickAsync">
+        @if (!string.IsNullOrEmpty(Icon))
+        {
+            <Icon Name="@Icon" Size="16" />
+        }
+        <span>@if (ChildContent is not null) { @ChildContent } else { @Text }</span>
+    </button>
+}

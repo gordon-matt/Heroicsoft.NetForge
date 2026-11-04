@@ -1,0 +1,29 @@
+<CascadingValue Value="this" IsFixed="true">
+    <div class="nf-tabs @Class">
+        <div class="nf-tab-list" role="tablist" aria-label="@AriaLabel">
+            @foreach (var tab in tabs)
+            {
+                bool active = IsActive(tab);
+                <button type="button"
+                        id="@TabId(tab)"
+                        class="nf-tab @(active ? "is-active" : null)"
+                        role="tab"
+                        aria-selected="@(active ? "true" : "false")"
+                        aria-controls="@PanelId(tab)"
+                        disabled="@tab.Disabled"
+                        @onclick="() => SelectAsync(tab)">
+                    @if (!string.IsNullOrEmpty(tab.Icon))
+                    {
+                        <Icon Name="@tab.Icon" Size="16" />
+                    }
+                    <span>@tab.Title</span>
+                    @if (!string.IsNullOrEmpty(tab.Badge))
+                    {
+                        <span class="nf-badge nf-badge-muted">@tab.Badge</span>
+                    }
+                </button>
+            }
+        </div>
+        @ChildContent
+    </div>
+</CascadingValue>

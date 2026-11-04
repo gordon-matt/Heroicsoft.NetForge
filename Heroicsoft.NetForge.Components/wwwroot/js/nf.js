@@ -63,6 +63,49 @@ window.netForge = {
      * Plays a toast sound, like egalink-toasty's playSound. Browsers may block audio until the user
      * has interacted with the page; that rejection is ignored.
      */
+    /**
+     * Pins an open ActionMenu list to its trigger with fixed positioning, so a table wrapper with
+     * overflow does not clip it. Flips above the trigger when there is no room below, and follows
+     * the trigger while the page scrolls until the list leaves the DOM.
+     */
+    placeMenu: function (trigger, menu) {
+        if (!trigger || !menu) {
+            return;
+        }
+
+        function place() {
+            if (!menu.isConnected) {
+                window.removeEventListener('scroll', place, true);
+                window.removeEventListener('resize', place);
+                return;
+            }
+
+            var bounds = trigger.getBoundingClientRect();
+            var width = menu.offsetWidth;
+            var height = menu.offsetHeight;
+            var gap = 4;
+            var top = bounds.bottom + gap;
+            if (top + height > window.innerHeight && bounds.top - gap - height > 0) {
+                top = bounds.top - gap - height;
+            }
+
+            var left = Math.max(8, Math.min(bounds.right - width, window.innerWidth - width - 8));
+            menu.style.position = 'fixed';
+            menu.style.top = top + 'px';
+            menu.style.left = left + 'px';
+            menu.style.right = 'auto';
+        }
+
+        place();
+        window.addEventListener('scroll', place, true);
+        window.addEventListener('resize', place);
+
+        var first = menu.querySelector('[role="menuitem"]:not([disabled])');
+        if (first) {
+            first.focus();
+        }
+    },
+
     playSound: function (src) {
         if (!src) {
             return;

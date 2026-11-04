@@ -1,0 +1,14 @@
+@typeparam TItem
+
+<Table Class="@($"nf-tree-table {Class}")" Framed="@Framed">
+    @if (Header is not null)
+    {
+        <thead>@Header</thead>
+    }
+    <tbody>
+        @foreach (var row in rows)
+        {
+            @RowTemplate(row)
+        }
+    </tbody>
+</Table>

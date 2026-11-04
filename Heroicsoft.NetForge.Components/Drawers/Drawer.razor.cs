@@ -21,6 +21,13 @@ public partial class Drawer
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
+    /// <summary>
+    /// A bar pinned under the scrolling body, for Save and Cancel on a long form. A submit button
+    /// here reaches a form in the body through its <c>form</c> attribute.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Footer { get; set; }
+
     [Parameter]
     public EventCallback OnClose { get; set; }
 

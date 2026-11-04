@@ -642,6 +642,14 @@ kbd {
     border-color: var(--nf-accent);
     box-shadow: 0 0 0 3px var(--nf-accent-soft);
 }
+.nf-input:disabled,
+.nf-textarea:disabled,
+.nf-select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: var(--nf-surface-2);
+}
+}
 /* Blazor's EditForm adds "invalid" to a field that failed validation. */
 .nf-input.invalid,
 .nf-textarea.invalid,
@@ -649,9 +657,17 @@ kbd {
 .nf-textarea { min-height: 110px; resize: vertical; }
 .nf-textarea-code { min-height: 180px; font-family: var(--nf-mono); font-size: 13px; line-height: 1.5; }
 .nf-select { width: auto; padding-right: 1.6rem; }
+.nf-select.nf-select-block { width: 100%; }
 
 .nf-check { display: flex; align-items: center; gap: 0.45rem; margin: 0.2rem 0 0.9rem; color: var(--nf-muted); }
 .nf-form-actions { display: flex; justify-content: flex-end; gap: 0.45rem; margin-top: 0.4rem; }
+/* Two or more short fields side by side, stacking when the drawer or screen is narrow. */
+.nf-form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0 0.75rem; }
+/* A set of checkboxes laid out in columns, with the fieldset's legend as the group label. */
+.nf-check-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0 0.75rem; margin: 0 0 0.9rem; padding: 0; border: 0; }
+.nf-check-grid > legend { margin-bottom: 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--nf-text); }
+.nf-check-grid .nf-check { margin: 0.15rem 0; }
+.nf-range { width: 100%; accent-color: var(--nf-accent); }
 
 /* ---------- Content primitives ---------- */
 
@@ -746,6 +762,12 @@ kbd {
 
 .nf-chip-row { display: flex; flex-wrap: wrap; gap: 0.35rem; }
 .nf-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    line-height: 1;
+    text-decoration: none;
     height: 30px;
     padding: 0 0.7rem;
     background: var(--nf-surface);
@@ -826,6 +848,16 @@ kbd {
 .nf-drawer-title { display: flex; align-items: center; gap: 0.5rem; min-width: 0; font-weight: 650; }
 .nf-drawer-actions { display: flex; gap: 0.15rem; margin-left: auto; }
 .nf-drawer-body { flex: 1; overflow-y: auto; padding: 1rem 1.1rem 1.5rem; }
+.nf-drawer-foot {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.45rem;
+    padding: 0.7rem 1.1rem;
+    border-top: 1px solid var(--nf-border);
+    background: var(--nf-surface);
+}
+.nf-drawer-foot-start { margin-right: auto; }
 
 @keyframes nf-slide-in { from { transform: translateX(16px); opacity: 0; } }
 
@@ -1204,6 +1236,172 @@ kbd {
 .nf-pager-size { display: flex; align-items: center; gap: 0.5rem; color: var(--nf-muted); font-size: 12.5px; }
 .nf-pager-size .nf-select { padding-top: 0.3rem; padding-bottom: 0.3rem; }
 
+/* ---------- Toolbar and table helpers ---------- */
+
+.nf-toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem 0.9rem;
+    margin-bottom: 0.9rem;
+}
+.nf-toolbar .nf-search { flex: 0 1 22rem; margin-left: auto; }
+.nf-toolbar-start { display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem; }
+
+.nf-row-actions { display: flex; align-items: center; justify-content: flex-end; gap: 0.15rem; }
+.nf-table td.nf-cell-actions,
+.nf-table th.nf-cell-actions { width: 1%; white-space: nowrap; text-align: right; }
+.nf-table td.nf-cell-number,
+.nf-table th.nf-cell-number { text-align: right; font-variant-numeric: tabular-nums; }
+.nf-table td.nf-cell-nowrap { white-space: nowrap; }
+.nf-row-title { color: var(--nf-text); font-weight: 600; text-decoration: none; }
+a.nf-row-title:hover { color: var(--nf-accent); }
+.nf-row-subtitle { display: block; color: var(--nf-muted); font-size: 12px; }
+
+/* ---------- Sortable headers ---------- */
+
+.nf-table th.nf-sort-header { padding: 0; }
+.nf-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    cursor: pointer;
+}
+.nf-sort:hover { color: var(--nf-text); }
+.nf-sort-icon { opacity: 0; transition: opacity 0.12s; }
+.nf-sort:hover .nf-sort-icon,
+.nf-sort:focus-visible .nf-sort-icon { opacity: 0.45; }
+.nf-sort-header.is-asc .nf-sort,
+.nf-sort-header.is-desc .nf-sort { color: var(--nf-text); }
+.nf-sort-header.is-asc .nf-sort-icon,
+.nf-sort-header.is-desc .nf-sort-icon { opacity: 1; color: var(--nf-accent); }
+
+/* ---------- Tree table ---------- */
+
+.nf-tree-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    min-width: 0;
+    padding-left: calc(var(--nf-tree-depth, 0) * 1.35rem);
+}
+.nf-tree-toggle,
+.nf-tree-spacer { flex: 0 0 22px; width: 22px; height: 22px; }
+.nf-tree-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: var(--nf-radius-small);
+    color: var(--nf-muted);
+    cursor: pointer;
+}
+.nf-tree-toggle:hover { background: var(--nf-hover); color: var(--nf-text); }
+.nf-tree-toggle .nf-icon { transition: transform 0.12s; }
+.nf-tree-toggle.is-expanded .nf-icon { transform: rotate(90deg); }
+.nf-tree-content { min-width: 0; }
+
+/* ---------- Action menu ---------- */
+
+.nf-action-menu { position: relative; display: inline-flex; }
+.nf-action-menu-list { min-width: 11rem; text-transform: none; letter-spacing: normal; font-weight: 400; }
+.nf-menu-item { color: var(--nf-text); font: inherit; text-decoration: none; }
+.nf-menu-item:hover { text-decoration: none; }
+.nf-menu-item:disabled { opacity: 0.5; cursor: default; }
+.nf-menu-item:disabled:hover { background: transparent; }
+.nf-menu-item:focus-visible { outline: 2px solid var(--nf-accent); outline-offset: -2px; }
+.nf-menu-item .nf-icon { flex: 0 0 auto; color: var(--nf-muted); }
+.nf-menu-item.is-danger,
+.nf-menu-item.is-danger .nf-icon { color: var(--nf-danger); }
+.nf-menu-item.is-danger:hover { background: var(--nf-danger-soft); }
+.nf-menu-divider { height: 1px; margin: 0.3rem 0.2rem; background: var(--nf-border-soft); }
+
+/* ---------- Tabs ---------- */
+
+.nf-tab-list {
+    display: flex;
+    gap: 0.15rem;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    /* An inset baseline instead of a border lets the active tab's underline cover it without overflowing the strip. */
+    box-shadow: inset 0 -1px 0 var(--nf-border);
+}
+.nf-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.8rem;
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    color: var(--nf-muted);
+    font: inherit;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.nf-tab:hover { color: var(--nf-text); }
+.nf-tab:disabled { opacity: 0.5; cursor: default; }
+.nf-tab.is-active { border-bottom-color: var(--nf-accent); color: var(--nf-accent); }
+.nf-tab:focus-visible { outline: 2px solid var(--nf-accent); outline-offset: -2px; border-radius: var(--nf-radius-small) var(--nf-radius-small) 0 0; }
+.nf-tab-panel[hidden] { display: none; }
+
+/* ---------- Switch ---------- */
+
+.nf-switch {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin: 0.2rem 0 0.9rem;
+    cursor: pointer;
+}
+.nf-switch input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+.nf-switch-track {
+    position: relative;
+    flex: 0 0 auto;
+    width: 36px;
+    height: 20px;
+    margin-top: 1px;
+    background: var(--nf-border);
+    border-radius: 999px;
+    transition: background 0.15s;
+}
+.nf-switch-track::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.25);
+    transition: transform 0.15s;
+}
+.nf-switch input:checked + .nf-switch-track { background: var(--nf-accent); }
+.nf-switch input:checked + .nf-switch-track::after { transform: translateX(16px); }
+.nf-switch input:focus-visible + .nf-switch-track { box-shadow: 0 0 0 3px var(--nf-accent-soft); }
+.nf-switch.is-disabled { opacity: 0.55; cursor: default; }
+.nf-switch-text { display: grid; gap: 0.1rem; min-width: 0; }
+.nf-switch-label { font-weight: 500; }
+
 /* ---------- Responsive ---------- */
 
 /* Wide: the toggle collapses the sidebar to an icon rail. */
@@ -1285,6 +1483,9 @@ kbd {
 @media (prefers-reduced-motion: reduce) {
     .nf-sidebar,
     .nf-drawer,
-    .nf-toast { transition: none; animation: none; }
+    .nf-toast,
+    .nf-switch-track,
+    .nf-switch-track::after,
+    .nf-tree-toggle .nf-icon { transition: none; animation: none; }
     .nf-spinner { animation-duration: 2s; }
 }

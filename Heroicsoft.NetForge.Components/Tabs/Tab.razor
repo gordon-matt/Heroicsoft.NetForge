@@ -1,0 +1,10 @@
+@if (Parent is not null)
+{
+    bool active = Parent.IsActive(this);
+    @if (active || Parent.KeepPanelsMounted)
+    {
+        <div class="nf-tab-panel" role="tabpanel" id="@Parent.PanelId(this)" aria-labelledby="@Parent.TabId(this)" hidden="@(!active)">
+            @ChildContent
+        </div>
+    }
+}

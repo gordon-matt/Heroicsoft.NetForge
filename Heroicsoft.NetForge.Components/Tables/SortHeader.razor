@@ -1,0 +1,6 @@
+<th class="nf-sort-header @StateClass @Class" style="@Style" aria-sort="@AriaSort">
+    <button type="button" class="nf-sort" @onclick="ToggleAsync">
+        <span>@ChildContent</span>
+        <Icon Name="@(IsSorted && !Sort!.Descending ? "chevron-up" : "chevron-down")" Size="14" Class="nf-sort-icon" />
+    </button>
+</th>

@@ -93,6 +93,18 @@ public static partial class IconSet
         ["grip"] = """<circle cx="9" cy="8" r="1" fill="currentColor" stroke="none" /><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none" /><circle cx="9" cy="16" r="1" fill="currentColor" stroke="none" /><circle cx="15" cy="8" r="1" fill="currentColor" stroke="none" /><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none" /><circle cx="15" cy="16" r="1" fill="currentColor" stroke="none" />""",
         ["play"] = """<polygon points="8 5 19 12 8 19" fill="currentColor" stroke="none" />""",
         ["download"] = """<path d="M12 4v11M8 11l4 4 4-4" /><path d="M5 19h14" />""",
+        ["chevron-up"] = """<path d="m6 15 6-6 6 6" />""",
+        ["arrow-up"] = """<path d="M12 19V5" /><path d="m5 12 7-7 7 7" />""",
+        ["arrow-down"] = """<path d="M12 5v14" /><path d="m19 12-7 7-7-7" />""",
+        ["eye"] = """<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" /><circle cx="12" cy="12" r="3" />""",
+        ["mail"] = """<rect x="3" y="5" width="18" height="14" rx="2" /><path d="m4 7 8 6 8-6" />""",
+        ["image"] = """<rect x="3" y="4" width="18" height="16" rx="2" /><circle cx="9" cy="10" r="1.8" /><path d="m21 16-5-5-9 9" />""",
+        ["palette"] = """<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.8 1.8-1.8 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-1 .8-1.8 1.8-1.8H17a4 4 0 0 0 4-4c0-4.4-4-8-9-8z" /><circle cx="7.5" cy="11" r="1" /><circle cx="10" cy="7.5" r="1" /><circle cx="14.5" cy="7.5" r="1" />""",
+        ["grid"] = """<rect x="4" y="4" width="7" height="7" rx="1" /><rect x="13" y="4" width="7" height="7" rx="1" /><rect x="4" y="13" width="7" height="7" rx="1" /><rect x="13" y="13" width="7" height="7" rx="1" />""",
+        ["sitemap"] = """<rect x="9" y="3" width="6" height="5" rx="1" /><rect x="3" y="16" width="6" height="5" rx="1" /><rect x="15" y="16" width="6" height="5" rx="1" /><path d="M12 8v4M6 16v-4h12v4" />""",
+        ["send"] = """<path d="M21 3 10 14" /><path d="m21 3-7 18-4-7-7-4z" />""",
+        ["puzzle"] = """<path d="M10 4a2 2 0 1 1 4 0v1h4a1 1 0 0 1 1 1v4h-1a2 2 0 1 0 0 4h1v4a1 1 0 0 1-1 1h-4v-1a2 2 0 1 0-4 0v1H6a1 1 0 0 1-1-1v-4h1a2 2 0 1 0 0-4H5V6a1 1 0 0 1 1-1h4z" />""",
+        ["translate"] = """<path d="M4 5h9M8.5 3v2M6 5c.8 3.5 3.2 6 6 7.5M11 5c-.8 3.5-3.2 6-6 7.5" /><path d="m12 21 4.5-10 4.5 10M13.5 17.5h6" />""",
     }.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
 
     private static readonly FrozenDictionary<string, IReadOnlyList<IconShape>> Shapes =

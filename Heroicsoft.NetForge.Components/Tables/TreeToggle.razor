@@ -1,0 +1,18 @@
+<span class="nf-tree-cell" style="--nf-tree-depth: @Row.Depth">
+    @if (Row.HasChildren)
+    {
+        <button type="button"
+                class="nf-tree-toggle @(Row.IsExpanded ? "is-expanded" : null)"
+                aria-expanded="@(Row.IsExpanded ? "true" : "false")"
+                aria-label="@(Row.IsExpanded ? "Collapse" : "Expand")"
+                title="@(Row.IsExpanded ? "Collapse" : "Expand")"
+                @onclick="Row.Toggle">
+            <Icon Name="chevron-right" Size="14" />
+        </button>
+    }
+    else
+    {
+        <span class="nf-tree-spacer" aria-hidden="true"></span>
+    }
+    <span class="nf-tree-content">@ChildContent</span>
+</span>
