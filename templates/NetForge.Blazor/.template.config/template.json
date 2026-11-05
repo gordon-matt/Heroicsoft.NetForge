@@ -1,6 +1,6 @@
 {
   "$schema": "http://json.schemastore.org/template",
-  "author": "Heroicsoft",
+  "author": "Matt Gordon",
   "classifications": [ "Blazor", "Web", "NetForge" ],
   "identity": "Heroicsoft.NetForge.Templates.Blazor",
   "name": "NetForge Blazor App",

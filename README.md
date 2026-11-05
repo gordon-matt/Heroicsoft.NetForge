@@ -1,4 +1,4 @@
-<img src="https://github.com/gordon-matt/Heroicsoft.NetForge/blob/master/_Misc/Logo-Wide.jpg" alt="Logo" width="100%" />
+<img src="https://github.com/gordon-matt/Heroicsoft.NetForge/raw/master/_Misc/Logo-Wide.jpg" alt="Logo" width="100%" />
 
 Shared building blocks for the self-hosted MVC and Blazor apps. Authentication, result helpers, and the Hangfire dashboard filter are used by both. The two Blazor component packages share the same component names and services: use `Heroicsoft.NetForge.Components.Bootstrap` for apps built on Bootstrap and Bootswatch, and `Heroicsoft.NetForge.Components` for apps that use the NetForge `nf-` style (light and dark, no Bootstrap).
 
@@ -9,8 +9,7 @@ Shared building blocks for the self-hosted MVC and Blazor apps. Authentication, 
 | `Heroicsoft.NetForge.Abstractions` | `AuthProvider`, `IUserContextService`, `BootswatchThemes`, `AppVersion`, `DatabaseProviders`, setup status, nav models |
 | `Heroicsoft.NetForge.Results` | `ResultExtensions` (`To<T>`, `GetDisplayMessage`) |
 | `Heroicsoft.NetForge.Authentication` | Identity / Keycloak / None registration, Keycloak back-channel and role mapping, `/auth/login`, setup redirect |
-| `Heroicsoft.NetForge.Components` | Shared services (toasts, dialogs, sidebar refresh, paging maths, shell options) plus the 
-f- styled shell, dialogs, toasts, pager, empty states, router, and light/dark toggle. No Bootstrap. |
+| `Heroicsoft.NetForge.Components` | Shared services (toasts, dialogs, sidebar refresh, paging maths, shell options) plus the `nf-` styled shell, dialogs, toasts, pager, empty states, router, and light/dark toggle. No Bootstrap. |
 | `Heroicsoft.NetForge.Components.Bootstrap` | The same set on Bootstrap/Bootswatch, with the Bootswatch theme picker. References Heroicsoft.NetForge.Components. |
 | `Heroicsoft.NetForge.Hangfire` | Administrator-only Hangfire dashboard filter |
 | `Heroicsoft.NetForge.Drawing` | Resize, crop, rotate, transcode, and difference-hash for thumbnails and other rasters. SkiaSharp, not ImageSharp |

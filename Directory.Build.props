@@ -3,18 +3,23 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Version>1.0.0</Version>
-		<Authors>Heroicsoft</Authors>
-		<Company>Heroicsoft</Company>
+		<Authors>Matt Gordon</Authors>
+		<Company>Matt Gordon</Company>
 		<Product>Heroicsoft.NetForge</Product>
-		<Copyright>Copyright © Heroicsoft</Copyright>
+		<Copyright>Copyright © Matt Gordon</Copyright>
+		<NeutralLanguage>en-US</NeutralLanguage>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://heroicsoft.com</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/gordon-matt/Heroicsoft.NetForge</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/gordon-matt/Heroicsoft.NetForge</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageIcon>Icon.png</PackageIcon>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoWarn>$(NoWarn);CS1591</NoWarn>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\" />
+		<None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\" Visible="false" />
+		<None Include="$(MSBuildThisFileDirectory)_Misc\Icon.png" Pack="true" PackagePath="\" Visible="false" />
 	</ItemGroup>
 </Project>
