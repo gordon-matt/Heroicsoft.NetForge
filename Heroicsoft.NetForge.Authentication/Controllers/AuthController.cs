@@ -16,6 +16,11 @@ namespace Heroicsoft.NetForge.Authentication.Controllers;
 [AllowAnonymous]
 public sealed class AuthController(IAuthProviderService authProvider) : Controller
 {
+    /// <summary>
+    /// Gets the login.
+    /// </summary>
+    /// <param name="returnUrl">The return URL.</param>
+    /// <returns>The login.</returns>
     [HttpGet("login")]
     public IActionResult Login([FromQuery] string? returnUrl) => authProvider.Provider != AuthProvider.Keycloak
         ? Redirect("/")
@@ -23,6 +28,10 @@ public sealed class AuthController(IAuthProviderService authProvider) : Controll
             new AuthenticationProperties { RedirectUri = SafeReturnUrl(returnUrl) },
             OpenIdConnectDefaults.AuthenticationScheme);
 
+    /// <summary>
+    /// Gets the logout.
+    /// </summary>
+    /// <returns>The logout.</returns>
     [HttpPost("logout")]
     [ValidateAntiForgeryToken]
     public IActionResult Logout()

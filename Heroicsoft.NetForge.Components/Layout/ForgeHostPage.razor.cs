@@ -7,14 +7,23 @@ using Microsoft.Extensions.Options;
 
 namespace Heroicsoft.NetForge.Components.Layout;
 
+/// <summary>
+/// Represents the forge host page.
+/// </summary>
 public partial class ForgeHostPage
 {
     [Inject]
     private IOptions<ForgeUiOptions> UiOptions { get; set; } = default!;
 
+    /// <summary>
+    /// Gets or sets the title.
+    /// </summary>
     [Parameter, EditorRequired]
     public string Title { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Gets or sets the icon href.
+    /// </summary>
     [Parameter]
     public string? IconHref { get; set; }
 
@@ -22,15 +31,27 @@ public partial class ForgeHostPage
     [Parameter]
     public string? AppStylesheet { get; set; }
 
+    /// <summary>
+    /// Gets or sets the page render mode.
+    /// </summary>
     [Parameter]
     public IComponentRenderMode? PageRenderMode { get; set; }
 
+    /// <summary>
+    /// Gets or sets the additional head.
+    /// </summary>
     [Parameter]
     public RenderFragment? AdditionalHead { get; set; }
 
+    /// <summary>
+    /// Gets or sets the additional body.
+    /// </summary>
     [Parameter]
     public RenderFragment? AdditionalBody { get; set; }
 
+    /// <summary>
+    /// Gets or sets the child content.
+    /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 

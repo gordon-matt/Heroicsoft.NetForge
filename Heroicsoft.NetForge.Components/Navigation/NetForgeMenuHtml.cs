@@ -11,6 +11,15 @@ namespace Heroicsoft.NetForge.Components.Navigation;
 /// <summary>Renders a menu as HTML so MVC can draw the same tree as the Blazor component.</summary>
 public static class NetForgeMenuHtml
 {
+    /// <summary>
+    /// Renders the value.
+    /// </summary>
+    /// <param name="menu">The menu.</param>
+    /// <param name="user">The user.</param>
+    /// <param name="requestPath">The request path.</param>
+    /// <param name="placement">The placement.</param>
+    /// <param name="mainPlacement">The main placement.</param>
+    /// <returns>The i HTML content.</returns>
     public static IHtmlContent Render(
         NetForgeMenuModel menu,
         ClaimsPrincipal user,

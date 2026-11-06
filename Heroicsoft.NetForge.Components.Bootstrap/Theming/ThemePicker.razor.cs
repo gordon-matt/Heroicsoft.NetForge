@@ -5,6 +5,9 @@ using Microsoft.JSInterop;
 
 namespace Heroicsoft.NetForge.Components.Bootstrap.Theming;
 
+/// <summary>
+/// Represents the theme picker.
+/// </summary>
 public partial class ThemePicker : IAsyncDisposable
 {
     [Inject]
@@ -24,6 +27,7 @@ public partial class ThemePicker : IAsyncDisposable
 
     private ForgeBootstrapOptions Ui => UiOptions.Value;
 
+    /// <inheritdoc/>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender)
@@ -115,6 +119,10 @@ public partial class ThemePicker : IAsyncDisposable
         await InvokeAsync(StateHasChanged);
     }
 
+    /// <summary>
+    /// Handles the theme modal dismissed event.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [JSInvokable]
     public async Task OnThemeModalDismissed()
     {
@@ -131,6 +139,10 @@ public partial class ThemePicker : IAsyncDisposable
         }
     }
 
+    /// <summary>
+    /// Releases the resources used by this instance.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     public ValueTask DisposeAsync()
     {
         dotNetRef?.Dispose();

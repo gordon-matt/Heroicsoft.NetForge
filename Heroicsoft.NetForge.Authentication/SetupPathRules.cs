@@ -3,6 +3,12 @@ namespace Heroicsoft.NetForge.Authentication;
 /// <summary>Path matching for <see cref="SetupRedirectMiddleware"/>, split out so it can be tested.</summary>
 public static class SetupPathRules
 {
+    /// <summary>
+    /// Determines whether this instance is exempt.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <param name="prefixes">The prefixes.</param>
+    /// <returns>true when the condition is met; otherwise, false.</returns>
     public static bool IsExempt(string? path, IReadOnlyList<string> prefixes)
     {
         if (string.IsNullOrEmpty(path))

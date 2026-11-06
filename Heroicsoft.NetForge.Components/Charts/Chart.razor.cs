@@ -23,6 +23,9 @@ public partial class Chart : IAsyncDisposable
     [Inject]
     private IJSRuntime Js { get; set; } = default!;
 
+    /// <summary>
+    /// Gets or sets the config.
+    /// </summary>
     [Parameter, EditorRequired]
     public object Config { get; set; } = default!;
 
@@ -37,6 +40,7 @@ public partial class Chart : IAsyncDisposable
         _ => 300,
     };
 
+    /// <inheritdoc/>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         // Chart.js redraws are expensive, and Blazor re-renders on unrelated state changes, so
@@ -54,6 +58,10 @@ public partial class Chart : IAsyncDisposable
         await Js.InvokeVoidAsync("netForge.renderChart", canvasId, Config);
     }
 
+    /// <summary>
+    /// Releases the resources used by this instance.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     public async ValueTask DisposeAsync()
     {
         if (!isRendered)

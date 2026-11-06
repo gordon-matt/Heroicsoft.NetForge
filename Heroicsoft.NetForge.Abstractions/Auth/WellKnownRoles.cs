@@ -7,7 +7,13 @@ namespace Heroicsoft.NetForge.Abstractions.Auth;
 /// </summary>
 public static class WellKnownRoles
 {
+    /// <summary>
+    /// The administrator constant.
+    /// </summary>
     public const string Administrator = "Administrator";
 
+    /// <summary>
+    /// The user constant.
+    /// </summary>
     public const string User = "User";
 }

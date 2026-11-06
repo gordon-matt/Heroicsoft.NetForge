@@ -2,30 +2,54 @@ using Microsoft.AspNetCore.Components;
 
 namespace Heroicsoft.NetForge.Components.Paging;
 
+/// <summary>
+/// Represents the pager.
+/// </summary>
 public partial class Pager
 {
     private readonly string pageSizeId = "nf-pager-" + Guid.NewGuid().ToString("N");
 
     private static readonly int[] DefaultPageSizes = [12, 24, 48, 96];
 
+    /// <summary>
+    /// Gets or sets the page number.
+    /// </summary>
     [Parameter, EditorRequired]
     public int PageNumber { get; set; } = 1;
 
+    /// <summary>
+    /// Gets or sets the page size.
+    /// </summary>
     [Parameter, EditorRequired]
     public int PageSize { get; set; } = 24;
 
+    /// <summary>
+    /// Gets or sets the total count.
+    /// </summary>
     [Parameter, EditorRequired]
     public int TotalCount { get; set; }
 
+    /// <summary>
+    /// Gets or sets the page number changed.
+    /// </summary>
     [Parameter]
     public EventCallback<int> PageNumberChanged { get; set; }
 
+    /// <summary>
+    /// Gets or sets the page size changed.
+    /// </summary>
     [Parameter]
     public EventCallback<int> PageSizeChanged { get; set; }
 
+    /// <summary>
+    /// Gets or sets the page sizes.
+    /// </summary>
     [Parameter]
     public IReadOnlyList<int>? PageSizes { get; set; }
 
+    /// <summary>
+    /// Gets or sets the aria label.
+    /// </summary>
     [Parameter]
     public string AriaLabel { get; set; } = "Pagination";
 

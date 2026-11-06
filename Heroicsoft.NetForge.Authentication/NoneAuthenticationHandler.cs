@@ -19,8 +19,12 @@ public sealed class NoneAuthenticationHandler(
     IOptions<NetForgeAuthOptions> forgeOptions)
     : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
 {
+    /// <summary>
+    /// The scheme name constant.
+    /// </summary>
     public const string SchemeName = "None";
 
+    /// <inheritdoc/>
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         var configured = forgeOptions.Value;

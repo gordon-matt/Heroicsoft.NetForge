@@ -6,18 +6,33 @@ namespace Heroicsoft.NetForge.Components.Bootstrap.Chips;
 /// <summary>One filter chip. Renders a link when <see cref="Href"/> is set, otherwise a button.</summary>
 public partial class Chip
 {
+    /// <summary>
+    /// Gets or sets the href.
+    /// </summary>
     [Parameter]
     public string? Href { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is selected.
+    /// </summary>
     [Parameter]
     public bool Selected { get; set; }
 
+    /// <summary>
+    /// Gets or sets the callback raised for the click event.
+    /// </summary>
     [Parameter]
     public EventCallback<MouseEventArgs> OnClick { get; set; }
 
+    /// <summary>
+    /// Gets or sets the child content.
+    /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
+    /// <summary>
+    /// Gets or sets the class.
+    /// </summary>
     [Parameter]
     public string? Class { get; set; }
 

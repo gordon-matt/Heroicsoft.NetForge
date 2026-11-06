@@ -5,8 +5,19 @@ using Xabe.FFmpeg;
 
 namespace Heroicsoft.NetForge.Video;
 
+/// <summary>
+/// Represents the video frame service.
+/// </summary>
 public sealed class VideoFrameService(ILogger<VideoFrameService> logger) : IVideoFrameService
 {
+    /// <summary>
+    /// Attempts to capture jpeg.
+    /// </summary>
+    /// <param name="videoPath">The video path.</param>
+    /// <param name="outputJpegPath">The output jpeg path.</param>
+    /// <param name="at">The at.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result is true when the condition is met; otherwise, false.</returns>
     public async Task<bool> TryCaptureJpegAsync(
         string videoPath,
         string outputJpegPath,
@@ -44,6 +55,9 @@ public sealed class VideoFrameService(ILogger<VideoFrameService> logger) : IVide
     }
 }
 
+/// <summary>
+/// Represents the video transcoder.
+/// </summary>
 public sealed class VideoTranscoder(ILogger<VideoTranscoder> logger) : IVideoTranscoder
 {
     /// <summary>
@@ -52,6 +66,12 @@ public sealed class VideoTranscoder(ILogger<VideoTranscoder> logger) : IVideoTra
     /// </summary>
     private const int UprightCrf = 18;
 
+    /// <summary>
+    /// Gets the transcode to size.
+    /// </summary>
+    /// <param name="request">The request.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the video transcode result.</returns>
     public async Task<VideoTranscodeResult> TranscodeToSizeAsync(VideoSizeTranscodeRequest request, CancellationToken cancellationToken = default)
     {
         if (!VideoSizes.TryGetPixelSize(request.VideoSizeName, out int maxWidth, out int maxHeight)
@@ -392,6 +412,12 @@ public sealed class VideoTranscoder(ILogger<VideoTranscoder> logger) : IVideoTra
         return null;
     }
 
+    /// <summary>
+    /// Gets the downscale to max height.
+    /// </summary>
+    /// <param name="request">The request.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the string.</returns>
     public async Task<string> DownscaleToMaxHeightAsync(VideoDownscaleRequest request, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(request.FfmpegPath)
@@ -609,8 +635,18 @@ public sealed class VideoTranscoder(ILogger<VideoTranscoder> logger) : IVideoTra
     }
 }
 
+/// <summary>
+/// Represents the video integrity service.
+/// </summary>
 public sealed class VideoIntegrityService(ILogger<VideoIntegrityService> logger) : IVideoIntegrityService
 {
+    /// <summary>
+    /// Verifies the value.
+    /// </summary>
+    /// <param name="ffmpegPath">The ffmpeg path.</param>
+    /// <param name="videoFilePath">The video file path.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the video integrity result.</returns>
     public async Task<VideoIntegrityResult> VerifyAsync(
         string? ffmpegPath,
         string videoFilePath,
@@ -669,8 +705,17 @@ public sealed class VideoIntegrityService(ILogger<VideoIntegrityService> logger)
     }
 }
 
+/// <summary>
+/// Represents the pcm audio encoder.
+/// </summary>
 public sealed class PcmAudioEncoder(ILogger<PcmAudioEncoder> logger) : IPcmAudioEncoder
 {
+    /// <summary>
+    /// Encodes the value.
+    /// </summary>
+    /// <param name="request">The request.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the pcm encode result.</returns>
     public async Task<PcmEncodeResult> EncodeAsync(PcmAudioEncodeRequest request, CancellationToken cancellationToken = default)
     {
         if (request.PcmChunkFiles.Count == 0)

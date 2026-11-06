@@ -5,6 +5,11 @@ namespace Heroicsoft.NetForge.Video;
 /// <summary>Names Xabe already accepts, such as <c>Hd720</c>. Kept here so apps can validate a setting without referencing Xabe.</summary>
 public static class VideoSizes
 {
+    /// <summary>
+    /// Determines whether this instance is known.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <returns>true when the condition is met; otherwise, false.</returns>
     public static bool IsKnown(string? name) =>
         !string.IsNullOrWhiteSpace(name) && Enum.TryParse<VideoSize>(name, ignoreCase: true, out _);
 
@@ -98,6 +103,14 @@ public static class VideoFit
         return turns is 90 or 270 ? (height, width) : (width, height);
     }
 
+    /// <summary>
+    /// Gets the fits within.
+    /// </summary>
+    /// <param name="width">The width.</param>
+    /// <param name="height">The height.</param>
+    /// <param name="maxWidth">The max width.</param>
+    /// <param name="maxHeight">The max height.</param>
+    /// <returns>true when the condition is met; otherwise, false.</returns>
     public static bool FitsWithin(int width, int height, int maxWidth, int maxHeight) =>
         width > 0 && height > 0 && width <= maxWidth && height <= maxHeight;
 
@@ -107,6 +120,12 @@ public static class VideoFit
     /// </summary>
     public const double UprightGrowthFactor = 1.15;
 
+    /// <summary>
+    /// Gets the within upright budget.
+    /// </summary>
+    /// <param name="originalBytes">The original bytes.</param>
+    /// <param name="encodedBytes">The encoded bytes.</param>
+    /// <returns>true when the condition is met; otherwise, false.</returns>
     public static bool WithinUprightBudget(long originalBytes, long encodedBytes) =>
         originalBytes > 0 && encodedBytes > 0 && encodedBytes <= (long)Math.Ceiling(originalBytes * UprightGrowthFactor);
 
@@ -164,6 +183,9 @@ public sealed class FfmpegBootstrapOptions
     /// <summary>Where an official build is downloaded when nothing else is on disk.</summary>
     public string? DownloadDirectory { get; init; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is search well known locations.
+    /// </summary>
     public bool SearchWellKnownLocations { get; init; } = true;
 
     /// <summary>Also look next to the app and in the process working directory.</summary>
@@ -172,6 +194,9 @@ public sealed class FfmpegBootstrapOptions
     /// <summary>On Linux, prefer <c>/usr/bin</c> when ffmpeg is installed in the image.</summary>
     public bool PreferLinuxSystemDirectory { get; init; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is download if missing.
+    /// </summary>
     public bool DownloadIfMissing { get; init; } = true;
 
     /// <summary>Video and thumbnail work needs ffprobe beside ffmpeg. Audio-only encode can relax this.</summary>
@@ -183,10 +208,21 @@ public sealed class FfmpegBootstrapOptions
 /// <param name="Error">ffmpeg stderr when the file failed the check.</param>
 public readonly record struct VideoIntegrityResult(bool IsValid, bool WasSkipped, string? Error)
 {
+    /// <summary>
+    /// The valid.
+    /// </summary>
     public static readonly VideoIntegrityResult Valid = new(true, false, null);
 
+    /// <summary>
+    /// The skipped.
+    /// </summary>
     public static readonly VideoIntegrityResult Skipped = new(true, true, null);
 
+    /// <summary>
+    /// Gets the invalid.
+    /// </summary>
+    /// <param name="error">The error.</param>
+    /// <returns>The invalid.</returns>
     public static VideoIntegrityResult Invalid(string error) => new(false, false, error);
 }
 
@@ -199,14 +235,29 @@ public readonly record struct VideoIntegrityResult(bool IsValid, bool WasSkipped
 /// </summary>
 public sealed record VideoSizeTranscodeRequest
 {
+    /// <summary>
+    /// Gets or sets the input path.
+    /// </summary>
     public required string InputPath { get; init; }
 
+    /// <summary>
+    /// Gets or sets the output path.
+    /// </summary>
     public required string OutputPath { get; init; }
 
+    /// <summary>
+    /// Gets or sets the video size name.
+    /// </summary>
     public string VideoSizeName { get; init; } = "Hd720";
 
+    /// <summary>
+    /// Gets or sets the crf.
+    /// </summary>
     public int Crf { get; init; } = 23;
 
+    /// <summary>
+    /// Gets or sets the audio bitrate.
+    /// </summary>
     public int AudioBitrate { get; init; } = 128_000;
 
     /// <summary>
@@ -223,8 +274,14 @@ public sealed record VideoSizeTranscodeRequest
 /// </param>
 public readonly record struct VideoTranscodeResult(bool FileReplaced)
 {
+    /// <summary>
+    /// The unchanged.
+    /// </summary>
     public static readonly VideoTranscodeResult Unchanged = new(false);
 
+    /// <summary>
+    /// The replaced.
+    /// </summary>
     public static readonly VideoTranscodeResult Replaced = new(true);
 }
 
@@ -235,29 +292,65 @@ public readonly record struct VideoTranscodeResult(bool FileReplaced)
 /// </summary>
 public sealed record VideoDownscaleRequest
 {
+    /// <summary>
+    /// Gets or sets the ffmpeg path.
+    /// </summary>
     public required string FfmpegPath { get; init; }
 
+    /// <summary>
+    /// Gets or sets the video path.
+    /// </summary>
     public required string VideoPath { get; init; }
 
+    /// <summary>
+    /// Gets or sets the max height.
+    /// </summary>
     public int MaxHeight { get; init; } = 720;
 
+    /// <summary>
+    /// Gets or sets the crf.
+    /// </summary>
     public int Crf { get; init; } = 23;
 
+    /// <summary>
+    /// Gets or sets the preset.
+    /// </summary>
     public string Preset { get; init; } = "medium";
 }
 
 /// <summary>Headerless s16le PCM chunks concatenated and encoded to AAC in an MP4 container.</summary>
 public sealed record PcmAudioEncodeRequest
 {
+    /// <summary>
+    /// Gets or sets the pcm chunk files.
+    /// </summary>
     public required IReadOnlyList<string> PcmChunkFiles { get; init; }
 
+    /// <summary>
+    /// Gets or sets the output path.
+    /// </summary>
     public required string OutputPath { get; init; }
 
+    /// <summary>
+    /// Gets or sets the sample rate hz.
+    /// </summary>
     public int SampleRateHz { get; init; } = 24_000;
 
+    /// <summary>
+    /// Gets or sets the channels.
+    /// </summary>
     public int Channels { get; init; } = 1;
 
+    /// <summary>
+    /// Gets or sets the audio bitrate.
+    /// </summary>
     public string AudioBitrate { get; init; } = "64k";
 }
 
+/// <summary>
+/// Represents the pcm encode result.
+/// </summary>
+/// <param name="FilePath">The file path.</param>
+/// <param name="FileSizeBytes">The file size bytes.</param>
+/// <param name="DurationSeconds">The duration seconds.</param>
 public sealed record PcmEncodeResult(string FilePath, long FileSizeBytes, double DurationSeconds);

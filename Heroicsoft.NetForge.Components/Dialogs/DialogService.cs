@@ -3,6 +3,15 @@ namespace Heroicsoft.NetForge.Components.Dialogs;
 /// <summary>A confirm dialog the host has mounted. Both component sets implement it.</summary>
 public interface IConfirmDialog
 {
+    /// <summary>
+    /// Gets the show.
+    /// </summary>
+    /// <param name="title">The title.</param>
+    /// <param name="message">The message.</param>
+    /// <param name="confirmLabel">The confirm label.</param>
+    /// <param name="isDestructive">The is destructive.</param>
+    /// <param name="detail">The detail.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result is true when the condition is met; otherwise, false.</returns>
     Task<bool> ShowAsync(
         string title,
         string message,
@@ -14,6 +23,17 @@ public interface IConfirmDialog
 /// <summary>A single-line prompt dialog the host has mounted. Both component sets implement it.</summary>
 public interface IPromptDialog
 {
+    /// <summary>
+    /// Gets the show.
+    /// </summary>
+    /// <param name="title">The title.</param>
+    /// <param name="label">The label.</param>
+    /// <param name="initialValue">The initial value.</param>
+    /// <param name="confirmLabel">The confirm label.</param>
+    /// <param name="selectFileNameStem">The select file name stem.</param>
+    /// <param name="description">The description.</param>
+    /// <param name="maxLength">The max length.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the string.</returns>
     Task<string?> ShowAsync(
         string title,
         string label,
@@ -39,6 +59,15 @@ public sealed class DialogService
     /// <summary>Called by the dialog host once its dialogs have rendered.</summary>
     public void Attach(IPromptDialog dialog) => prompt = dialog;
 
+    /// <summary>
+    /// Gets the confirm.
+    /// </summary>
+    /// <param name="title">The title.</param>
+    /// <param name="message">The message.</param>
+    /// <param name="confirmLabel">The confirm label.</param>
+    /// <param name="isDestructive">The is destructive.</param>
+    /// <param name="detail">The detail.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result is true when the condition is met; otherwise, false.</returns>
     public Task<bool> ConfirmAsync(
         string title,
         string message,
@@ -47,6 +76,17 @@ public sealed class DialogService
         string? detail = null) =>
         Require(confirm).ShowAsync(title, message, confirmLabel, isDestructive, detail);
 
+    /// <summary>
+    /// Gets the prompt.
+    /// </summary>
+    /// <param name="title">The title.</param>
+    /// <param name="label">The label.</param>
+    /// <param name="initialValue">The initial value.</param>
+    /// <param name="confirmLabel">The confirm label.</param>
+    /// <param name="selectFileNameStem">The select file name stem.</param>
+    /// <param name="description">The description.</param>
+    /// <param name="maxLength">The max length.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the string.</returns>
     public Task<string?> PromptAsync(
         string title,
         string label,

@@ -3,6 +3,12 @@ namespace Heroicsoft.NetForge.Abstractions.Navigation;
 /// <summary>Decides whether a sidebar link is the current page, including its query string.</summary>
 public static class ForgeNavMatch
 {
+    /// <summary>
+    /// Determines whether this instance is current.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    /// <param name="relativeUrl">The relative URL.</param>
+    /// <returns>true when the condition is met; otherwise, false.</returns>
     public static bool IsCurrent(ForgeNavItem item, string relativeUrl)
     {
         // "#" and a blank address are submenu labels. Treating them as a path would light up every page.

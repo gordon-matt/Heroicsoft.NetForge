@@ -6,6 +6,9 @@ using Microsoft.Extensions.Options;
 
 namespace Heroicsoft.NetForge.Components.Status;
 
+/// <summary>
+/// Represents the error content.
+/// </summary>
 public partial class ErrorContent
 {
     [Inject]
@@ -16,18 +19,33 @@ public partial class ErrorContent
     [CascadingParameter]
     private HttpContext? HttpContext { get; set; }
 
+    /// <summary>
+    /// Gets or sets the title.
+    /// </summary>
     [Parameter]
     public string Title { get; set; } = "Something went wrong";
 
+    /// <summary>
+    /// Gets or sets the message.
+    /// </summary>
     [Parameter]
     public string Message { get; set; } = "The error has been logged. Trying again often works.";
 
+    /// <summary>
+    /// Gets or sets the home href.
+    /// </summary>
     [Parameter]
     public string HomeHref { get; set; } = "/";
 
+    /// <summary>
+    /// Gets or sets the home label.
+    /// </summary>
     [Parameter]
     public string HomeLabel { get; set; } = "Back home";
 
+    /// <summary>
+    /// Gets or sets the home icon.
+    /// </summary>
     [Parameter]
     public string HomeIcon { get; set; } = "home";
 
@@ -43,6 +61,7 @@ public partial class ErrorContent
     protected override void OnInitialized() =>
         requestId = Activity.Current?.Id ?? HttpContext?.TraceIdentifier;
 
+    /// <inheritdoc/>
     protected override void OnParametersSet() =>
         PageTitleText ??= string.IsNullOrWhiteSpace(ShellOptions.Value.Brand)
             ? "Error"

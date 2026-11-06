@@ -6,16 +6,34 @@ namespace Heroicsoft.NetForge.Abstractions.Data;
 /// </summary>
 public static class DatabaseProviders
 {
+    /// <summary>
+    /// The configuration key constant.
+    /// </summary>
     public const string ConfigurationKey = "Database:Provider";
 
+    /// <summary>
+    /// The sqlite constant.
+    /// </summary>
     public const string Sqlite = "Sqlite";
 
+    /// <summary>
+    /// The SQL server constant.
+    /// </summary>
     public const string SqlServer = "SqlServer";
 
+    /// <summary>
+    /// The npgsql constant.
+    /// </summary>
     public const string Npgsql = "Npgsql";
 
+    /// <summary>
+    /// The my SQL constant.
+    /// </summary>
     public const string MySql = "MySql";
 
+    /// <summary>
+    /// The all.
+    /// </summary>
     public static readonly IReadOnlyList<string> All = [Sqlite, SqlServer, Npgsql, MySql];
 
     /// <summary>

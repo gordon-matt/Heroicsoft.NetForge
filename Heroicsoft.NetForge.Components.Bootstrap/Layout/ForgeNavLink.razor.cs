@@ -4,11 +4,17 @@ using Microsoft.AspNetCore.Components.Routing;
 
 namespace Heroicsoft.NetForge.Components.Bootstrap.Layout;
 
+/// <summary>
+/// Represents the forge nav link.
+/// </summary>
 public partial class ForgeNavLink : IDisposable
 {
     [Inject]
     private NavigationManager Navigation { get; set; } = default!;
 
+    /// <summary>
+    /// Gets or sets the item.
+    /// </summary>
     [Parameter, EditorRequired]
     public ForgeNavItem Item { get; set; } = default!;
 
@@ -24,6 +30,7 @@ public partial class ForgeNavLink : IDisposable
             ? Item.Icon
             : $"bi-{Item.Icon}";
 
+    /// <inheritdoc/>
     protected override void OnInitialized()
     {
         if (UsesQuery)
@@ -34,5 +41,8 @@ public partial class ForgeNavLink : IDisposable
 
     private void OnLocationChanged(object? sender, LocationChangedEventArgs args) => InvokeAsync(StateHasChanged);
 
+    /// <summary>
+    /// Releases the resources used by this instance.
+    /// </summary>
     public void Dispose() => Navigation.LocationChanged -= OnLocationChanged;
 }

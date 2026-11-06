@@ -17,18 +17,36 @@ public sealed class ImageProcessor : IImageProcessor
 
     private static readonly SKSamplingOptions Nearest = new(SKFilterMode.Nearest, SKMipmapMode.None);
 
+    /// <summary>
+    /// Attempts to identify.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the raster info.</returns>
     public async Task<RasterInfo?> TryIdentifyAsync(string path, CancellationToken cancellationToken = default)
     {
         await using var stream = File.OpenRead(path);
         return await TryIdentifyAsync(stream, cancellationToken);
     }
 
+    /// <summary>
+    /// Attempts to identify.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the raster info.</returns>
     public async Task<RasterInfo?> TryIdentifyAsync(Stream stream, CancellationToken cancellationToken = default)
     {
         byte[] bytes = await ReadBytesAsync(stream, cancellationToken);
         return TryIdentify(bytes);
     }
 
+    /// <summary>
+    /// Attempts to decode.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the decoded raster.</returns>
     public async Task<DecodedRaster?> TryDecodeAsync(Stream stream, CancellationToken cancellationToken = default)
     {
         try
@@ -43,14 +61,35 @@ public sealed class ImageProcessor : IImageProcessor
         }
     }
 
+    /// <summary>
+    /// Resizes the value.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <param name="transform">The transform.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the processed image.</returns>
     public Task<ProcessedImage> ResizeAsync(string path, ImageTransform transform, CancellationToken cancellationToken = default) => WithFileAsync(path, stream => ResizeAsync(stream, transform, cancellationToken), cancellationToken);
 
+    /// <summary>
+    /// Resizes the value.
+    /// </summary>
+    /// <param name="source">The source.</param>
+    /// <param name="transform">The transform.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the processed image.</returns>
     public async Task<ProcessedImage> ResizeAsync(ReadOnlyMemory<byte> source, ImageTransform transform, CancellationToken cancellationToken = default)
     {
         using var stream = new MemoryStream(source.ToArray(), writable: false);
         return await ResizeAsync(stream, transform, cancellationToken);
     }
 
+    /// <summary>
+    /// Resizes the value.
+    /// </summary>
+    /// <param name="source">The source.</param>
+    /// <param name="transform">The transform.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the processed image.</returns>
     public async Task<ProcessedImage> ResizeAsync(Stream source, ImageTransform transform, CancellationToken cancellationToken = default)
     {
         byte[] bytes = await ReadBytesAsync(source, cancellationToken);
@@ -62,6 +101,13 @@ public sealed class ImageProcessor : IImageProcessor
         return Encode(transformed, format, transform.Quality);
     }
 
+    /// <summary>
+    /// Attempts to shrink file.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <param name="options">The options.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result is true when the condition is met; otherwise, false.</returns>
     public async Task<bool> TryShrinkFileAsync(string path, ImageShrinkOptions options, CancellationToken cancellationToken = default)
     {
         if ((options.MaxWidth <= 0 && options.MaxHeight <= 0) || !File.Exists(path))
@@ -112,6 +158,14 @@ public sealed class ImageProcessor : IImageProcessor
         }
     }
 
+    /// <summary>
+    /// Gets the crop.
+    /// </summary>
+    /// <param name="source">The source.</param>
+    /// <param name="crop">The crop.</param>
+    /// <param name="encode">The encode.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the processed image.</returns>
     public async Task<ProcessedImage> CropAsync(
         Stream source,
         ImageCropBox crop,
@@ -129,6 +183,14 @@ public sealed class ImageProcessor : IImageProcessor
         return Encode(output, encode.Format, encode.Quality);
     }
 
+    /// <summary>
+    /// Rotates the value.
+    /// </summary>
+    /// <param name="source">The source.</param>
+    /// <param name="degrees">The degrees.</param>
+    /// <param name="encode">The encode.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the processed image.</returns>
     public async Task<ProcessedImage> RotateAsync(
         Stream source,
         float degrees,
@@ -144,8 +206,22 @@ public sealed class ImageProcessor : IImageProcessor
         return Encode(rotated, format, encode?.Quality ?? 75);
     }
 
+    /// <summary>
+    /// Gets the transcode.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <param name="encode">The encode.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the processed image.</returns>
     public Task<ProcessedImage> TranscodeAsync(string path, ImageEncode encode, CancellationToken cancellationToken = default) => WithFileAsync(path, stream => TranscodeAsync(stream, encode, cancellationToken), cancellationToken);
 
+    /// <summary>
+    /// Gets the transcode.
+    /// </summary>
+    /// <param name="source">The source.</param>
+    /// <param name="encode">The encode.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the processed image.</returns>
     public async Task<ProcessedImage> TranscodeAsync(Stream source, ImageEncode encode, CancellationToken cancellationToken = default)
     {
         byte[] bytes = await ReadBytesAsync(source, cancellationToken);
@@ -153,6 +229,15 @@ public sealed class ImageProcessor : IImageProcessor
         return Encode(bitmap, encode.Format, encode.Quality);
     }
 
+    /// <summary>
+    /// Encodes the bgra.
+    /// </summary>
+    /// <param name="bgra">The bgra.</param>
+    /// <param name="width">The width.</param>
+    /// <param name="height">The height.</param>
+    /// <param name="encode">The encode.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the processed image.</returns>
     public Task<ProcessedImage> EncodeBgraAsync(
         ReadOnlyMemory<byte> bgra,
         int width,
@@ -187,8 +272,20 @@ public sealed class ImageProcessor : IImageProcessor
         }
     }
 
+    /// <summary>
+    /// Computes the difference hash.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the long.</returns>
     public Task<long> ComputeDifferenceHashAsync(string path, CancellationToken cancellationToken = default) => WithFileAsync(path, stream => ComputeDifferenceHashAsync(stream, cancellationToken), cancellationToken);
 
+    /// <summary>
+    /// Computes the difference hash.
+    /// </summary>
+    /// <param name="source">The source.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the long.</returns>
     public async Task<long> ComputeDifferenceHashAsync(Stream source, CancellationToken cancellationToken = default)
     {
         const int hashWidth = 9;
@@ -246,6 +343,12 @@ public sealed class ImageProcessor : IImageProcessor
         return unchecked((long)hash);
     }
 
+    /// <summary>
+    /// Gets the hamming distance.
+    /// </summary>
+    /// <param name="left">The left.</param>
+    /// <param name="right">The right.</param>
+    /// <returns>The hamming distance.</returns>
     public int HammingDistance(long left, long right) =>
         BitOperations.PopCount(unchecked((ulong)(left ^ right)));
 

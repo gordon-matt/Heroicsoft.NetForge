@@ -5,6 +5,13 @@ namespace Heroicsoft.NetForge.Components.Navigation;
 /// <summary>One named menu after the host's <c>BuildMenu</c> callbacks have run.</summary>
 public sealed class NetForgeMenuModel
 {
+    /// <summary>
+    /// Initializes a new instance of the NetForgeMenuModel class.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="isDefined">The is defined.</param>
+    /// <param name="placement">The placement.</param>
+    /// <param name="sections">The sections.</param>
     public NetForgeMenuModel(
         string name,
         bool isDefined,
@@ -17,15 +24,29 @@ public sealed class NetForgeMenuModel
         Sections = sections;
     }
 
+    /// <summary>
+    /// Gets the name.
+    /// </summary>
     public string Name { get; }
 
     /// <summary>False when nothing was registered for <see cref="Name"/>. Renderers draw nothing.</summary>
     public bool IsDefined { get; }
 
+    /// <summary>
+    /// Gets the placement.
+    /// </summary>
     public NetForgeMenuPlacement Placement { get; }
 
+    /// <summary>
+    /// Gets the sections.
+    /// </summary>
     public IReadOnlyList<ForgeNavSection> Sections { get; }
 
+    /// <summary>
+    /// Gets the placement of.
+    /// </summary>
+    /// <param name="section">The section.</param>
+    /// <returns>The placement of.</returns>
     public NetForgeMenuPlacement PlacementOf(ForgeNavSection section) =>
         section.InTopbar switch
         {
@@ -34,11 +55,17 @@ public sealed class NetForgeMenuModel
             _ => Placement,
         };
 
+    /// <summary>
+    /// Gets a value indicating whether this instance has sidebar sections.
+    /// </summary>
     public bool HasSidebarSections =>
         Sections.Count == 0
             ? Placement == NetForgeMenuPlacement.Sidebar
             : Sections.Any(section => PlacementOf(section) == NetForgeMenuPlacement.Sidebar);
 
+    /// <summary>
+    /// Gets a value indicating whether this instance has topbar sections.
+    /// </summary>
     public bool HasTopbarSections =>
         Sections.Count == 0
             ? Placement == NetForgeMenuPlacement.Topbar
@@ -72,6 +99,14 @@ public sealed class NetForgeMenuModel
             ? NetForgeMenuPlacement.Topbar
             : NetForgeMenuPlacement.Sidebar;
 
+    /// <summary>
+    /// Gets the for slot.
+    /// </summary>
+    /// <param name="slot">The slot.</param>
+    /// <param name="main">The main.</param>
+    /// <param name="path">The path.</param>
+    /// <param name="sections">The sections.</param>
+    /// <returns>The for slot.</returns>
     public IReadOnlyList<ForgeNavSection> ForSlot(
         NetForgeMenuPlacement slot,
         NetForgeMenuPlacement main,
@@ -140,9 +175,20 @@ public sealed class NetForgeMenuModel
         return null;
     }
 
+    /// <summary>
+    /// Determines whether this instance is active.
+    /// </summary>
+    /// <param name="section">The section.</param>
+    /// <param name="path">The path.</param>
+    /// <returns>true when the condition is met; otherwise, false.</returns>
     public static bool IsActive(ForgeNavSection section, string path) =>
         section.Items.Any(item => ForgeNavMatch.IsInBranch(item, path));
 
+    /// <summary>
+    /// Gets the empty.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <returns>The empty.</returns>
     public static NetForgeMenuModel Empty(string? name) =>
         new(string.IsNullOrWhiteSpace(name) ? NetForgeMenus.DefaultName : name.Trim(), false, NetForgeMenuPlacement.Sidebar, []);
 }

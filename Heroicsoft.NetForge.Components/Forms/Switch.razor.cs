@@ -13,30 +13,57 @@ public partial class Switch
     [CascadingParameter]
     private EditContext? EditContext { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is value.
+    /// </summary>
     [Parameter]
     public bool Value { get; set; }
 
+    /// <summary>
+    /// Gets or sets the value changed.
+    /// </summary>
     [Parameter]
     public EventCallback<bool> ValueChanged { get; set; }
 
+    /// <summary>
+    /// Gets or sets the value expression.
+    /// </summary>
     [Parameter]
     public Expression<Func<bool>>? ValueExpression { get; set; }
 
+    /// <summary>
+    /// Gets or sets the label.
+    /// </summary>
     [Parameter]
     public string? Label { get; set; }
 
+    /// <summary>
+    /// Gets or sets the description.
+    /// </summary>
     [Parameter]
     public string? Description { get; set; }
 
+    /// <summary>
+    /// Gets or sets the identifier.
+    /// </summary>
     [Parameter]
     public string? Id { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is disabled.
+    /// </summary>
     [Parameter]
     public bool Disabled { get; set; }
 
+    /// <summary>
+    /// Gets or sets the class.
+    /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
+    /// <summary>
+    /// Gets or sets the child content.
+    /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 

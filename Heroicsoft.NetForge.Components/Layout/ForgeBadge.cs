@@ -3,6 +3,9 @@ namespace Heroicsoft.NetForge.Components.Layout;
 /// <summary>Maps badge class names onto the <c>nf-badge-*</c> tones.</summary>
 public static class ForgeBadge
 {
+    /// <summary>
+    /// The default constant.
+    /// </summary>
     public const string Default = "nf-badge-muted";
 
     /// <summary>

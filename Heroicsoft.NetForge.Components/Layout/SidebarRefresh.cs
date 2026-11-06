@@ -6,7 +6,13 @@ namespace Heroicsoft.NetForge.Components.Layout;
 /// </summary>
 public sealed class SidebarRefresh
 {
+    /// <summary>
+    /// Occurs when changed.
+    /// </summary>
     public event Action? Changed;
 
+    /// <summary>
+    /// Notifies the changed.
+    /// </summary>
     public void NotifyChanged() => Changed?.Invoke();
 }

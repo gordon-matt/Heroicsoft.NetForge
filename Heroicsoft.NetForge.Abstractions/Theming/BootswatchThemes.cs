@@ -7,8 +7,14 @@ namespace Heroicsoft.NetForge.Abstractions.Theming;
 /// </summary>
 public static class BootswatchThemes
 {
+    /// <summary>
+    /// The default constant.
+    /// </summary>
     public const string Default = "flatly";
 
+    /// <summary>
+    /// The all.
+    /// </summary>
     public static readonly IReadOnlyList<string> All =
     [
         "brite", "cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal", "litera", "lumen",
@@ -27,11 +33,22 @@ public static class BootswatchThemes
             "cyborg", "darkly", "slate", "solar", "superhero", "vapor",
         };
 
+    /// <summary>
+    /// Determines whether this instance is dark color scheme.
+    /// </summary>
+    /// <param name="theme">The theme.</param>
+    /// <returns>true when the condition is met; otherwise, false.</returns>
     public static bool IsDarkColorScheme(string? theme) =>
         !string.IsNullOrEmpty(theme) && DarkColorScheme.Contains(theme);
 
+    /// <summary>
+    /// Gets the dark themes.
+    /// </summary>
     public static IEnumerable<string> DarkThemes => All.Where(DarkColorScheme.Contains);
 
+    /// <summary>
+    /// Gets the light themes.
+    /// </summary>
     public static IEnumerable<string> LightThemes => All.Where(theme => !DarkColorScheme.Contains(theme));
 
     /// <summary>
@@ -59,6 +76,12 @@ public static class BootswatchThemes
         return true;
     }
 
+    /// <summary>
+    /// Gets the stylesheet href.
+    /// </summary>
+    /// <param name="theme">The theme.</param>
+    /// <param name="format">The format.</param>
+    /// <returns>The stylesheet href.</returns>
     public static string StylesheetHref(string theme, string format = "lib/bootswatch/dist/{0}/bootstrap.min.css") =>
         string.Format(System.Globalization.CultureInfo.InvariantCulture, format, theme);
 }

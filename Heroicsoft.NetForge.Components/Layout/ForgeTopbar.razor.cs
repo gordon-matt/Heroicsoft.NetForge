@@ -5,17 +5,29 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace Heroicsoft.NetForge.Components.Layout;
 
+/// <summary>
+/// Represents the forge topbar.
+/// </summary>
 public partial class ForgeTopbar
 {
     [Inject]
     private IAuthProviderService Auth { get; set; } = default!;
 
+    /// <summary>
+    /// Gets or sets the callback raised for the toggle sidebar event.
+    /// </summary>
     [Parameter]
     public EventCallback OnToggleSidebar { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is show sidebar toggle.
+    /// </summary>
     [Parameter]
     public bool ShowSidebarToggle { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets the sections.
+    /// </summary>
     [Parameter]
     public IReadOnlyList<ForgeNavSection> Sections { get; set; } = [];
 
@@ -31,18 +43,33 @@ public partial class ForgeTopbar
     [Parameter]
     public bool SharedMenuAfterSections { get; set; }
 
+    /// <summary>
+    /// Gets or sets the brand.
+    /// </summary>
     [Parameter]
     public string? Brand { get; set; }
 
+    /// <summary>
+    /// Gets or sets the brand href.
+    /// </summary>
     [Parameter]
     public string BrandHref { get; set; } = "/";
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is enhance brand navigation.
+    /// </summary>
     [Parameter]
     public bool EnhanceBrandNavigation { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets the logo URL.
+    /// </summary>
     [Parameter]
     public string? LogoUrl { get; set; }
 
+    /// <summary>
+    /// Gets or sets the logo dark URL.
+    /// </summary>
     [Parameter]
     public string? LogoDarkUrl { get; set; }
 
@@ -50,15 +77,27 @@ public partial class ForgeTopbar
     [Parameter]
     public RenderFragment? CenterContent { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is show search.
+    /// </summary>
     [Parameter]
     public bool ShowSearch { get; set; }
 
+    /// <summary>
+    /// Gets or sets the search placeholder.
+    /// </summary>
     [Parameter]
     public string SearchPlaceholder { get; set; } = "Search";
 
+    /// <summary>
+    /// Gets or sets the search text.
+    /// </summary>
     [Parameter]
     public string SearchText { get; set; } = "";
 
+    /// <summary>
+    /// Gets or sets the callback raised for the search event.
+    /// </summary>
     [Parameter]
     public EventCallback<string> OnSearch { get; set; }
 
@@ -66,9 +105,15 @@ public partial class ForgeTopbar
     [Parameter]
     public bool ShowThemePicker { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is show user menu.
+    /// </summary>
     [Parameter]
     public bool ShowUserMenu { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets the user menu items.
+    /// </summary>
     [Parameter]
     public IReadOnlyList<ForgeNavItem>? UserMenuItems { get; set; }
 
@@ -78,6 +123,9 @@ public partial class ForgeTopbar
                 || item.Roles.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Any(user.IsInRole))
             .ToList();
 
+    /// <summary>
+    /// Gets or sets the child content.
+    /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
@@ -86,6 +134,7 @@ public partial class ForgeTopbar
     private bool menuOpen;
     private bool navOpen;
 
+    /// <inheritdoc/>
     protected override void OnParametersSet()
     {
         if (!string.Equals(SearchText, appliedSearchText, StringComparison.Ordinal))

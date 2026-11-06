@@ -9,6 +9,9 @@ using Microsoft.Extensions.Options;
 
 namespace Heroicsoft.NetForge.Components.Bootstrap;
 
+/// <summary>
+/// Provides extension methods for net forge menu HTMLs.
+/// </summary>
 public static class NetForgeMenuHtmlExtensions
 {
     /// <summary>The unnamed menu, in the placement it was built with.</summary>

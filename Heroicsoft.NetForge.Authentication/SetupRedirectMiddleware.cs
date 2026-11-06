@@ -15,6 +15,12 @@ public sealed class SetupRedirectMiddleware(
     RequestDelegate next,
     IOptions<SetupGateOptions> options)
 {
+    /// <summary>
+    /// Invokes the value.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="setupStatus">The setup status.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     public async Task InvokeAsync(HttpContext context, ISetupStatus setupStatus)
     {
         var gate = options.Value;

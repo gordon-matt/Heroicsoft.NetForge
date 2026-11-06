@@ -12,20 +12,42 @@ public sealed class ToastService : IDisposable
     private readonly ConcurrentDictionary<Guid, Toast> toasts = new();
     private readonly ConcurrentDictionary<Guid, Timer> timers = new();
 
+    /// <summary>
+    /// Occurs when changed.
+    /// </summary>
     public event Action? Changed;
 
     /// <summary>Raised for each new toast, for hosts that render and time out toasts themselves.</summary>
     public event Action<Toast>? Shown;
 
+    /// <summary>
+    /// Gets the toasts.
+    /// </summary>
     public IReadOnlyCollection<Toast> Toasts =>
         [.. toasts.Values.OrderBy(toast => toast.CreatedAt)];
 
+    /// <summary>
+    /// Performs the success operation.
+    /// </summary>
+    /// <param name="message">The message.</param>
     public void Success(string message) => Show(message, "success");
 
+    /// <summary>
+    /// Performs the error operation.
+    /// </summary>
+    /// <param name="message">The message.</param>
     public void Error(string message) => Show(message, "danger", TimeSpan.FromSeconds(12));
 
+    /// <summary>
+    /// Performs the warning operation.
+    /// </summary>
+    /// <param name="message">The message.</param>
     public void Warning(string message) => Show(message, "warning", TimeSpan.FromSeconds(9));
 
+    /// <summary>
+    /// Performs the info operation.
+    /// </summary>
+    /// <param name="message">The message.</param>
     public void Info(string message) => Show(message, "info");
 
     /// <summary>Surfaces a failed result without every caller writing the same status switch.</summary>
@@ -76,6 +98,10 @@ public sealed class ToastService : IDisposable
         Changed?.Invoke();
     }
 
+    /// <summary>
+    /// Performs the dismiss operation.
+    /// </summary>
+    /// <param name="id">The identifier.</param>
     public void Dismiss(Guid id)
     {
         toasts.TryRemove(id, out _);
@@ -88,6 +114,9 @@ public sealed class ToastService : IDisposable
         Changed?.Invoke();
     }
 
+    /// <summary>
+    /// Releases the resources used by this instance.
+    /// </summary>
     public void Dispose()
     {
         foreach (var timer in timers.Values)
@@ -99,6 +128,13 @@ public sealed class ToastService : IDisposable
         toasts.Clear();
     }
 
+    /// <summary>
+    /// Represents the toast.
+    /// </summary>
+    /// <param name="Id">The identifier.</param>
+    /// <param name="Message">The message.</param>
+    /// <param name="Level">The level.</param>
+    /// <param name="CreatedAt">The created at.</param>
     public sealed record Toast(Guid Id, string Message, string Level, DateTime CreatedAt)
     {
         /// <summary>Alias of <see cref="Level"/>, the name the app-local toast services used.</summary>

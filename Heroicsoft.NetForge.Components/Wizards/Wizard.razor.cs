@@ -10,24 +10,45 @@ public partial class Wizard
 {
     private readonly List<WizardStep> steps = [];
 
+    /// <summary>
+    /// Gets or sets the child content.
+    /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
+    /// <summary>
+    /// Gets or sets the orientation.
+    /// </summary>
     [Parameter]
     public WizardOrientation Orientation { get; set; } = WizardOrientation.Vertical;
 
+    /// <summary>
+    /// Gets or sets the finish text.
+    /// </summary>
     [Parameter]
     public string FinishText { get; set; } = "Finish";
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is busy.
+    /// </summary>
     [Parameter]
     public bool Busy { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is show cancel.
+    /// </summary>
     [Parameter]
     public bool ShowCancel { get; set; }
 
+    /// <summary>
+    /// Gets or sets the callback raised for the cancel event.
+    /// </summary>
     [Parameter]
     public EventCallback OnCancel { get; set; }
 
+    /// <summary>
+    /// Gets or sets the callback raised for the finished event.
+    /// </summary>
     [Parameter]
     public EventCallback OnFinished { get; set; }
 
@@ -39,6 +60,7 @@ public partial class Wizard
         return steps.Count - 1;
     }
 
+    /// <inheritdoc/>
     protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)

@@ -3,6 +3,9 @@ namespace Heroicsoft.NetForge.Authentication;
 /// <summary>Paths that must keep working while the first-run wizard is incomplete.</summary>
 public sealed class SetupGateOptions
 {
+    /// <summary>
+    /// Gets or sets the setup path.
+    /// </summary>
     public string SetupPath { get; set; } = "/setup";
 
     /// <summary>

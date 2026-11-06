@@ -11,9 +11,15 @@ public partial class WizardStep : ComponentBase, IDisposable
     [CascadingParameter]
     private Wizard? Parent { get; set; }
 
+    /// <summary>
+    /// Gets or sets the title.
+    /// </summary>
     [Parameter, EditorRequired]
     public string Title { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Gets or sets the child content.
+    /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
@@ -25,6 +31,7 @@ public partial class WizardStep : ComponentBase, IDisposable
 
     private bool Visible => Parent is not null && Parent.ActiveIndex == Index;
 
+    /// <inheritdoc/>
     protected override void OnInitialized()
     {
         if (Parent is null)
@@ -35,5 +42,8 @@ public partial class WizardStep : ComponentBase, IDisposable
         Index = Parent.Register(this);
     }
 
+    /// <summary>
+    /// Releases the resources used by this instance.
+    /// </summary>
     public void Dispose() => Parent?.Unregister(this);
 }

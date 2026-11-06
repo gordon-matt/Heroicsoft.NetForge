@@ -16,22 +16,46 @@ public sealed record ProcessedImage(byte[] Bytes, int Width, int Height, RasterF
 /// </summary>
 public enum ImageScaleMode
 {
+    /// <summary>
+    /// The max value.
+    /// </summary>
     Max = 0,
+    /// <summary>
+    /// The stretch value.
+    /// </summary>
     Stretch = 1,
+    /// <summary>
+    /// The crop value.
+    /// </summary>
     Crop = 2,
 }
 
 /// <summary>Resize plus an optional re-encode. A null <see cref="Format"/> keeps the source container.</summary>
 public sealed record ImageTransform
 {
+    /// <summary>
+    /// Gets or sets the width.
+    /// </summary>
     public int Width { get; init; }
 
+    /// <summary>
+    /// Gets or sets the height.
+    /// </summary>
     public int Height { get; init; }
 
+    /// <summary>
+    /// Gets or sets the mode.
+    /// </summary>
     public ImageScaleMode Mode { get; init; } = ImageScaleMode.Max;
 
+    /// <summary>
+    /// Gets or sets the format.
+    /// </summary>
     public RasterFormat? Format { get; init; }
 
+    /// <summary>
+    /// Gets or sets the quality.
+    /// </summary>
     public int Quality { get; init; } = 80;
 
     /// <summary>
@@ -40,9 +64,18 @@ public sealed record ImageTransform
     /// </summary>
     public bool StripMetadata { get; init; }
 
+    /// <summary>
+    /// Gets or sets the max pixels.
+    /// </summary>
     public long MaxPixels { get; init; } = ImageFormats.DefaultMaxPixels;
 }
 
+/// <summary>
+/// Represents the image encode.
+/// </summary>
+/// <param name="Format">The format.</param>
+/// <param name="Quality">The quality.</param>
+/// <param name="StripMetadata">The strip metadata.</param>
 public sealed record ImageEncode(RasterFormat Format, int Quality = 80, bool StripMetadata = true);
 
 /// <summary>
@@ -65,13 +98,22 @@ public sealed record ImageCropBox(
 /// </summary>
 public sealed record ImageShrinkOptions
 {
+    /// <summary>
+    /// Gets or sets the max width.
+    /// </summary>
     public int MaxWidth { get; init; }
 
+    /// <summary>
+    /// Gets or sets the max height.
+    /// </summary>
     public int MaxHeight { get; init; }
 
     /// <summary>Encoder quality for JPEG and WebP. Null keeps the encoder default (75).</summary>
     public int? Quality { get; init; }
 
+    /// <summary>
+    /// Gets or sets the max pixels.
+    /// </summary>
     public long MaxPixels { get; init; } = ImageFormats.DefaultMaxPixels;
 }
 

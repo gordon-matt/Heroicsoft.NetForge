@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Components;
 
 namespace Heroicsoft.NetForge.Components.Status;
 
+/// <summary>
+/// Represents the redirect to login.
+/// </summary>
 public partial class RedirectToLogin
 {
     [Inject]
@@ -14,6 +17,7 @@ public partial class RedirectToLogin
     // The login URL differs per provider, so it is resolved here rather than hard-coded at every
     // call site: Identity serves its own Razor Pages, while Keycloak goes through the challenge
     // endpoint that redirects to the IdP.
+    /// <inheritdoc/>
     protected override void OnInitialized()
     {
         string returnUrl = Uri.EscapeDataString(

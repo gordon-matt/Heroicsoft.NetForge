@@ -10,6 +10,15 @@ namespace Heroicsoft.NetForge.Components.Bootstrap.Navigation;
 /// <summary>Bootstrap markup for the same menu the nf HTML helper renders.</summary>
 public static class BootstrapNetForgeMenuHtml
 {
+    /// <summary>
+    /// Renders the value.
+    /// </summary>
+    /// <param name="menu">The menu.</param>
+    /// <param name="user">The user.</param>
+    /// <param name="requestPath">The request path.</param>
+    /// <param name="placement">The placement.</param>
+    /// <param name="mainPlacement">The main placement.</param>
+    /// <returns>The i HTML content.</returns>
     public static IHtmlContent Render(
         NetForgeMenuModel menu,
         ClaimsPrincipal user,

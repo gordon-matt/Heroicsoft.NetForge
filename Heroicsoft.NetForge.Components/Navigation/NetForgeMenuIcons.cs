@@ -6,6 +6,11 @@ namespace Heroicsoft.NetForge.Components.Navigation;
 /// </summary>
 public static class NetForgeMenuIcons
 {
+    /// <summary>
+    /// Determines whether this instance is font class.
+    /// </summary>
+    /// <param name="icon">The icon.</param>
+    /// <returns>true when the condition is met; otherwise, false.</returns>
     public static bool IsFontClass(string? icon)
     {
         if (string.IsNullOrWhiteSpace(icon))

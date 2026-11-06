@@ -13,6 +13,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Heroicsoft.NetForge.Authentication;
 
+/// <summary>
+/// Provides extension methods for service collections.
+/// </summary>
 public static class ServiceCollectionExtensions
 {
     /// <summary>
@@ -101,6 +104,11 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
+    /// <summary>
+    /// Uses the net forge setup gate.
+    /// </summary>
+    /// <param name="app">The app.</param>
+    /// <returns>The net forge setup gate.</returns>
     public static IApplicationBuilder UseNetForgeSetupGate(this IApplicationBuilder app) =>
         app.UseMiddleware<SetupRedirectMiddleware>();
 

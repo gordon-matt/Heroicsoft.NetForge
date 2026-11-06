@@ -9,6 +9,10 @@ namespace Heroicsoft.NetForge.Authentication;
 /// </summary>
 public static class KeycloakClaims
 {
+    /// <summary>
+    /// Maps the roles.
+    /// </summary>
+    /// <param name="principal">The principal.</param>
     public static void MapRoles(ClaimsPrincipal? principal)
     {
         if (principal?.Identity is not ClaimsIdentity identity)
@@ -66,6 +70,12 @@ public static class KeycloakClaims
         }
     }
 
+    /// <summary>
+    /// Gets the rewrite origin.
+    /// </summary>
+    /// <param name="url">The URL.</param>
+    /// <param name="publicOrigin">The public origin.</param>
+    /// <returns>The rewrite origin.</returns>
     public static string? RewriteOrigin(string? url, string publicOrigin) => string.IsNullOrWhiteSpace(url) || !Uri.TryCreate(url, UriKind.Absolute, out var uri)
             ? url
             : Uri.TryCreate(publicOrigin, UriKind.Absolute, out var origin)

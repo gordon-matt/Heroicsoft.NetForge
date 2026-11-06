@@ -3,6 +3,9 @@ using Microsoft.Extensions.Options;
 
 namespace Heroicsoft.NetForge.Components.Theming;
 
+/// <summary>
+/// Represents the theme toggle.
+/// </summary>
 public partial class ThemeToggle
 {
     [Inject]

@@ -29,10 +29,25 @@ public static class ForgeBrand
         return path.StartsWith('/') || Uri.TryCreate(path, UriKind.Absolute, out _) ? path : "/" + path;
     }
 
+    /// <summary>
+    /// Gets the logo.
+    /// </summary>
+    /// <param name="options">The options.</param>
+    /// <returns>The logo.</returns>
     public static string? Logo(ForgeShellOptions options) => Url(options.LogoUrl);
 
+    /// <summary>
+    /// Gets the logo dark.
+    /// </summary>
+    /// <param name="options">The options.</param>
+    /// <returns>The logo dark.</returns>
     public static string? LogoDark(ForgeShellOptions options) => Url(options.LogoDarkUrl);
 
+    /// <summary>
+    /// Gets the mark.
+    /// </summary>
+    /// <param name="options">The options.</param>
+    /// <returns>The mark.</returns>
     public static string? Mark(ForgeShellOptions options) => Url(options.MarkUrl);
 
     /// <summary>Brand text. Empty when the host has not set <see cref="ForgeShellOptions.Brand"/>.</summary>

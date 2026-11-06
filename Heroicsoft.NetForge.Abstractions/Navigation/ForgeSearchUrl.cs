@@ -6,6 +6,12 @@ namespace Heroicsoft.NetForge.Abstractions.Navigation;
 /// </summary>
 public static class ForgeSearchUrl
 {
+    /// <summary>
+    /// Reads the term.
+    /// </summary>
+    /// <param name="format">The format.</param>
+    /// <param name="uri">The URI.</param>
+    /// <returns>The term.</returns>
     public static string ReadTerm(string? format, Uri uri) => !TryGetKey(format, out string key)
             ? string.Empty
             : ForgeQuery.Parse(uri.Query).TryGetValue(key, out string? value) ? value : string.Empty;

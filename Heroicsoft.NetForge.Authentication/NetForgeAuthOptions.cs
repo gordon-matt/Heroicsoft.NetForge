@@ -9,15 +9,27 @@ namespace Heroicsoft.NetForge.Authentication;
 /// </summary>
 public sealed class NetForgeAuthOptions
 {
+    /// <summary>
+    /// The section name constant.
+    /// </summary>
     public const string SectionName = "Authentication";
 
     /// <summary><see cref="AuthProviderNames.Identity"/>, <see cref="AuthProviderNames.Keycloak"/>, or <see cref="AuthProviderNames.None"/>.</summary>
     public string Provider { get; set; } = AuthProviderNames.Identity;
 
+    /// <summary>
+    /// Gets or sets the administrator role.
+    /// </summary>
     public string AdministratorRole { get; set; } = WellKnownRoles.Administrator;
 
+    /// <summary>
+    /// Gets or sets the user role.
+    /// </summary>
     public string UserRole { get; set; } = WellKnownRoles.User;
 
+    /// <summary>
+    /// Gets or sets the access denied path.
+    /// </summary>
     public string AccessDeniedPath { get; set; } = "/access-denied";
 
     /// <summary>
@@ -39,10 +51,19 @@ public sealed class NetForgeAuthOptions
     /// </summary>
     public bool RegisterUserContext { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets the identity.
+    /// </summary>
     public IdentityAuthOptions Identity { get; set; } = new();
 
+    /// <summary>
+    /// Gets or sets the none.
+    /// </summary>
     public NoneAuthOptions None { get; set; } = new();
 
+    /// <summary>
+    /// Gets or sets the keycloak.
+    /// </summary>
     public KeycloakAuthOptions Keycloak { get; set; } = new();
 }
 
@@ -59,39 +80,84 @@ public sealed class IdentityAuthOptions
     /// </summary>
     public bool UseRelaxedPasswordPolicy { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is require digit.
+    /// </summary>
     public bool RequireDigit { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is require lowercase.
+    /// </summary>
     public bool RequireLowercase { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is require uppercase.
+    /// </summary>
     public bool RequireUppercase { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is require non alphanumeric.
+    /// </summary>
     public bool RequireNonAlphanumeric { get; set; }
 
+    /// <summary>
+    /// Gets or sets the required length.
+    /// </summary>
     public int RequiredLength { get; set; } = 6;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is require unique email.
+    /// </summary>
     public bool RequireUniqueEmail { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is require confirmed account.
+    /// </summary>
     public bool RequireConfirmedAccount { get; set; }
 }
 
 /// <summary>The synthetic user created when <see cref="AuthProviderNames.None"/> is selected.</summary>
 public sealed class NoneAuthOptions
 {
+    /// <summary>
+    /// Gets or sets the user identifier.
+    /// </summary>
     public string UserId { get; set; } = "_default";
 
+    /// <summary>
+    /// Gets or sets the user name.
+    /// </summary>
     public string UserName { get; set; } = "Default User";
 }
 
+/// <summary>
+/// Represents the keycloak auth options.
+/// </summary>
 public sealed class KeycloakAuthOptions
 {
+    /// <summary>
+    /// Gets or sets the authority.
+    /// </summary>
     public string? Authority { get; set; }
 
+    /// <summary>
+    /// Gets or sets the client identifier.
+    /// </summary>
     public string? ClientId { get; set; }
 
+    /// <summary>
+    /// Gets or sets the client secret.
+    /// </summary>
     public string? ClientSecret { get; set; }
 
+    /// <summary>
+    /// Gets or sets the admin client identifier.
+    /// </summary>
     public string? AdminClientId { get; set; }
 
+    /// <summary>
+    /// Gets or sets the admin client secret.
+    /// </summary>
     public string? AdminClientSecret { get; set; }
 
     /// <summary>
@@ -106,8 +172,14 @@ public sealed class KeycloakAuthOptions
     /// </summary>
     public string? BackchannelBaseUrl { get; set; }
 
+    /// <summary>
+    /// Gets or sets the login path.
+    /// </summary>
     public string LoginPath { get; set; } = "/auth/login";
 
+    /// <summary>
+    /// Gets or sets the cookie days.
+    /// </summary>
     public int CookieDays { get; set; } = 7;
 
     /// <summary>Blazor apps leave this true. HTTP Keycloak in Docker sets it false.</summary>
@@ -119,6 +191,9 @@ public sealed class KeycloakAuthOptions
     /// </summary>
     public SameSiteMode CorrelationCookieSameSite { get; set; } = SameSiteMode.Lax;
 
+    /// <summary>
+    /// Gets or sets the correlation cookie secure policy.
+    /// </summary>
     public CookieSecurePolicy CorrelationCookieSecurePolicy { get; set; } = CookieSecurePolicy.SameAsRequest;
 
     /// <summary>

@@ -8,6 +8,9 @@ namespace Heroicsoft.NetForge.Components.Navigation;
 /// </summary>
 public sealed class NetForgeMenuItemOptions
 {
+    /// <summary>
+    /// Gets or sets the title.
+    /// </summary>
     public string Title { get; set; } = string.Empty;
 
     /// <summary>Root-relative (<c>/logs</c>) or absolute. Leave empty when this item only groups <see cref="Children"/>.</summary>
@@ -19,36 +22,66 @@ public sealed class NetForgeMenuItemOptions
     /// </summary>
     public string Icon { get; set; } = "circle";
 
+    /// <summary>
+    /// Gets or sets the tooltip.
+    /// </summary>
     public string? Tooltip { get; set; }
 
     /// <summary>Comma-separated roles. Empty shows the item to everyone.</summary>
     public string? Roles { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is external.
+    /// </summary>
     public bool External { get; set; }
 
     /// <summary>When true, the link is only active on an exact path match. Set this for <c>/</c>.</summary>
     public bool MatchAll { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is tag icon.
+    /// </summary>
     public bool TagIcon { get; set; }
 
+    /// <summary>
+    /// Gets or sets the count.
+    /// </summary>
     public int? Count { get; set; }
 
+    /// <summary>
+    /// Gets or sets the badge.
+    /// </summary>
     public string? Badge { get; set; }
 
+    /// <summary>
+    /// Gets or sets the badge CSS class.
+    /// </summary>
     public string BadgeCssClass { get; set; } = "text-bg-secondary";
 
+    /// <summary>
+    /// Gets or sets the active paths.
+    /// </summary>
     public IReadOnlyList<string>? ActivePaths { get; set; }
 
+    /// <summary>
+    /// Gets or sets the active query.
+    /// </summary>
     public IReadOnlyDictionary<string, string?>? ActiveQuery { get; set; }
 
     /// <summary>Lower numbers come first. Equal numbers keep registration order.</summary>
     public int Order { get; set; }
 
+    /// <summary>
+    /// Gets or sets the CSS class.
+    /// </summary>
     public string? CssClass { get; set; }
 
     /// <summary>Checked in addition to <see cref="Roles"/> when the menu is rendered.</summary>
     public Func<ClaimsPrincipal, bool>? IsVisible { get; set; }
 
+    /// <summary>
+    /// Gets the children.
+    /// </summary>
     public IList<NetForgeMenuItemOptions> Children => ChildItems;
 
     internal List<NetForgeMenuItemOptions> ChildItems { get; } = [];

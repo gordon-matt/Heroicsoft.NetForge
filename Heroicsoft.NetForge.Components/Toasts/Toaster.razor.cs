@@ -4,6 +4,9 @@ using Microsoft.JSInterop;
 
 namespace Heroicsoft.NetForge.Components.Toasts;
 
+/// <summary>
+/// Represents the toaster.
+/// </summary>
 public partial class Toaster : IDisposable
 {
     [Inject]
@@ -15,6 +18,7 @@ public partial class Toaster : IDisposable
     [Inject]
     private IOptions<ForgeToastSoundOptions> SoundOptions { get; set; } = default!;
 
+    /// <inheritdoc/>
     protected override void OnInitialized()
     {
         ToastService.Changed += OnToastsChanged;
@@ -52,6 +56,9 @@ public partial class Toaster : IDisposable
         _ => "info",
     };
 
+    /// <summary>
+    /// Releases the resources used by this instance.
+    /// </summary>
     public void Dispose()
     {
         ToastService.Changed -= OnToastsChanged;

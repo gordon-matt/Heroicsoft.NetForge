@@ -22,6 +22,9 @@ public partial class ActionMenu
     [Parameter]
     public string Label { get; set; } = "Actions";
 
+    /// <summary>
+    /// Gets or sets the icon.
+    /// </summary>
     [Parameter]
     public string Icon { get; set; } = "dots";
 
@@ -33,17 +36,32 @@ public partial class ActionMenu
     [Parameter]
     public string? TriggerClass { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is disabled.
+    /// </summary>
     [Parameter]
     public bool Disabled { get; set; }
 
+    /// <summary>
+    /// Gets or sets the class.
+    /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
+    /// <summary>
+    /// Gets or sets the child content.
+    /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
+    /// <summary>
+    /// Gets a value indicating whether this instance is open.
+    /// </summary>
     public bool IsOpen => open;
 
+    /// <summary>
+    /// Closes the value.
+    /// </summary>
     public void Close()
     {
         if (open)
@@ -53,6 +71,7 @@ public partial class ActionMenu
         }
     }
 
+    /// <inheritdoc/>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!placePending)

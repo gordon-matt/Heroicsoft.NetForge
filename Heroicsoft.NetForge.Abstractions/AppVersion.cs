@@ -10,6 +10,9 @@ public static class AppVersion
 {
     private static readonly Lazy<string> CurrentLazy = new(Resolve);
 
+    /// <summary>
+    /// Gets the current.
+    /// </summary>
     public static string Current => CurrentLazy.Value;
 
     private static string Resolve()

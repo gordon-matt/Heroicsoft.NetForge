@@ -11,12 +11,28 @@ public sealed class HttpUserContextService(
     IHttpContextAccessor httpContextAccessor,
     IOptions<NetForgeAuthOptions> forgeOptions) : IUserContextService
 {
+    /// <summary>
+    /// Gets the current user identifier.
+    /// </summary>
+    /// <returns>The current user identifier.</returns>
     public string? GetCurrentUserId() => User.FindUserId();
 
+    /// <summary>
+    /// Gets the current user name.
+    /// </summary>
+    /// <returns>The current user name.</returns>
     public string? GetCurrentUserName() => User?.Identity?.Name;
 
+    /// <summary>
+    /// Determines whether this instance is authenticated.
+    /// </summary>
+    /// <returns>true when the condition is met; otherwise, false.</returns>
     public bool IsAuthenticated() => User?.Identity?.IsAuthenticated ?? false;
 
+    /// <summary>
+    /// Determines whether this instance is administrator.
+    /// </summary>
+    /// <returns>true when the condition is met; otherwise, false.</returns>
     public bool IsAdministrator()
     {
         var user = User;
@@ -30,6 +46,10 @@ public sealed class HttpUserContextService(
             || GetRoleNames().Contains(role, StringComparer.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// Gets the role names.
+    /// </summary>
+    /// <returns>The role names.</returns>
     public IReadOnlyList<string> GetRoleNames()
     {
         var user = User;

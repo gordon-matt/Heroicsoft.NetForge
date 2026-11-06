@@ -11,15 +11,24 @@ namespace Heroicsoft.NetForge.Components.Navigation;
 /// <summary>Loads one menu for both component packages. The razor file only chooses the markup.</summary>
 public abstract class NetForgeMenuView : ComponentBase, IDisposable
 {
+    /// <summary>
+    /// Gets or sets the catalog.
+    /// </summary>
     [Inject]
     protected INetForgeMenuCatalog Catalog { get; set; } = default!;
 
+    /// <summary>
+    /// Gets or sets the navigation.
+    /// </summary>
     [Inject]
     protected NavigationManager Navigation { get; set; } = default!;
 
     [Inject]
     private IOptions<ForgeUiOptions> UiOptions { get; set; } = default!;
 
+    /// <summary>
+    /// Gets or sets the authentication state.
+    /// </summary>
     [CascadingParameter]
     protected Task<AuthenticationState>? AuthenticationState { get; set; }
 
@@ -35,6 +44,9 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
     [Parameter]
     public NetForgeMenuPlacement? Placement { get; set; }
 
+    /// <summary>
+    /// Gets or sets the aria label.
+    /// </summary>
     [Parameter]
     public string AriaLabel { get; set; } = "Navigation";
 
@@ -45,21 +57,40 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
     [Parameter]
     public bool Landmark { get; set; } = true;
 
+    /// <summary>
+    /// Gets a value indicating whether this instance is top.
+    /// </summary>
     protected bool IsTop => ResolvedPlacement == NetForgeMenuPlacement.Topbar;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is defined.
+    /// </summary>
     protected bool Defined { get; private set; }
 
+    /// <summary>
+    /// Gets or sets the resolved placement.
+    /// </summary>
     protected NetForgeMenuPlacement ResolvedPlacement { get; private set; } = NetForgeMenuPlacement.Sidebar;
 
+    /// <summary>
+    /// Gets or sets the sections.
+    /// </summary>
     protected IReadOnlyList<ForgeNavSection> Sections { get; private set; } = [];
 
     /// <summary>Site path plus query, so a menu hosted under another app's base href still matches root links.</summary>
     protected string Path { get; private set; } = "/";
 
+    /// <inheritdoc/>
     protected override void OnInitialized() => Navigation.LocationChanged += OnLocationChanged;
 
+    /// <inheritdoc/>
     protected override async Task OnParametersSetAsync() => await LoadAsync();
 
+    /// <summary>
+    /// Gets the section item.
+    /// </summary>
+    /// <param name="section">The section.</param>
+    /// <returns>The section item.</returns>
     protected static ForgeNavItem SectionItem(ForgeNavSection section) =>
         new()
         {
@@ -100,5 +131,8 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
             StateHasChanged();
         });
 
+    /// <summary>
+    /// Releases the resources used by this instance.
+    /// </summary>
     public void Dispose() => Navigation.LocationChanged -= OnLocationChanged;
 }

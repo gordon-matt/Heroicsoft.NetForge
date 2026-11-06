@@ -5,6 +5,9 @@ namespace Heroicsoft.NetForge.Components.Bootstrap.Navigation;
 /// <summary>A trail of links. The last item is the current page.</summary>
 public partial class Breadcrumbs<TItem>
 {
+    /// <summary>
+    /// Gets or sets the items.
+    /// </summary>
     [Parameter, EditorRequired]
     public IReadOnlyList<TItem>? Items { get; set; }
 
@@ -24,6 +27,9 @@ public partial class Breadcrumbs<TItem>
     [Parameter]
     public RenderFragment<TItem>? Leading { get; set; }
 
+    /// <summary>
+    /// Gets or sets the aria label.
+    /// </summary>
     [Parameter]
     public string AriaLabel { get; set; } = "Breadcrumb";
 
@@ -31,12 +37,21 @@ public partial class Breadcrumbs<TItem>
     [Parameter]
     public string Separator { get; set; } = "/";
 
+    /// <summary>
+    /// Gets or sets the class.
+    /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
+    /// <summary>
+    /// Gets or sets the link class.
+    /// </summary>
     [Parameter]
     public string? LinkClass { get; set; }
 
+    /// <summary>
+    /// Gets or sets the current class.
+    /// </summary>
     [Parameter]
     public string? CurrentClass { get; set; }
 

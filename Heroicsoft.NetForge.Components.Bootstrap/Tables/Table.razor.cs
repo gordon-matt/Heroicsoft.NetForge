@@ -5,27 +5,51 @@ namespace Heroicsoft.NetForge.Components.Bootstrap.Tables;
 /// <summary>Scrolling table. Put the head and body in the child content.</summary>
 public partial class Table
 {
+    /// <summary>
+    /// Gets or sets the child content.
+    /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
+    /// <summary>
+    /// Gets or sets the class.
+    /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is hover.
+    /// </summary>
     [Parameter]
     public bool Hover { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is dense.
+    /// </summary>
     [Parameter]
     public bool Dense { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is striped.
+    /// </summary>
     [Parameter]
     public bool Striped { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is bordered.
+    /// </summary>
     [Parameter]
     public bool Bordered { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is borderless.
+    /// </summary>
     [Parameter]
     public bool Borderless { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is responsive.
+    /// </summary>
     [Parameter]
     public bool Responsive { get; set; } = true;
 

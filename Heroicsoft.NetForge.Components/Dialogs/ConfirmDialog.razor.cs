@@ -4,6 +4,9 @@ using Microsoft.JSInterop;
 
 namespace Heroicsoft.NetForge.Components.Dialogs;
 
+/// <summary>
+/// Represents the confirm dialog.
+/// </summary>
 public partial class ConfirmDialog : IConfirmDialog, IDisposable
 {
     private readonly string titleId = "nf-confirm-title-" + Guid.NewGuid().ToString("N");
@@ -48,6 +51,7 @@ public partial class ConfirmDialog : IConfirmDialog, IDisposable
         return completion.Task;
     }
 
+    /// <inheritdoc/>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!shouldFocus)
@@ -83,5 +87,8 @@ public partial class ConfirmDialog : IConfirmDialog, IDisposable
         completion = null;
     }
 
+    /// <summary>
+    /// Releases the resources used by this instance.
+    /// </summary>
     public void Dispose() => completion?.TrySetResult(false);
 }

@@ -5,21 +5,39 @@ namespace Heroicsoft.NetForge.Components.Tables;
 /// <summary>A clickable column header for a <see cref="Table"/>. Bind it with <c>@bind-Sort</c>.</summary>
 public partial class SortHeader
 {
+    /// <summary>
+    /// Gets or sets the field.
+    /// </summary>
     [Parameter, EditorRequired]
     public string Field { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Gets or sets the sort.
+    /// </summary>
     [Parameter]
     public TableSort? Sort { get; set; }
 
+    /// <summary>
+    /// Gets or sets the sort changed.
+    /// </summary>
     [Parameter]
     public EventCallback<TableSort?> SortChanged { get; set; }
 
+    /// <summary>
+    /// Gets or sets the child content.
+    /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
+    /// <summary>
+    /// Gets or sets the class.
+    /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
+    /// <summary>
+    /// Gets or sets the style.
+    /// </summary>
     [Parameter]
     public string? Style { get; set; }
 

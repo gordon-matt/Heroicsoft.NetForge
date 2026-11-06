@@ -9,6 +9,9 @@ public partial class TabSet
     private readonly List<Tab> tabs = [];
     private string? activeId;
 
+    /// <summary>
+    /// Gets or sets the child content.
+    /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
@@ -16,6 +19,9 @@ public partial class TabSet
     [Parameter]
     public string? ActiveTab { get; set; }
 
+    /// <summary>
+    /// Gets or sets the active tab changed.
+    /// </summary>
     [Parameter]
     public EventCallback<string?> ActiveTabChanged { get; set; }
 
@@ -26,14 +32,22 @@ public partial class TabSet
     [Parameter]
     public bool KeepPanelsMounted { get; set; }
 
+    /// <summary>
+    /// Gets or sets the aria label.
+    /// </summary>
     [Parameter]
     public string? AriaLabel { get; set; }
 
+    /// <summary>
+    /// Gets or sets the class.
+    /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
+    /// <inheritdoc/>
     protected override void OnParametersSet() => activeId = ActiveTab;
 
+    /// <inheritdoc/>
     protected override void OnAfterRender(bool firstRender)
     {
         // Tabs register while the child content renders, after this component has drawn its list.

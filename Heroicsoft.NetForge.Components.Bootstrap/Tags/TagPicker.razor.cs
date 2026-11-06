@@ -20,15 +20,27 @@ public partial class TagPicker<TItem> : IDisposable
     [Parameter]
     public bool AllowCreate { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets the chip class.
+    /// </summary>
     [Parameter]
     public string? ChipClass { get; set; }
 
+    /// <summary>
+    /// Gets or sets the class.
+    /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
+    /// <summary>
+    /// Gets or sets the identifier.
+    /// </summary>
     [Parameter]
     public string? Id { get; set; }
 
+    /// <summary>
+    /// Gets or sets the label.
+    /// </summary>
     [Parameter, EditorRequired]
     public string Label { get; set; } = "Item";
 
@@ -42,6 +54,9 @@ public partial class TagPicker<TItem> : IDisposable
     [Parameter, EditorRequired]
     public Func<string, Task> OnAddAsync { get; set; } = _ => Task.CompletedTask;
 
+    /// <summary>
+    /// Gets or sets the callback raised for the changed event.
+    /// </summary>
     [Parameter]
     public EventCallback OnChanged { get; set; }
 
@@ -50,11 +65,17 @@ public partial class TagPicker<TItem> : IDisposable
     public Func<string, Task<IReadOnlyList<TItem>>> SearchAsync { get; set; } =
         _ => Task.FromResult<IReadOnlyList<TItem>>([]);
 
+    /// <summary>
+    /// Gets or sets the selected.
+    /// </summary>
     [Parameter, EditorRequired]
     public IList<TItem> Selected { get; set; } = [];
 
     private string Placeholder => $"Add {Label.ToLowerInvariant()}…";
 
+    /// <summary>
+    /// Releases the resources used by this instance.
+    /// </summary>
     public void Dispose()
     {
         blurCts?.Cancel();

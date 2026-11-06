@@ -10,6 +10,13 @@ namespace Heroicsoft.NetForge.Video;
 /// </summary>
 public static class FfmpegBootstrap
 {
+    /// <summary>
+    /// Ensures the value.
+    /// </summary>
+    /// <param name="options">The options.</param>
+    /// <param name="logger">The logger.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the ffmpeg location.</returns>
     public static async Task<FfmpegLocation?> EnsureAsync(
         FfmpegBootstrapOptions options,
         ILogger logger,
@@ -88,8 +95,18 @@ public static class FfmpegBootstrap
         return null;
     }
 
+    /// <summary>
+    /// Uses the value.
+    /// </summary>
+    /// <param name="location">The location.</param>
     public static void Use(FfmpegLocation location) => FFmpeg.SetExecutablesPath(location.Directory);
 
+    /// <summary>
+    /// Gets the probe.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <param name="requireFfprobe">The require ffprobe.</param>
+    /// <returns>The probe.</returns>
     public static FfmpegLocation? Probe(string path, bool requireFfprobe)
     {
         if (string.IsNullOrWhiteSpace(path))

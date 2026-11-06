@@ -6,8 +6,14 @@ namespace Heroicsoft.NetForge.Abstractions.Navigation;
 /// </summary>
 public sealed class ForgeNavSection
 {
+    /// <summary>
+    /// Gets or sets the heading.
+    /// </summary>
     public string? Heading { get; init; }
 
+    /// <summary>
+    /// Gets or sets the roles.
+    /// </summary>
     public string? Roles { get; init; }
 
     /// <summary>
@@ -15,5 +21,8 @@ public sealed class ForgeNavSection
     /// </summary>
     public bool? InTopbar { get; init; }
 
+    /// <summary>
+    /// Gets or sets the items.
+    /// </summary>
     public IReadOnlyList<ForgeNavItem> Items { get; init; } = [];
 }

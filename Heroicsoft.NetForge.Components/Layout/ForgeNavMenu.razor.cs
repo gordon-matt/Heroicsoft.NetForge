@@ -5,11 +5,17 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace Heroicsoft.NetForge.Components.Layout;
 
+/// <summary>
+/// Represents the forge nav menu.
+/// </summary>
 public partial class ForgeNavMenu : IDisposable
 {
     [Inject]
     private NavigationManager Navigation { get; set; } = default!;
 
+    /// <summary>
+    /// Gets or sets the section.
+    /// </summary>
     [Parameter, EditorRequired]
     public ForgeNavSection Section { get; set; } = default!;
 
@@ -22,6 +28,7 @@ public partial class ForgeNavMenu : IDisposable
         ForgeNavMatch.IsCurrent(item, RelativeUrl)
         || item.Children.Any(child => ForgeNavMatch.IsCurrent(child, RelativeUrl)));
 
+    /// <inheritdoc/>
     protected override void OnInitialized() => Navigation.LocationChanged += OnLocationChanged;
 
     private void Toggle() => open = !open;
@@ -50,5 +57,8 @@ public partial class ForgeNavMenu : IDisposable
             StateHasChanged();
         });
 
+    /// <summary>
+    /// Releases the resources used by this instance.
+    /// </summary>
     public void Dispose() => Navigation.LocationChanged -= OnLocationChanged;
 }

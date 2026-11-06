@@ -9,6 +9,9 @@ using Microsoft.Extensions.Options;
 
 namespace Heroicsoft.NetForge.Components.Bootstrap.Layout;
 
+/// <summary>
+/// Represents the shell layout.
+/// </summary>
 public partial class ShellLayout : IDisposable
 {
     [Inject]
@@ -77,6 +80,7 @@ public partial class ShellLayout : IDisposable
         builder.CloseComponent();
     };
 
+    /// <inheritdoc/>
     protected override void OnInitialized()
     {
         options = ShellOptions.Value;
@@ -89,6 +93,7 @@ public partial class ShellLayout : IDisposable
         Navigation.LocationChanged += OnLocationChanged;
     }
 
+    /// <inheritdoc/>
     protected override Task OnInitializedAsync() => LoadSectionsAsync();
 
     private void OnSidebarChanged() => _ = InvokeAsync(LoadSectionsAsync);
@@ -141,6 +146,9 @@ public partial class ShellLayout : IDisposable
     private string CurrentTerm() =>
         ForgeSearchUrl.ReadTerm(SearchFormat, Navigation.ToAbsoluteUri(Navigation.Uri));
 
+    /// <summary>
+    /// Releases the resources used by this instance.
+    /// </summary>
     public void Dispose()
     {
         SidebarRefresh.Changed -= OnSidebarChanged;

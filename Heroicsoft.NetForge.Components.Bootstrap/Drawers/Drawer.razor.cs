@@ -18,9 +18,15 @@ public partial class Drawer
     [Parameter]
     public RenderFragment? Actions { get; set; }
 
+    /// <summary>
+    /// Gets or sets the child content.
+    /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
+    /// <summary>
+    /// Gets or sets the callback raised for the close event.
+    /// </summary>
     [Parameter]
     public EventCallback OnClose { get; set; }
 
@@ -40,15 +46,27 @@ public partial class Drawer
     [Parameter]
     public bool Persistent { get; set; }
 
+    /// <summary>
+    /// Gets or sets the side.
+    /// </summary>
     [Parameter]
     public DrawerSide Side { get; set; } = DrawerSide.End;
 
+    /// <summary>
+    /// Gets or sets the class.
+    /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
+    /// <summary>
+    /// Gets or sets the body class.
+    /// </summary>
     [Parameter]
     public string? BodyClass { get; set; }
 
+    /// <summary>
+    /// Gets or sets the aria label.
+    /// </summary>
     [Parameter]
     public string? AriaLabel { get; set; }
 

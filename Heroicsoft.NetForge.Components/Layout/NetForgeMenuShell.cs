@@ -6,6 +6,12 @@ namespace Heroicsoft.NetForge.Components.Layout;
 /// <summary>Lets the shell render a menu built with <c>BuildMenu</c> without each layout copying the lookup.</summary>
 public static class NetForgeMenuShell
 {
+    /// <summary>
+    /// Finds the value.
+    /// </summary>
+    /// <param name="services">The services.</param>
+    /// <param name="options">The options.</param>
+    /// <returns>The net forge menu.</returns>
     public static NetForgeMenuModel? Find(IServiceProvider services, ForgeShellOptions options)
     {
         if (!options.UseSharedMenu)
@@ -24,6 +30,13 @@ public static class NetForgeMenuShell
     public static bool Splits(NetForgeMenuModel? menu) =>
         menu is { HasSidebarSections: true, HasTopbarSections: true };
 
+    /// <summary>
+    /// Gets the placement.
+    /// </summary>
+    /// <param name="menu">The menu.</param>
+    /// <param name="fallback">The fallback.</param>
+    /// <param name="main">The main.</param>
+    /// <returns>The placement.</returns>
     public static ForgeNavigationPlacement Placement(
         NetForgeMenuModel? menu,
         ForgeNavigationPlacement fallback,

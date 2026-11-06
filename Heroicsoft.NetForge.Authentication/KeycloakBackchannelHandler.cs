@@ -17,12 +17,18 @@ public sealed class KeycloakBackchannelHandler : HttpClientHandler
     private readonly Uri authority;
     private readonly Uri backchannelBase;
 
+    /// <summary>
+    /// Initializes a new instance of the KeycloakBackchannelHandler class.
+    /// </summary>
+    /// <param name="authority">The authority.</param>
+    /// <param name="backchannelBaseUrl">The backchannel base URL.</param>
     public KeycloakBackchannelHandler(string authority, string backchannelBaseUrl)
     {
         this.authority = new Uri(authority, UriKind.Absolute);
         backchannelBase = new Uri(backchannelBaseUrl, UriKind.Absolute);
     }
 
+    /// <inheritdoc/>
     protected override Task<HttpResponseMessage> SendAsync(
         HttpRequestMessage request,
         CancellationToken cancellationToken)

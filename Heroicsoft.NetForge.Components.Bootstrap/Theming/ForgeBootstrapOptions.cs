@@ -12,6 +12,9 @@ public sealed class ForgeBootstrapOptions
     /// </summary>
     public string ThemeStorageKey { get; set; } = ThemeStorage.DefaultKey;
 
+    /// <summary>
+    /// Gets or sets the default theme.
+    /// </summary>
     public string DefaultTheme { get; set; } = BootswatchThemes.Default;
 
     /// <summary>
@@ -25,7 +28,13 @@ public sealed class ForgeBootstrapOptions
     /// <summary>Format string whose <c>{0}</c> is the theme name. The host serves the CSS.</summary>
     public string StylesheetFormat { get; set; } = "lib/bootswatch/dist/{0}/bootstrap.min.css";
 
+    /// <summary>
+    /// Gets or sets the bootstrap script path.
+    /// </summary>
     public string BootstrapScriptPath { get; set; } = "lib/bootstrap/dist/js/bootstrap.bundle.min.js";
 
+    /// <summary>
+    /// Gets or sets the icons stylesheet path.
+    /// </summary>
     public string IconsStylesheetPath { get; set; } = "lib/bootstrap-icons/font/bootstrap-icons.min.css";
 }

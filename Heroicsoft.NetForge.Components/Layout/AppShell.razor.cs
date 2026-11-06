@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Components.Routing;
 
 namespace Heroicsoft.NetForge.Components.Layout;
 
+/// <summary>
+/// Represents the app shell.
+/// </summary>
 public partial class AppShell : IDisposable
 {
     [Inject]
@@ -16,9 +19,15 @@ public partial class AppShell : IDisposable
 
     private bool sidebarOpen;
 
+    /// <summary>
+    /// Gets or sets the brand.
+    /// </summary>
     [Parameter]
     public string? Brand { get; set; }
 
+    /// <summary>
+    /// Gets or sets the brand href.
+    /// </summary>
     [Parameter]
     public string BrandHref { get; set; } = "/";
 
@@ -29,18 +38,33 @@ public partial class AppShell : IDisposable
     [Parameter]
     public bool EnhanceBrandNavigation { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets the logo URL.
+    /// </summary>
     [Parameter]
     public string? LogoUrl { get; set; }
 
+    /// <summary>
+    /// Gets or sets the logo dark URL.
+    /// </summary>
     [Parameter]
     public string? LogoDarkUrl { get; set; }
 
+    /// <summary>
+    /// Gets or sets the mark URL.
+    /// </summary>
     [Parameter]
     public string? MarkUrl { get; set; }
 
+    /// <summary>
+    /// Gets or sets the brand content.
+    /// </summary>
     [Parameter]
     public RenderFragment? BrandContent { get; set; }
 
+    /// <summary>
+    /// Gets or sets the sections.
+    /// </summary>
     [Parameter]
     public IReadOnlyList<ForgeNavSection> Sections { get; set; } = [];
 
@@ -71,9 +95,15 @@ public partial class AppShell : IDisposable
     [Parameter]
     public RenderFragment? SidebarFooter { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is show search.
+    /// </summary>
     [Parameter]
     public bool ShowSearch { get; set; }
 
+    /// <summary>
+    /// Gets or sets the search placeholder.
+    /// </summary>
     [Parameter]
     public string SearchPlaceholder { get; set; } = "Search";
 
@@ -81,6 +111,9 @@ public partial class AppShell : IDisposable
     [Parameter]
     public string SearchText { get; set; } = "";
 
+    /// <summary>
+    /// Gets or sets the callback raised for the search event.
+    /// </summary>
     [Parameter]
     public EventCallback<string> OnSearch { get; set; }
 
@@ -90,6 +123,9 @@ public partial class AppShell : IDisposable
     [Parameter]
     public RenderFragment? TopbarCenter { get; set; }
 
+    /// <summary>
+    /// Gets or sets the topbar end.
+    /// </summary>
     [Parameter]
     public RenderFragment? TopbarEnd { get; set; }
 
@@ -104,21 +140,37 @@ public partial class AppShell : IDisposable
     [Parameter]
     public bool ShowThemePicker { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is show user menu.
+    /// </summary>
     [Parameter]
     public bool ShowUserMenu { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets the user menu items.
+    /// </summary>
     [Parameter]
     public IReadOnlyList<ForgeNavItem>? UserMenuItems { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is show version.
+    /// </summary>
     [Parameter]
     public bool ShowVersion { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets the version.
+    /// </summary>
     [Parameter]
     public string? Version { get; set; }
 
+    /// <summary>
+    /// Gets or sets the child content.
+    /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
+    /// <inheritdoc/>
     protected override void OnInitialized() => Navigation.LocationChanged += OnLocationChanged;
 
     private void ToggleSidebar()
@@ -145,5 +197,8 @@ public partial class AppShell : IDisposable
         _ = InvokeAsync(StateHasChanged);
     }
 
+    /// <summary>
+    /// Releases the resources used by this instance.
+    /// </summary>
     public void Dispose() => Navigation.LocationChanged -= OnLocationChanged;
 }

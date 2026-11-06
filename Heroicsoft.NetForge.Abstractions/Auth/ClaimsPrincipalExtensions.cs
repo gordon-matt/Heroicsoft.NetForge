@@ -16,6 +16,11 @@ public static class ClaimsPrincipalExtensions
         "nameid",
     ];
 
+    /// <summary>
+    /// Finds the user identifier.
+    /// </summary>
+    /// <param name="principal">The principal.</param>
+    /// <returns>The user identifier.</returns>
     public static string? FindUserId(this ClaimsPrincipal? principal)
     {
         if (principal is null)

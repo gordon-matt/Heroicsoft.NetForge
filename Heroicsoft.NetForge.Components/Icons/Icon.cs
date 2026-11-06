@@ -29,9 +29,13 @@ public sealed class Icon : ComponentBase
     [Parameter]
     public string? Title { get; set; }
 
+    /// <summary>
+    /// Gets or sets the additional attributes.
+    /// </summary>
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
+    /// <inheritdoc/>
     protected override void BuildRenderTree(RenderTreeBuilder builder)
     {
         string icon = IconSet.Normalize(Name);

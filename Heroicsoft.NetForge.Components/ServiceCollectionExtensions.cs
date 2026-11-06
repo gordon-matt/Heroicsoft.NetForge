@@ -8,6 +8,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Heroicsoft.NetForge.Components;
 
+/// <summary>
+/// Provides extension methods for service collections.
+/// </summary>
 public static class ServiceCollectionExtensions
 {
     /// <summary>

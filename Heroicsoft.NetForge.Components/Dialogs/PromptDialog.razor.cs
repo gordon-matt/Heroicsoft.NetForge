@@ -4,6 +4,9 @@ using Microsoft.JSInterop;
 
 namespace Heroicsoft.NetForge.Components.Dialogs;
 
+/// <summary>
+/// Represents the prompt dialog.
+/// </summary>
 public partial class PromptDialog : IPromptDialog, IDisposable
 {
     [Inject]
@@ -23,6 +26,9 @@ public partial class PromptDialog : IPromptDialog, IDisposable
     private bool shouldFocus;
     private TaskCompletionSource<string?>? completion;
 
+    /// <summary>
+    /// Gets or sets the value.
+    /// </summary>
     public string Value { get; set; } = string.Empty;
 
     /// <summary>
@@ -66,6 +72,7 @@ public partial class PromptDialog : IPromptDialog, IDisposable
         StateHasChanged();
     }
 
+    /// <inheritdoc/>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!shouldFocus)
@@ -119,5 +126,8 @@ public partial class PromptDialog : IPromptDialog, IDisposable
         completion = null;
     }
 
+    /// <summary>
+    /// Releases the resources used by this instance.
+    /// </summary>
     public void Dispose() => completion?.TrySetResult(null);
 }

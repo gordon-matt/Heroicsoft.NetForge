@@ -3,6 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Heroicsoft.NetForge.Components.Bootstrap;
 
+/// <summary>
+/// Provides extension methods for bootstrap service collections.
+/// </summary>
 public static class BootstrapServiceCollectionExtensions
 {
     /// <summary>

@@ -16,6 +16,9 @@ public partial class TreeTable<TItem>
     [Parameter, EditorRequired]
     public IEnumerable<TItem> Items { get; set; } = [];
 
+    /// <summary>
+    /// Gets or sets the children of.
+    /// </summary>
     [Parameter, EditorRequired]
     public Func<TItem, IEnumerable<TItem>> ChildrenOf { get; set; } = _ => [];
 
@@ -23,6 +26,9 @@ public partial class TreeTable<TItem>
     [Parameter, EditorRequired]
     public Func<TItem, object> KeyOf { get; set; } = item => item!;
 
+    /// <summary>
+    /// Gets or sets the row template.
+    /// </summary>
     [Parameter, EditorRequired]
     public RenderFragment<TreeTableRow<TItem>> RowTemplate { get; set; } = default!;
 
@@ -30,22 +36,38 @@ public partial class TreeTable<TItem>
     [Parameter]
     public RenderFragment? Header { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is expanded by default.
+    /// </summary>
     [Parameter]
     public bool ExpandedByDefault { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is framed.
+    /// </summary>
     [Parameter]
     public bool Framed { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets the class.
+    /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
     /// <summary>The rows currently shown, in display order.</summary>
     public IReadOnlyList<TreeTableRow<TItem>> VisibleRows => rows;
 
+    /// <inheritdoc/>
     protected override void OnParametersSet() => Build();
 
+    /// <summary>
+    /// Performs the expand all operation.
+    /// </summary>
     public void ExpandAll() => SetAll(expanded: true);
 
+    /// <summary>
+    /// Performs the collapse all operation.
+    /// </summary>
     public void CollapseAll() => SetAll(expanded: false);
 
     internal void Toggle(TItem item)

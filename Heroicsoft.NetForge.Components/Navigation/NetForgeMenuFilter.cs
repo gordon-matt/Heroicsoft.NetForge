@@ -6,6 +6,12 @@ namespace Heroicsoft.NetForge.Components.Navigation;
 /// <summary>Drops links the current user cannot see, without changing the menu stored in DI.</summary>
 public static class NetForgeMenuFilter
 {
+    /// <summary>
+    /// Applies the value.
+    /// </summary>
+    /// <param name="sections">The sections.</param>
+    /// <param name="user">The user.</param>
+    /// <returns>The forge nav sections.</returns>
     public static IReadOnlyList<ForgeNavSection> Apply(IReadOnlyList<ForgeNavSection> sections, ClaimsPrincipal user)
     {
         var visible = new List<ForgeNavSection>();
@@ -40,8 +46,20 @@ public static class NetForgeMenuFilter
         return visible;
     }
 
+    /// <summary>
+    /// Determines whether this instance can see.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    /// <param name="user">The user.</param>
+    /// <returns>true when the condition is met; otherwise, false.</returns>
     public static bool CanSee(ForgeNavItem item, ClaimsPrincipal user) => CanSeeRoles(user, item.Roles) && (item.IsVisible is null || item.IsVisible(user));
 
+    /// <summary>
+    /// Determines whether this instance can see roles.
+    /// </summary>
+    /// <param name="user">The user.</param>
+    /// <param name="roles">The roles.</param>
+    /// <returns>true when the condition is met; otherwise, false.</returns>
     public static bool CanSeeRoles(ClaimsPrincipal user, string? roles) => string.IsNullOrWhiteSpace(roles) || roles
             .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Any(user.IsInRole);

@@ -4,6 +4,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Heroicsoft.NetForge.Components;
 
+/// <summary>
+/// Provides extension methods for menu service collections.
+/// </summary>
 public static class MenuServiceCollectionExtensions
 {
     /// <summary>

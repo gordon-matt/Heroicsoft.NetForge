@@ -2,6 +2,9 @@ using Heroicsoft.NetForge.Components.Dialogs;
 
 namespace Heroicsoft.NetForge.Components.Bootstrap.Dialogs;
 
+/// <summary>
+/// Represents the confirm dialog.
+/// </summary>
 public partial class ConfirmDialog : IConfirmDialog
 {
     private bool isVisible;

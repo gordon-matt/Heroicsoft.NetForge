@@ -9,14 +9,29 @@ namespace Heroicsoft.NetForge.Components.Layout;
 /// </summary>
 public sealed class ForgeShellOptions
 {
+    /// <summary>
+    /// Gets or sets the brand.
+    /// </summary>
     public string? Brand { get; set; }
 
+    /// <summary>
+    /// Gets or sets the brand href.
+    /// </summary>
     public string BrandHref { get; set; } = "/";
 
+    /// <summary>
+    /// Gets or sets the logo URL.
+    /// </summary>
     public string? LogoUrl { get; set; }
 
+    /// <summary>
+    /// Gets or sets the logo dark URL.
+    /// </summary>
     public string? LogoDarkUrl { get; set; }
 
+    /// <summary>
+    /// Gets or sets the mark URL.
+    /// </summary>
     public string? MarkUrl { get; set; }
 
     /// <summary>
@@ -25,17 +40,32 @@ public sealed class ForgeShellOptions
     /// </summary>
     public string? SearchUrlFormat { get; set; }
 
+    /// <summary>
+    /// Gets or sets the search placeholder.
+    /// </summary>
     public string SearchPlaceholder { get; set; } = "Search";
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is show theme picker.
+    /// </summary>
     public bool ShowThemePicker { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is show user menu.
+    /// </summary>
     public bool ShowUserMenu { get; set; } = true;
 
     /// <summary>Extra entries at the top of the user menu, for example Profile. Roles are honoured.</summary>
     public List<ForgeNavItem> UserMenuItems { get; set; } = [];
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is show version.
+    /// </summary>
     public bool ShowVersion { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets the version.
+    /// </summary>
     public string? Version { get; set; }
 
     /// <summary>
@@ -45,6 +75,9 @@ public sealed class ForgeShellOptions
     /// </summary>
     public ForgeNavigationPlacement NavigationPlacement { get; set; } = ForgeNavigationPlacement.Sidebar;
 
+    /// <summary>
+    /// Gets or sets the sections.
+    /// </summary>
     public List<ForgeNavSection> Sections { get; set; } = [];
 
     /// <summary>
@@ -76,6 +109,12 @@ public sealed class ForgeShellOptions
 /// <summary>Where the shell draws <see cref="ForgeShellOptions.Sections"/>.</summary>
 public enum ForgeNavigationPlacement
 {
+    /// <summary>
+    /// The sidebar value.
+    /// </summary>
     Sidebar = 0,
+    /// <summary>
+    /// The topbar value.
+    /// </summary>
     Topbar = 1,
 }

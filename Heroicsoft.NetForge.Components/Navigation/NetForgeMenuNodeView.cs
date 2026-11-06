@@ -8,9 +8,15 @@ public abstract class NetForgeMenuNodeView : ComponentBase
 {
     private string? appliedPath;
 
+    /// <summary>
+    /// Gets or sets the item.
+    /// </summary>
     [Parameter, EditorRequired]
     public ForgeNavItem Item { get; set; } = default!;
 
+    /// <summary>
+    /// Gets or sets the path.
+    /// </summary>
     [Parameter]
     public string Path { get; set; } = "/";
 
@@ -26,20 +32,42 @@ public abstract class NetForgeMenuNodeView : ComponentBase
     [Parameter]
     public bool Heading { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether this instance is open.
+    /// </summary>
     protected bool Open { get; private set; }
 
+    /// <summary>
+    /// Gets a value indicating whether this instance has children.
+    /// </summary>
     protected bool HasChildren => Item.Children is { Count: > 0 };
 
+    /// <summary>
+    /// Gets a value indicating whether this instance has href.
+    /// </summary>
     protected bool HasHref => !string.IsNullOrWhiteSpace(Item.Href);
 
+    /// <summary>
+    /// Gets a value indicating whether this instance is current.
+    /// </summary>
     protected bool Current => ForgeNavMatch.IsCurrent(Item, Path);
 
+    /// <summary>
+    /// Gets a value indicating whether this instance is branch current.
+    /// </summary>
     protected bool BranchCurrent => ForgeNavMatch.IsInBranch(Item, Path);
 
+    /// <summary>
+    /// Gets the tip.
+    /// </summary>
     protected string Tip => string.IsNullOrWhiteSpace(Item.Tooltip) ? Item.Title : Item.Tooltip;
 
+    /// <summary>
+    /// Gets the expand label.
+    /// </summary>
     protected string ExpandLabel => "Expand " + Item.Title;
 
+    /// <inheritdoc/>
     protected override void OnParametersSet()
     {
         if (string.Equals(appliedPath, Path, StringComparison.Ordinal))
@@ -54,7 +82,13 @@ public abstract class NetForgeMenuNodeView : ComponentBase
         Open = !Top && BranchCurrent;
     }
 
+    /// <summary>
+    /// Toggles the value.
+    /// </summary>
     protected void Toggle() => Open = !Open;
 
+    /// <summary>
+    /// Closes the value.
+    /// </summary>
     protected void Close() => Open = false;
 }

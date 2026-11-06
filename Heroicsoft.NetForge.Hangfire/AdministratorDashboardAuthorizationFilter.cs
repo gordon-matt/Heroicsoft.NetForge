@@ -14,6 +14,11 @@ namespace Heroicsoft.NetForge.Hangfire;
 public sealed class AdministratorDashboardAuthorizationFilter(string role = WellKnownRoles.Administrator)
     : IDashboardAuthorizationFilter
 {
+    /// <summary>
+    /// Authorizes the value.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <returns>true when the condition is met; otherwise, false.</returns>
     public bool Authorize(DashboardContext context)
     {
         var httpContext = context.GetHttpContext();

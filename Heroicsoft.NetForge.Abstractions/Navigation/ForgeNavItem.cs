@@ -5,6 +5,9 @@ namespace Heroicsoft.NetForge.Abstractions.Navigation;
 /// <summary>One link, or a submenu when <see cref="Children"/> is not empty.</summary>
 public sealed class ForgeNavItem
 {
+    /// <summary>
+    /// Gets or sets the title.
+    /// </summary>
     public required string Title { get; init; }
 
     /// <summary>Empty when this item only groups <see cref="Children"/> and is not itself a link.</summary>
@@ -22,13 +25,22 @@ public sealed class ForgeNavItem
     /// <summary>Quiet trailing number. <see cref="Badge"/> is the pill; this is the plain count.</summary>
     public int? Count { get; init; }
 
+    /// <summary>
+    /// Gets or sets the badge.
+    /// </summary>
     public string? Badge { get; init; }
 
+    /// <summary>
+    /// Gets or sets the badge CSS class.
+    /// </summary>
     public string BadgeCssClass { get; init; } = "text-bg-secondary";
 
     /// <summary>Rendered after the title. Use this for a count that changes while the page is open. Static text uses <see cref="Badge"/>.</summary>
     public Type? BadgeComponent { get; init; }
 
+    /// <summary>
+    /// Gets or sets the badge parameters.
+    /// </summary>
     public IDictionary<string, object>? BadgeParameters { get; init; }
 
     /// <summary>When true, the link is only active on an exact path match.</summary>

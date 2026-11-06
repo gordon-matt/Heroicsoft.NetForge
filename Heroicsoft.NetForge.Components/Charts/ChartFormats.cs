@@ -11,11 +11,23 @@ namespace Heroicsoft.NetForge.Components.Charts;
 /// </remarks>
 public static class ChartFormats
 {
+    /// <summary>
+    /// The number constant.
+    /// </summary>
     public const string Number = "number";
 
+    /// <summary>
+    /// The integer constant.
+    /// </summary>
     public const string Integer = "integer";
 
+    /// <summary>
+    /// The currency constant.
+    /// </summary>
     public const string Currency = "currency";
 
+    /// <summary>
+    /// The percent constant.
+    /// </summary>
     public const string Percent = "percent";
 }
