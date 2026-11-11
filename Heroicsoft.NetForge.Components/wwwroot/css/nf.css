@@ -803,6 +803,15 @@ kbd {
 .nf-markdown p { margin: 0.4rem 0 0.7rem; }
 .nf-markdown pre { padding: 0.75rem; overflow: auto; background: var(--nf-surface-2); border-radius: var(--nf-radius-small); }
 .nf-markdown code { font-size: 12.5px; }
+.nf-markdown-editor { overflow: hidden; border: 1px solid var(--nf-border); border-radius: var(--nf-radius); background: var(--nf-surface); }
+.nf-markdown-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.3rem 0.4rem; border-bottom: 1px solid var(--nf-border); background: var(--nf-surface-2); }
+.nf-markdown-tabs, .nf-markdown-tools { display: flex; flex-wrap: wrap; gap: 0.15rem; }
+.nf-markdown-tab { border: 0; background: transparent; color: var(--nf-muted); border-radius: var(--nf-radius-small); padding: 0.25rem 0.6rem; cursor: pointer; }
+.nf-markdown-tab.is-active { background: var(--nf-surface); color: var(--nf-text); }
+.nf-markdown-tools .nf-icon-button { width: 30px; height: 30px; }
+.nf-markdown-input { display: block; margin: 0; border: 0; border-radius: 0; min-height: 12rem; resize: vertical; }
+.nf-markdown-editor .nf-markdown-input:focus { box-shadow: none; }
+.nf-markdown-preview { min-height: 12rem; margin: 0; padding: 1rem 1.1rem; }
 
 /* ---------- Empty state ---------- */
 

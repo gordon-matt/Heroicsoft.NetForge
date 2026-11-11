@@ -1,0 +1,44 @@
+<div class="nf-markdown-editor">
+    <div class="nf-markdown-toolbar" role="toolbar" aria-label="Formatting">
+        <div class="nf-markdown-tabs" role="tablist">
+            <button type="button" role="tab" class="nf-markdown-tab @(previewing ? null : "is-active")" aria-selected="@(!previewing)" @onclick="() => previewing = false">Write</button>
+            <button type="button" role="tab" class="nf-markdown-tab @(previewing ? "is-active" : null)" aria-selected="@previewing" @onclick="() => previewing = true">Preview</button>
+        </div>
+        @if (!previewing)
+        {
+            <div class="nf-markdown-tools">
+                <button type="button" class="nf-icon-button" title="Heading" aria-label="Heading" @onclick="@(() => PrefixAsync("## "))"><strong>H</strong></button>
+                <button type="button" class="nf-icon-button" title="Bold" aria-label="Bold" @onclick="@(() => WrapAsync("**", "**", "bold text"))"><strong>B</strong></button>
+                <button type="button" class="nf-icon-button" title="Italic" aria-label="Italic" @onclick="@(() => WrapAsync("_", "_", "italic text"))"><em>I</em></button>
+                <button type="button" class="nf-icon-button" title="Link" aria-label="Link" @onclick="@(() => WrapAsync("[", "](https://)", "link text"))"><Icon Name="link" Size="16" /></button>
+                <button type="button" class="nf-icon-button" title="Quote" aria-label="Quote" @onclick="@(() => PrefixAsync("> "))"><span aria-hidden="true">❝</span></button>
+                <button type="button" class="nf-icon-button" title="List" aria-label="List" @onclick="@(() => PrefixAsync("- "))"><Icon Name="menu" Size="16" /></button>
+                <button type="button" class="nf-icon-button" title="Code" aria-label="Code" @onclick="@(() => WrapAsync("`", "`", "code"))"><Icon Name="code" Size="16" /></button>
+                @ToolbarExtra
+            </div>
+        }
+    </div>
+
+    @if (previewing)
+    {
+        <div class="nf-markdown-preview">
+            @if (Preview is not null)
+            {
+                @Preview(Value)
+            }
+            else if (string.IsNullOrWhiteSpace(Value))
+            {
+                <p class="nf-muted">Nothing to preview yet.</p>
+            }
+            else
+            {
+                <pre class="nf-markdown">@Value</pre>
+            }
+        </div>
+    }
+    else
+    {
+        <textarea @ref="textarea" class="nf-textarea nf-textarea-code nf-markdown-input" aria-label="@AriaLabel"
+                  value="@Value" @onchange="ChangedAsync" rows="@Rows" placeholder="@Placeholder"></textarea>
+    }
+</div>
