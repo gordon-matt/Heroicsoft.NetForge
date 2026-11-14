@@ -6,7 +6,7 @@ Shared building blocks for the self-hosted MVC and Blazor apps. Authentication, 
 
 | Package | What it replaces |
 | --- | --- |
-| `Heroicsoft.NetForge.Abstractions` | `AuthProvider`, `IUserContextService`, `BootswatchThemes`, `AppVersion`, `DatabaseProviders`, setup status, nav models |
+| `Heroicsoft.NetForge.Abstractions` | `AuthProvider`, `IUserContextService`, `BootswatchThemes`, `AppVersion`, `DatabaseProviders`, `IServiceCollectionBuilder`, setup status, nav models |
 | `Heroicsoft.NetForge.Results` | `ResultExtensions` (`To<T>`, `GetDisplayMessage`) |
 | `Heroicsoft.NetForge.Authentication` | Identity / Keycloak / None registration, Keycloak back-channel and role mapping, `/auth/login`, setup redirect |
 | `Heroicsoft.NetForge.Components` | Shared services (toasts, dialogs, sidebar refresh, paging maths, shell options) plus the `nf-` styled shell, dialogs, toasts, pager, empty states, router, and light/dark toggle. No Bootstrap. |

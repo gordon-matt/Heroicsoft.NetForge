@@ -17,6 +17,8 @@ None.
 
 ## Reverse dependencies
 
+- `Components\WebFilez` - Heroicsoft.NetForge.Abstractions (ProjectReference from `WebFilez.Core`)
+- `Libraries\Pickstack` - Heroicsoft.NetForge.Abstractions (ProjectReference from `Pickstack`)
 - `Libraries\IdentityNexus` - Heroicsoft.NetForge.Components 1.1.0 (NuGet PackageReference)
 - `Libraries\LogVue` - Heroicsoft.NetForge.Components 1.1.1 (NuGet PackageReference)
 - `SelfHosted\ArcaFS` - Heroicsoft.NetForge.Abstractions commented-out package 1.0.3-beta (ProjectReference); Heroicsoft.NetForge.Authentication commented-out package 1.0.3-beta (ProjectReference); Heroicsoft.NetForge.Components commented-out package 1.0.3-beta (ProjectReference); Heroicsoft.NetForge.Hangfire commented-out package 1.0.3-beta (ProjectReference); Heroicsoft.NetForge.Results commented-out package 1.0.3-beta (ProjectReference)
