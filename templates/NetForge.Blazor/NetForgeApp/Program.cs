@@ -1,3 +1,4 @@
+using Heroicsoft.NetForge.Components;
 using LogVue;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -84,7 +85,8 @@ app.UseForwardedHeaders(forwardedHeaders);
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.MapStaticAssets();
+app.MapStaticAssets();
+app.MapNetForgeAssets();
 
 app.UseAntiforgery();
 
