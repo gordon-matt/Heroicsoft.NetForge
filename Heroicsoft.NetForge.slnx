@@ -18,4 +18,5 @@
   <Project Path="Heroicsoft.NetForge.Hangfire/Heroicsoft.NetForge.Hangfire.csproj" />
   <Project Path="Heroicsoft.NetForge.Results/Heroicsoft.NetForge.Results.csproj" />
   <Project Path="Heroicsoft.NetForge.Video/Heroicsoft.NetForge.Video.csproj" />
+  <Project Path="Heroicsoft.NetForge.WebAssets/Heroicsoft.NetForge.WebAssets.csproj" />
 </Solution>

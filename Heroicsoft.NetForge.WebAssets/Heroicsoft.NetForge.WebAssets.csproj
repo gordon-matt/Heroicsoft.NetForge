@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<RootNamespace>Heroicsoft.NetForge.WebAssets</RootNamespace>
+		<Description>Serves a library's wwwroot from the assembly at the usual _content path, for hosts that load the library without a compile-time reference.</Description>
+		<PackageTags>netforge;static-web-assets;embedded-resources;aspnetcore;razor-class-library</PackageTags>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="build\Heroicsoft.NetForge.WebAssets.targets" Pack="true" PackagePath="build" />
+	</ItemGroup>
+
+</Project>

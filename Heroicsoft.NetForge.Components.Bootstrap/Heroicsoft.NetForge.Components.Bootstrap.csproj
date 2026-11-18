@@ -7,6 +7,8 @@
 		<PackageTags>netforge;blazor;razor;components;bootstrap;bootswatch;ui;dialogs;toasts;theming</PackageTags>
 	</PropertyGroup>
 
+	<Import Project="..\Heroicsoft.NetForge.WebAssets\build\Heroicsoft.NetForge.WebAssets.targets" />
+
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>

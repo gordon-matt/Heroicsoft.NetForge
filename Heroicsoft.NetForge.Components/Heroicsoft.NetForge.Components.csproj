@@ -11,9 +11,12 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 
+	<Import Project="..\Heroicsoft.NetForge.WebAssets\build\Heroicsoft.NetForge.WebAssets.targets" />
+
 	<ItemGroup>
 		<ProjectReference Include="..\Heroicsoft.NetForge.Abstractions\Heroicsoft.NetForge.Abstractions.csproj" />
 		<ProjectReference Include="..\Heroicsoft.NetForge.Results\Heroicsoft.NetForge.Results.csproj" />
+		<ProjectReference Include="..\Heroicsoft.NetForge.WebAssets\Heroicsoft.NetForge.WebAssets.csproj" />
 	</ItemGroup>
 
 </Project>

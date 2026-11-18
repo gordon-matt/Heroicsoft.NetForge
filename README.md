@@ -14,6 +14,7 @@ Shared building blocks for the self-hosted MVC and Blazor apps. Authentication, 
 | `Heroicsoft.NetForge.Hangfire` | Administrator-only Hangfire dashboard filter |
 | `Heroicsoft.NetForge.Drawing` | Resize, crop, rotate, transcode, and difference-hash for thumbnails and other rasters. SkiaSharp, not ImageSharp |
 | `Heroicsoft.NetForge.Video` | FFmpeg bootstrap, frame capture, max-size shrink, height downscale, integrity check, and PCM-to-AAC. Xabe.FFmpeg |
+| `Heroicsoft.NetForge.WebAssets` | Embeds a library's `wwwroot` and serves it at `/_content/{AssemblyName}/` when the host did not reference that library at compile time |
 
 ## New app
 
