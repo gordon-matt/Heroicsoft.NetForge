@@ -39,7 +39,7 @@
 }
 else if (Top)
 {
-    <li class="nav-item">
+    <li class="nav-item" @onpointerenter="OnPointerEnter">
         @if (HasChildren)
         {
             <div class="bf-nav-group @(Open ? "is-open" : null)">
@@ -53,7 +53,10 @@ else if (Top)
                 </button>
                 @if (Open)
                 {
-                    <div class="bf-menu-scrim" @onclick="Close"></div>
+                    @if (!UsesMenuBar)
+                    {
+                        <div class="bf-menu-scrim" @onclick="Close"></div>
+                    }
                     <ul class="dropdown-menu show" role="menu">
                         @foreach (var child in Item.Children)
                         {

@@ -159,7 +159,7 @@ public static class BootstrapNetForgeMenuHtml
             html.Append("<details class=\"bf-nav-group\">");
             html.Append(inDropdown ? "<summary class=\"dropdown-item" : "<summary class=\"nav-link");
             AppendActive(html, ForgeNavMatch.IsInBranch(item, requestPath));
-            html.Append("\">");
+            html.Append(inDropdown ? "\">" : "\" aria-haspopup=\"menu\" aria-expanded=\"false\">");
 
             if (!heading)
             {

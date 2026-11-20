@@ -4,7 +4,12 @@
 {
     @if (IsTop)
     {
-        <nav class="bf-shared-menu is-top" role="@(Landmark ? null : "presentation")" aria-label="@(Landmark ? AriaLabel : null)">
+        <CascadingValue Value="Bar" IsFixed="true">
+        <nav class="bf-shared-menu is-top" role="@(Landmark ? null : "presentation")" aria-label="@(Landmark ? AriaLabel : null)" @onkeydown="OnBarKeyDown">
+            @if (Bar.IsActive)
+            {
+                <div class="bf-menu-scrim" @onclick="CloseBar"></div>
+            }
             <details class="bf-shared-collapse">
                 <summary class="bf-shared-collapse-toggle" aria-label="Menu">
                     <i class="bi bi-list" aria-hidden="true"></i>
@@ -27,6 +32,7 @@
                 </ul>
             </details>
         </nav>
+        </CascadingValue>
     }
     else
     {

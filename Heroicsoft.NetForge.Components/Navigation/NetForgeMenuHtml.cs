@@ -158,7 +158,7 @@ public static class NetForgeMenuHtml
             html.Append("<details class=\"nf-nav-group\">");
             html.Append(inDropdown ? "<summary class=\"nf-menu-item" : "<summary class=\"nf-nav-link");
             AppendActive(html, ForgeNavMatch.IsInBranch(item, requestPath));
-            html.Append("\">");
+            html.Append(inDropdown ? "\">" : "\" aria-haspopup=\"menu\" aria-expanded=\"false\">");
 
             if (!heading)
             {

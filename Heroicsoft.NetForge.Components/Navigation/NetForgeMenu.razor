@@ -4,7 +4,12 @@
 {
     @if (IsTop)
     {
-        <nav class="nf-shared-menu is-top" role="@(Landmark ? null : "presentation")" aria-label="@(Landmark ? AriaLabel : null)">
+        <CascadingValue Value="Bar" IsFixed="true">
+        <nav class="nf-shared-menu is-top" role="@(Landmark ? null : "presentation")" aria-label="@(Landmark ? AriaLabel : null)" @onkeydown="OnBarKeyDown">
+            @if (Bar.IsActive)
+            {
+                <div class="nf-menu-scrim" @onclick="CloseBar"></div>
+            }
             <details class="nf-shared-collapse">
                 <summary class="nf-shared-collapse-toggle" aria-label="Menu">
                     <Icon Name="menu" />
@@ -27,6 +32,7 @@
                 </ul>
             </details>
         </nav>
+        </CascadingValue>
     }
     else
     {

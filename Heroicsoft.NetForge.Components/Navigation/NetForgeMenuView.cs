@@ -4,6 +4,7 @@ using Heroicsoft.NetForge.Components.Theming;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Options;
 
 namespace Heroicsoft.NetForge.Components.Navigation;
@@ -11,6 +12,8 @@ namespace Heroicsoft.NetForge.Components.Navigation;
 /// <summary>Loads one menu for both component packages. The razor file only chooses the markup.</summary>
 public abstract class NetForgeMenuView : ComponentBase, IDisposable
 {
+    private readonly NetForgeMenuBar bar = new();
+
     /// <summary>
     /// Gets or sets the catalog.
     /// </summary>
@@ -80,8 +83,15 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
     /// <summary>Site path plus query, so a menu hosted under another app's base href still matches root links.</summary>
     protected string Path { get; private set; } = "/";
 
+    /// <summary>One open dropdown for the top-level items. A side menu does not use it.</summary>
+    protected NetForgeMenuBar Bar => bar;
+
     /// <inheritdoc/>
-    protected override void OnInitialized() => Navigation.LocationChanged += OnLocationChanged;
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += OnLocationChanged;
+        bar.Changed += OnBarChanged;
+    }
 
     /// <inheritdoc/>
     protected override async Task OnParametersSetAsync() => await LoadAsync();
@@ -124,9 +134,25 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
         return uri.PathAndQuery;
     }
 
+    /// <summary>Closes the open top-level dropdown.</summary>
+    protected void CloseBar() => bar.Close();
+
+    /// <summary>Escape closes the open dropdown and leaves the bar idle.</summary>
+    /// <param name="args">The key event.</param>
+    protected void OnBarKeyDown(KeyboardEventArgs args)
+    {
+        if (args.Key == "Escape")
+        {
+            bar.Close();
+        }
+    }
+
+    private void OnBarChanged() => _ = InvokeAsync(StateHasChanged);
+
     private void OnLocationChanged(object? sender, LocationChangedEventArgs args) =>
         InvokeAsync(async () =>
         {
+            bar.Close();
             await LoadAsync();
             StateHasChanged();
         });
@@ -134,5 +160,9 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
     /// <summary>
     /// Releases the resources used by this instance.
     /// </summary>
-    public void Dispose() => Navigation.LocationChanged -= OnLocationChanged;
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+        bar.Changed -= OnBarChanged;
+    }
 }

@@ -337,6 +337,9 @@ public class NetForgeMenuTests
 
         Assert.Contains("nf-shared-topnav", top, StringComparison.Ordinal);
         Assert.Contains("Work", top, StringComparison.Ordinal);
+        Assert.Contains("aria-haspopup=\"menu\"", top, StringComparison.Ordinal);
+        Assert.Contains("aria-expanded=\"false\"", top, StringComparison.Ordinal);
+        Assert.DoesNotContain("aria-haspopup", html, StringComparison.Ordinal);
     }
 
     [Fact]

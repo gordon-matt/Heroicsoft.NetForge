@@ -358,6 +358,17 @@ kbd {
 }
 .nf-shared-collapse > summary.nf-shared-collapse-toggle { display: none; }
 
+/* The open dropdown's scrim covers the page. The bar itself stays above that scrim so the pointer can reach the next top-level item. */
+.nf-shared-menu.is-top .nf-shared-collapse { position: relative; z-index: 46; }
+.nf-shared-topnav .nf-nav-group.is-open > .nf-menu-list.is-start::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: 0.3rem;
+}
+
 /* A closed disclosure does not paint its contents, and the hamburger is hidden on a wide
    screen, so the top menu would otherwise be an empty bar. */
 @media (min-width: 861px) {

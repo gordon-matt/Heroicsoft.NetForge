@@ -479,6 +479,9 @@ body:has(.bf-shell) {
 .bf-shared-topnav .dropdown-menu { z-index: 1001; }
 .bf-shared-collapse > summary.bf-shared-collapse-toggle { display: none; }
 
+/* The open dropdown's scrim covers the page. The bar itself stays above that scrim so the pointer can reach the next top-level item. */
+.bf-shared-menu.is-top .bf-shared-collapse { position: relative; z-index: 1002; }
+
 /* A closed disclosure does not paint its contents, and the hamburger is hidden on a wide
    screen, so the top menu would otherwise be an empty bar. */
 @media (min-width: 768px) {
