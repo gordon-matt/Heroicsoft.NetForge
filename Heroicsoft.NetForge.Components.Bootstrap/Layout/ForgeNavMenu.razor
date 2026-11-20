@@ -16,12 +16,12 @@
 }
 else
 {
-    <li class="nav-item dropdown">
+    <li class="nav-item dropdown" @onpointerenter="OnPointerEnter" @onkeydown="OnKeyDown">
         <button type="button" class="nav-link dropdown-toggle @(AnyCurrent ? "active" : null)"
-                data-bs-toggle="dropdown" aria-expanded="false">
+                aria-haspopup="menu" aria-expanded="@Open" @onclick="Toggle">
             @Section.Heading
         </button>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu @(Open ? "show" : null)">
             @foreach (var item in Section.Items)
             {
                 @if (string.IsNullOrEmpty(item.Roles))

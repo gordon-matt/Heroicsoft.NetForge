@@ -6,7 +6,7 @@
     {
         <CascadingValue Value="Bar" IsFixed="true">
         <nav class="nf-shared-menu is-top" role="@(Landmark ? null : "presentation")" aria-label="@(Landmark ? AriaLabel : null)" @onkeydown="OnBarKeyDown">
-            @if (Bar.IsActive)
+            @if (OwnsBar && Bar.IsActive)
             {
                 <div class="nf-menu-scrim" @onclick="CloseBar"></div>
             }

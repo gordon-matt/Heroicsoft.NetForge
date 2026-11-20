@@ -28,16 +28,22 @@
         </button>
     }
 
-    @if (SharedMenuAfterSections)
+    @if (menuBar.IsActive)
     {
-        @HostSections
-        @SharedMenus
+        <div class="bf-menu-scrim" @onclick="menuBar.Close"></div>
     }
-    else
-    {
-        @SharedMenus
-        @HostSections
-    }
+    <CascadingValue Value="menuBar" IsFixed="true">
+        @if (SharedMenuAfterSections)
+        {
+            @HostSections
+            @SharedMenus
+        }
+        else
+        {
+            @SharedMenus
+            @HostSections
+        }
+    </CascadingValue>
 
     @if (ShowSearch)
     {

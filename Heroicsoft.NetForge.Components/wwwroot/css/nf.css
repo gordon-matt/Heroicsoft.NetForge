@@ -460,6 +460,7 @@ kbd {
 }
 
 .nf-topnav .nf-menu-list.is-start { left: 0; right: auto; }
+.nf-topbar .nf-topnav { position: relative; z-index: 46; }
 
 .nf-shell-topnav .nf-topnav-toggle { display: none; }
 

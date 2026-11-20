@@ -16,16 +16,19 @@
 }
 else
 {
-    <li class="nf-nav-item">
+    <li class="nf-nav-item" @onpointerenter="OnPointerEnter">
         <div class="nf-menu" @onkeydown="OnKeyDown">
             <button type="button" class="nf-nav-link nf-menu-toggle @(AnyCurrent ? "active" : null)"
-                    aria-haspopup="menu" aria-expanded="@open" @onclick="Toggle">
+                    aria-haspopup="menu" aria-expanded="@Open" @onclick="Toggle">
                 <span class="nf-nav-label">@Section.Heading</span>
                 <Icon Name="chevron-down" Size="14" />
             </button>
-            @if (open)
+            @if (Open)
             {
-                <div class="nf-menu-scrim" @onclick="Close"></div>
+                @if (MenuBar is null)
+                {
+                    <div class="nf-menu-scrim" @onclick="Close"></div>
+                }
                 <div class="nf-menu-list is-start" role="menu">
                     @foreach (var item in Section.Items)
                     {

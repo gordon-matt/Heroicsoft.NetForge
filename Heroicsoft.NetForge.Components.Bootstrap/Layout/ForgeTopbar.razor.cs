@@ -1,5 +1,6 @@
 using Heroicsoft.NetForge.Abstractions.Auth;
 using Heroicsoft.NetForge.Abstractions.Navigation;
+using Heroicsoft.NetForge.Components.Navigation;
 using Microsoft.AspNetCore.Components;
 
 namespace Heroicsoft.NetForge.Components.Bootstrap.Layout;
@@ -7,8 +8,9 @@ namespace Heroicsoft.NetForge.Components.Bootstrap.Layout;
 /// <summary>
 /// Represents the forge topbar.
 /// </summary>
-public partial class ForgeTopbar
+public partial class ForgeTopbar : IDisposable
 {
+    private readonly NetForgeMenuBar menuBar = new();
     [Inject]
     private IAuthProviderService Auth { get; set; } = default!;
 
@@ -157,5 +159,19 @@ public partial class ForgeTopbar
         }
     }
 
+    /// <inheritdoc/>
+    protected override void OnInitialized()
+    {
+        menuBar.Changed += OnMenuBarChanged;
+        base.OnInitialized();
+    }
+
+    private void OnMenuBarChanged() => _ = InvokeAsync(StateHasChanged);
+
     private Task SubmitSearch() => OnSearch.InvokeAsync(searchTerm.Trim());
+
+    /// <summary>
+    /// Releases the resources used by this instance.
+    /// </summary>
+    public void Dispose() => menuBar.Changed -= OnMenuBarChanged;
 }

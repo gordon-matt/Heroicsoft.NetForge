@@ -1,6 +1,8 @@
 using Heroicsoft.NetForge.Abstractions.Navigation;
+using Heroicsoft.NetForge.Components.Navigation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace Heroicsoft.NetForge.Components.Layout;
 
@@ -17,6 +19,10 @@ public partial class ForgeNavLink : IDisposable
     /// </summary>
     [Parameter, EditorRequired]
     public ForgeNavItem Item { get; set; } = default!;
+
+    /// <summary>Present on a shell top-bar link, so hovering it hides an open dropdown without disarming the bar.</summary>
+    [CascadingParameter]
+    private NetForgeMenuBar? MenuBar { get; set; }
 
     private bool UsesQuery => Item.ActiveQuery is not null || Item.ActivePaths is not null;
 
@@ -65,6 +71,16 @@ public partial class ForgeNavLink : IDisposable
         {
             Navigation.LocationChanged += OnLocationChanged;
         }
+    }
+
+    private void OnPointerEnter(PointerEventArgs args)
+    {
+        if (MenuBar is null || !string.Equals(args.PointerType, "mouse", StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        MenuBar.Hover(null);
     }
 
     private void OnLocationChanged(object? sender, LocationChangedEventArgs args) => InvokeAsync(StateHasChanged);

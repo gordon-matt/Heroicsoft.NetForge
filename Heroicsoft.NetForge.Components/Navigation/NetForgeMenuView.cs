@@ -12,7 +12,12 @@ namespace Heroicsoft.NetForge.Components.Navigation;
 /// <summary>Loads one menu for both component packages. The razor file only chooses the markup.</summary>
 public abstract class NetForgeMenuView : ComponentBase, IDisposable
 {
-    private readonly NetForgeMenuBar bar = new();
+    private readonly NetForgeMenuBar ownedBar = new();
+    private NetForgeMenuBar? subscribed;
+
+    /// <summary>The top bar's bar, when this menu sits in the shell beside other top-level items.</summary>
+    [CascadingParameter]
+    protected NetForgeMenuBar? SharedBar { get; set; }
 
     /// <summary>
     /// Gets or sets the catalog.
@@ -84,13 +89,29 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
     protected string Path { get; private set; } = "/";
 
     /// <summary>One open dropdown for the top-level items. A side menu does not use it.</summary>
-    protected NetForgeMenuBar Bar => bar;
+    protected NetForgeMenuBar Bar => SharedBar ?? ownedBar;
+
+    /// <summary>False when the shell top bar owns the bar and draws the backdrop.</summary>
+    protected bool OwnsBar => SharedBar is null;
 
     /// <inheritdoc/>
-    protected override void OnInitialized()
+    protected override void OnInitialized() => Navigation.LocationChanged += OnLocationChanged;
+
+    /// <inheritdoc/>
+    protected override void OnParametersSet()
     {
-        Navigation.LocationChanged += OnLocationChanged;
-        bar.Changed += OnBarChanged;
+        if (ReferenceEquals(subscribed, Bar))
+        {
+            return;
+        }
+
+        if (subscribed is not null)
+        {
+            subscribed.Changed -= OnBarChanged;
+        }
+
+        subscribed = Bar;
+        subscribed.Changed += OnBarChanged;
     }
 
     /// <inheritdoc/>
@@ -135,7 +156,7 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
     }
 
     /// <summary>Closes the open top-level dropdown.</summary>
-    protected void CloseBar() => bar.Close();
+    protected void CloseBar() => Bar.Close();
 
     /// <summary>Escape closes the open dropdown and leaves the bar idle.</summary>
     /// <param name="args">The key event.</param>
@@ -143,7 +164,7 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
     {
         if (args.Key == "Escape")
         {
-            bar.Close();
+            Bar.Close();
         }
     }
 
@@ -152,7 +173,7 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
     private void OnLocationChanged(object? sender, LocationChangedEventArgs args) =>
         InvokeAsync(async () =>
         {
-            bar.Close();
+            Bar.Close();
             await LoadAsync();
             StateHasChanged();
         });
@@ -163,6 +184,9 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
     public void Dispose()
     {
         Navigation.LocationChanged -= OnLocationChanged;
-        bar.Changed -= OnBarChanged;
+        if (subscribed is not null)
+        {
+            subscribed.Changed -= OnBarChanged;
+        }
     }
 }
