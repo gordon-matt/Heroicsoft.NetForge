@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Heroicsoft.NetForge.Components.Bootstrap;
 
 /// <summary>
-/// Provides extension methods for bootstrap service collections.
+/// Registers Bootstrap shell options on an <see cref="IServiceCollection"/>.
 /// </summary>
 public static class BootstrapServiceCollectionExtensions
 {
@@ -13,6 +13,11 @@ public static class BootstrapServiceCollectionExtensions
     /// dialog, and sidebar-refresh services. Use this instead of <c>AddNetForgeComponents</c> in
     /// apps built on Bootstrap and Bootswatch.
     /// </summary>
+    /// <param name="services">The service collection to add the registration to.</param>
+    /// <param name="configure">
+    /// Sets <see cref="ForgeBootstrapOptions"/> at startup. <see langword="null"/> registers the options without extra configuration.
+    /// </param>
+    /// <returns>The same <paramref name="services"/> instance, so calls can be chained.</returns>
     public static IServiceCollection AddNetForgeBootstrapComponents(
         this IServiceCollection services,
         Action<ForgeBootstrapOptions>? configure = null)

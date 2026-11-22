@@ -9,26 +9,29 @@ namespace Heroicsoft.NetForge.Authentication;
 /// </summary>
 public sealed class NetForgeAuthOptions
 {
-    /// <summary>
-    /// The section name constant.
-    /// </summary>
+    /// <summary>Name of the configuration section these options bind from, <c>Authentication</c>.</summary>
     public const string SectionName = "Authentication";
 
     /// <summary><see cref="AuthProviderNames.Identity"/>, <see cref="AuthProviderNames.Keycloak"/>, or <see cref="AuthProviderNames.None"/>.</summary>
     public string Provider { get; set; } = AuthProviderNames.Identity;
 
     /// <summary>
-    /// Gets or sets the administrator role.
+    /// Role name <see cref="HttpUserContextService"/> and <see cref="BlazorAwareUserContextService"/>
+    /// compare in <c>IsAdministrator</c>. Defaults to <see cref="WellKnownRoles.Administrator"/>.
+    /// <see cref="AuthProvider.None"/> grants this role to the synthetic user.
     /// </summary>
     public string AdministratorRole { get; set; } = WellKnownRoles.Administrator;
 
     /// <summary>
-    /// Gets or sets the user role.
+    /// Role name for an ordinary signed-in user. Defaults to <see cref="WellKnownRoles.User"/>.
+    /// <see cref="AuthProvider.None"/> grants this role to the synthetic user.
     /// </summary>
     public string UserRole { get; set; } = WellKnownRoles.User;
 
     /// <summary>
-    /// Gets or sets the access denied path.
+    /// Path assigned to the Keycloak cookie handler when access is denied. Also the redirect for a
+    /// failed Keycloak callback when <see cref="RemoteFailurePath"/> is <see langword="null"/>.
+    /// Defaults to <c>/access-denied</c>.
     /// </summary>
     public string AccessDeniedPath { get; set; } = "/access-denied";
 
@@ -39,7 +42,7 @@ public sealed class NetForgeAuthOptions
     public string? RemoteFailurePath { get; set; }
 
     /// <summary>
-    /// When false, the host keeps its own <c>/auth</c> controller. The NetForge controller is
+    /// When <see langword="false"/>, the host keeps its own <c>/auth</c> controller. The NetForge controller is
     /// removed even if the MVC SDK discovered it, because two controllers on that route make
     /// login ambiguous.
     /// </summary>
@@ -51,19 +54,13 @@ public sealed class NetForgeAuthOptions
     /// </summary>
     public bool RegisterUserContext { get; set; } = true;
 
-    /// <summary>
-    /// Gets or sets the identity.
-    /// </summary>
+    /// <summary>Password and sign-in options used when <see cref="Provider"/> is <see cref="AuthProviderNames.Identity"/>.</summary>
     public IdentityAuthOptions Identity { get; set; } = new();
 
-    /// <summary>
-    /// Gets or sets the none.
-    /// </summary>
+    /// <summary>Synthetic user used when <see cref="Provider"/> is <see cref="AuthProviderNames.None"/>.</summary>
     public NoneAuthOptions None { get; set; } = new();
 
-    /// <summary>
-    /// Gets or sets the keycloak.
-    /// </summary>
+    /// <summary>Keycloak settings used when <see cref="Provider"/> is <see cref="AuthProviderNames.Keycloak"/>.</summary>
     public KeycloakAuthOptions Keycloak { get; set; } = new();
 }
 
@@ -75,43 +72,51 @@ public sealed class NetForgeAuthOptions
 public sealed class IdentityAuthOptions
 {
     /// <summary>
-    /// When true, password rules are relaxed for a self-hosted single-user install. MVC apps
-    /// that already rely on the Identity defaults set this to false.
+    /// When <see langword="true"/>, the other properties on this type replace the Identity password,
+    /// user, and sign-in options for a self-hosted single-user install. MVC apps that already rely
+    /// on the Identity defaults set this to <see langword="false"/>, and those properties are then ignored.
     /// </summary>
     public bool UseRelaxedPasswordPolicy { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is require digit.
+    /// Whether a password must contain a digit. Copied onto Identity only when
+    /// <see cref="UseRelaxedPasswordPolicy"/> is <see langword="true"/>. Defaults to <see langword="false"/>.
     /// </summary>
     public bool RequireDigit { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is require lowercase.
+    /// Whether a password must contain a lowercase letter. Copied onto Identity only when
+    /// <see cref="UseRelaxedPasswordPolicy"/> is <see langword="true"/>. Defaults to <see langword="false"/>.
     /// </summary>
     public bool RequireLowercase { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is require uppercase.
+    /// Whether a password must contain an uppercase letter. Copied onto Identity only when
+    /// <see cref="UseRelaxedPasswordPolicy"/> is <see langword="true"/>. Defaults to <see langword="false"/>.
     /// </summary>
     public bool RequireUppercase { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is require non alphanumeric.
+    /// Whether a password must contain a character that is not a letter or digit. Copied onto Identity
+    /// only when <see cref="UseRelaxedPasswordPolicy"/> is <see langword="true"/>. Defaults to <see langword="false"/>.
     /// </summary>
     public bool RequireNonAlphanumeric { get; set; }
 
     /// <summary>
-    /// Gets or sets the required length.
+    /// Minimum password length. Copied onto Identity only when <see cref="UseRelaxedPasswordPolicy"/>
+    /// is <see langword="true"/>. Defaults to 6.
     /// </summary>
     public int RequiredLength { get; set; } = 6;
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is require unique email.
+    /// Whether each user must have a distinct email address. Copied onto Identity only when
+    /// <see cref="UseRelaxedPasswordPolicy"/> is <see langword="true"/>. Defaults to <see langword="false"/>.
     /// </summary>
     public bool RequireUniqueEmail { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is require confirmed account.
+    /// Whether sign-in requires a confirmed account. Copied onto Identity only when
+    /// <see cref="UseRelaxedPasswordPolicy"/> is <see langword="true"/>. Defaults to <see langword="false"/>.
     /// </summary>
     public bool RequireConfirmedAccount { get; set; }
 }
@@ -119,50 +124,42 @@ public sealed class IdentityAuthOptions
 /// <summary>The synthetic user created when <see cref="AuthProviderNames.None"/> is selected.</summary>
 public sealed class NoneAuthOptions
 {
-    /// <summary>
-    /// Gets or sets the user identifier.
-    /// </summary>
+    /// <summary>Name identifier of the synthetic user. Defaults to <c>_default</c>.</summary>
     public string UserId { get; set; } = "_default";
 
-    /// <summary>
-    /// Gets or sets the user name.
-    /// </summary>
+    /// <summary>Display name of the synthetic user. Defaults to <c>Default User</c>.</summary>
     public string UserName { get; set; } = "Default User";
 }
 
-/// <summary>
-/// Represents the keycloak auth options.
-/// </summary>
+/// <summary>Settings for OpenID Connect sign-in against Keycloak.</summary>
 public sealed class KeycloakAuthOptions
 {
     /// <summary>
-    /// Gets or sets the authority.
+    /// Browser-facing Keycloak authority URL. Registration throws <see cref="InvalidOperationException"/>
+    /// when the provider is Keycloak and this is blank.
     /// </summary>
     public string? Authority { get; set; }
 
-    /// <summary>
-    /// Gets or sets the client identifier.
-    /// </summary>
+    /// <summary>OpenID Connect client id sent to Keycloak.</summary>
     public string? ClientId { get; set; }
 
-    /// <summary>
-    /// Gets or sets the client secret.
-    /// </summary>
+    /// <summary>OpenID Connect client secret sent to Keycloak.</summary>
     public string? ClientSecret { get; set; }
 
     /// <summary>
-    /// Gets or sets the admin client identifier.
+    /// Optional client id for Keycloak admin calls made by the host. Authentication registration does not read this value.
     /// </summary>
     public string? AdminClientId { get; set; }
 
     /// <summary>
-    /// Gets or sets the admin client secret.
+    /// Optional client secret paired with <see cref="AdminClientId"/>. Authentication registration does not read this value.
     /// </summary>
     public string? AdminClientSecret { get; set; }
 
     /// <summary>
     /// Browser-facing origin written into the OIDC redirect URI when the app itself is reached
-    /// through a different host than the one it binds to.
+    /// through a different host than the one it binds to. Sign-out uses it as the origin of
+    /// <c>/signout-callback-oidc</c>.
     /// </summary>
     public string? PublicOrigin { get; set; }
 
@@ -172,36 +169,41 @@ public sealed class KeycloakAuthOptions
     /// </summary>
     public string? BackchannelBaseUrl { get; set; }
 
-    /// <summary>
-    /// Gets or sets the login path.
-    /// </summary>
+    /// <summary>Cookie login path. A challenge redirects here. Defaults to <c>/auth/login</c>.</summary>
     public string LoginPath { get; set; } = "/auth/login";
 
     /// <summary>
-    /// Gets or sets the cookie days.
+    /// Days until the authentication cookie expires. Values below 1 are treated as 1 day, and the
+    /// cookie uses sliding expiration. Defaults to 7.
     /// </summary>
     public int CookieDays { get; set; } = 7;
 
-    /// <summary>Blazor apps leave this true. HTTP Keycloak in Docker sets it false.</summary>
+    /// <summary>Blazor apps leave this <see langword="true"/>. HTTP Keycloak in Docker sets it <see langword="false"/>.</summary>
     public bool RequireHttpsMetadata { get; set; } = true;
 
     /// <summary>
-    /// Lax matches the Blazor apps. MVC apps behind a reverse proxy use None, because Keycloak's
-    /// cross-site POST callback would otherwise drop the correlation cookie.
+    /// <see cref="SameSiteMode.Lax"/> matches the Blazor apps. MVC apps behind a reverse proxy use
+    /// <see cref="SameSiteMode.None"/>, because Keycloak's cross-site POST callback would otherwise
+    /// drop the correlation cookie. The same value is applied to the nonce cookie.
     /// </summary>
     public SameSiteMode CorrelationCookieSameSite { get; set; } = SameSiteMode.Lax;
 
     /// <summary>
-    /// Gets or sets the correlation cookie secure policy.
+    /// Secure policy applied to the correlation cookie and the nonce cookie. Defaults to
+    /// <see cref="CookieSecurePolicy.SameAsRequest"/>.
     /// </summary>
     public CookieSecurePolicy CorrelationCookieSecurePolicy { get; set; } = CookieSecurePolicy.SameAsRequest;
 
     /// <summary>
     /// When discovery was fetched through the back-channel, send the browser to the public
-    /// authority instead of the internal host that discovery returned.
+    /// authority instead of the internal host that discovery returned. Has no effect when
+    /// <see cref="BackchannelBaseUrl"/> is <see langword="null"/> or blank.
     /// </summary>
     public bool RedirectBrowserToPublicAuthority { get; set; }
 
-    /// <summary>Runs after realm roles have been copied onto the principal. Used to provision a local user row.</summary>
+    /// <summary>
+    /// Runs after realm roles and the name identifier have been copied onto the principal.
+    /// Used to provision a local user row.
+    /// </summary>
     public Func<TokenValidatedContext, Task>? OnTokenValidated { get; set; }
 }

@@ -7,15 +7,26 @@ using Microsoft.AspNetCore.Components.Web;
 namespace Heroicsoft.NetForge.Components.Bootstrap.Layout;
 
 /// <summary>
-/// Represents the forge nav link.
+/// Renders one navigation link as a list item. External addresses open in a new tab with an
+/// external-link icon. Items that match a query or extra paths highlight themselves from the current
+/// address; other items use <see cref="NavLink"/>, with an exact match when
+/// <see cref="ForgeNavItem.MatchAll"/> is set and a prefix match otherwise. In the top bar, hovering
+/// the link closes an open dropdown.
 /// </summary>
+/// <remarks><see cref="ForgeNavItem.Children"/> are not rendered on this link.</remarks>
 public partial class ForgeNavLink : IDisposable
 {
     [Inject]
     private NavigationManager Navigation { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the item.
+    /// The link to render. <see cref="ForgeNavItem.Title"/> is the label, and
+    /// <see cref="ForgeNavItem.Tooltip"/> is the tooltip when it is not blank.
+    /// <see cref="ForgeNavItem.Icon"/> is a Bootstrap Icons class; a value without a <c>bi-</c> or
+    /// <c>bi </c> prefix gets <c>bi-</c> prepended. <see cref="ForgeNavItem.TagIcon"/> draws a filled
+    /// dot instead. <see cref="ForgeNavItem.External"/> opens a new tab.
+    /// <see cref="ForgeNavItem.Count"/> shows a trailing number, or <see cref="ForgeNavItem.Badge"/>
+    /// shows a pill using <see cref="ForgeNavItem.BadgeCssClass"/> when the count is not set.
     /// </summary>
     [Parameter, EditorRequired]
     public ForgeNavItem Item { get; set; } = default!;
@@ -36,7 +47,10 @@ public partial class ForgeNavLink : IDisposable
             ? Item.Icon
             : $"bi-{Item.Icon}";
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Subscribes to address changes when the item matches a query or extra paths, so the
+    /// <c>active</c> class updates from the current address.
+    /// </summary>
     protected override void OnInitialized()
     {
         if (UsesQuery)
@@ -58,7 +72,7 @@ public partial class ForgeNavLink : IDisposable
     private void OnLocationChanged(object? sender, LocationChangedEventArgs args) => InvokeAsync(StateHasChanged);
 
     /// <summary>
-    /// Releases the resources used by this instance.
+    /// Stops listening for address changes used to refresh the active state of query-matched links.
     /// </summary>
     public void Dispose() => Navigation.LocationChanged -= OnLocationChanged;
 }

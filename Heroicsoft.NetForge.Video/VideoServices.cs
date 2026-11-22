@@ -6,18 +6,12 @@ using Xabe.FFmpeg;
 namespace Heroicsoft.NetForge.Video;
 
 /// <summary>
-/// Represents the video frame service.
+/// Captures one JPEG frame from a video file.
 /// </summary>
+/// <param name="logger">Receives a warning when the snapshot fails and the method returns <see langword="false"/>.</param>
 public sealed class VideoFrameService(ILogger<VideoFrameService> logger) : IVideoFrameService
 {
-    /// <summary>
-    /// Attempts to capture jpeg.
-    /// </summary>
-    /// <param name="videoPath">The video path.</param>
-    /// <param name="outputJpegPath">The output jpeg path.</param>
-    /// <param name="at">The at.</param>
-    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result is true when the condition is met; otherwise, false.</returns>
+    /// <inheritdoc/>
     public async Task<bool> TryCaptureJpegAsync(
         string videoPath,
         string outputJpegPath,
@@ -56,8 +50,9 @@ public sealed class VideoFrameService(ILogger<VideoFrameService> logger) : IVide
 }
 
 /// <summary>
-/// Represents the video transcoder.
+/// Shrinks video into a named pixel box and turns rotated frames upright.
 /// </summary>
+/// <param name="logger">Receives the keep, shrink, and discard decisions, and warnings when an encode fails.</param>
 public sealed class VideoTranscoder(ILogger<VideoTranscoder> logger) : IVideoTranscoder
 {
     /// <summary>
@@ -66,12 +61,7 @@ public sealed class VideoTranscoder(ILogger<VideoTranscoder> logger) : IVideoTra
     /// </summary>
     private const int UprightCrf = 18;
 
-    /// <summary>
-    /// Gets the transcode to size.
-    /// </summary>
-    /// <param name="request">The request.</param>
-    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the video transcode result.</returns>
+    /// <inheritdoc/>
     public async Task<VideoTranscodeResult> TranscodeToSizeAsync(VideoSizeTranscodeRequest request, CancellationToken cancellationToken = default)
     {
         if (!VideoSizes.TryGetPixelSize(request.VideoSizeName, out int maxWidth, out int maxHeight)
@@ -412,12 +402,7 @@ public sealed class VideoTranscoder(ILogger<VideoTranscoder> logger) : IVideoTra
         return null;
     }
 
-    /// <summary>
-    /// Gets the downscale to max height.
-    /// </summary>
-    /// <param name="request">The request.</param>
-    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the string.</returns>
+    /// <inheritdoc/>
     public async Task<string> DownscaleToMaxHeightAsync(VideoDownscaleRequest request, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(request.FfmpegPath)
@@ -636,17 +621,12 @@ public sealed class VideoTranscoder(ILogger<VideoTranscoder> logger) : IVideoTra
 }
 
 /// <summary>
-/// Represents the video integrity service.
+/// Checks the first video stream by stream-copying it through ffmpeg.
 /// </summary>
+/// <param name="logger">Receives a warning when the check is skipped or the file fails.</param>
 public sealed class VideoIntegrityService(ILogger<VideoIntegrityService> logger) : IVideoIntegrityService
 {
-    /// <summary>
-    /// Verifies the value.
-    /// </summary>
-    /// <param name="ffmpegPath">The ffmpeg path.</param>
-    /// <param name="videoFilePath">The video file path.</param>
-    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the video integrity result.</returns>
+    /// <inheritdoc/>
     public async Task<VideoIntegrityResult> VerifyAsync(
         string? ffmpegPath,
         string videoFilePath,
@@ -706,16 +686,12 @@ public sealed class VideoIntegrityService(ILogger<VideoIntegrityService> logger)
 }
 
 /// <summary>
-/// Represents the pcm audio encoder.
+/// Concatenates headerless PCM chunks and encodes them as AAC.
 /// </summary>
+/// <param name="logger">Receives a debug message when the merged PCM file cannot be deleted.</param>
 public sealed class PcmAudioEncoder(ILogger<PcmAudioEncoder> logger) : IPcmAudioEncoder
 {
-    /// <summary>
-    /// Encodes the value.
-    /// </summary>
-    /// <param name="request">The request.</param>
-    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the pcm encode result.</returns>
+    /// <inheritdoc/>
     public async Task<PcmEncodeResult> EncodeAsync(PcmAudioEncodeRequest request, CancellationToken cancellationToken = default)
     {
         if (request.PcmChunkFiles.Count == 0)

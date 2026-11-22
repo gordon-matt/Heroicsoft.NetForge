@@ -6,37 +6,37 @@ namespace Heroicsoft.NetForge.Components.Tables;
 public partial class SortHeader
 {
     /// <summary>
-    /// Gets or sets the field.
+    /// Column name passed to <see cref="TableSort.Toggle"/>. Required. Compared ordinally with <see cref="TableSort.Field"/> to choose the arrow. The default is empty.
     /// </summary>
     [Parameter, EditorRequired]
     public string Field { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the sort.
+    /// The table's current sort. <see langword="null"/> leaves this column unsorted. When <see cref="Field"/> matches, the header shows the direction.
     /// </summary>
     [Parameter]
     public TableSort? Sort { get; set; }
 
     /// <summary>
-    /// Gets or sets the sort changed.
+    /// Raised with the next sort when the header is clicked. The same column flips direction. A different column, or a <see langword="null"/> sort, starts ascending.
     /// </summary>
     [Parameter]
     public EventCallback<TableSort?> SortChanged { get; set; }
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// The header label. <see langword="null"/> leaves the button text empty.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra classes on the header cell. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
     /// <summary>
-    /// Gets or sets the style.
+    /// Inline style on the header cell. <see langword="null"/> omits it.
     /// </summary>
     [Parameter]
     public string? Style { get; set; }

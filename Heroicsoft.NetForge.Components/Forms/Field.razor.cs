@@ -6,37 +6,37 @@ namespace Heroicsoft.NetForge.Components.Forms;
 public partial class Field
 {
     /// <summary>
-    /// Gets or sets the label.
+    /// Text of the label. Ignored when <see cref="LabelContent"/> is set. <see langword="null"/> or empty hides the label.
     /// </summary>
     [Parameter]
     public string? Label { get; set; }
 
     /// <summary>
-    /// Gets or sets the label content.
+    /// Markup for the label. When set, it replaces <see cref="Label"/>.
     /// </summary>
     [Parameter]
     public RenderFragment? LabelContent { get; set; }
 
     /// <summary>
-    /// Gets or sets the for.
+    /// <c>for</c> on the label, matching the control <c>id</c>. <see langword="null"/> omits it.
     /// </summary>
     [Parameter]
     public string? For { get; set; }
 
     /// <summary>
-    /// Gets or sets the label class.
+    /// Classes on the label. <see langword="null"/> omits the attribute.
     /// </summary>
     [Parameter]
     public string? LabelClass { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra classes on the field, after <c>nf-field</c>. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// The control and anything under the label. <see langword="null"/> renders only the label.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }

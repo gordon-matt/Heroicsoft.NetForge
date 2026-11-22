@@ -3,33 +3,23 @@ namespace Heroicsoft.NetForge.Abstractions.Auth;
 /// <summary>Who is making the current request, independent of which auth provider is active.</summary>
 public interface IUserContextService
 {
-    /// <summary>
-    /// Gets the current user identifier.
-    /// </summary>
-    /// <returns>The current user identifier.</returns>
+    /// <summary>Returns the current caller's user id, or <see langword="null"/> when the caller has none.</summary>
+    /// <returns>The user id, or <see langword="null"/>.</returns>
     string? GetCurrentUserId();
 
-    /// <summary>
-    /// Gets the current user name.
-    /// </summary>
-    /// <returns>The current user name.</returns>
+    /// <summary>Returns the current caller's display name, or <see langword="null"/> when the caller has none.</summary>
+    /// <returns>The display name, or <see langword="null"/>.</returns>
     string? GetCurrentUserName();
 
-    /// <summary>
-    /// Determines whether this instance is authenticated.
-    /// </summary>
-    /// <returns>true when the condition is met; otherwise, false.</returns>
+    /// <summary>Returns <see langword="true"/> when the current caller is signed in.</summary>
+    /// <returns><see langword="true"/> when the caller is signed in; otherwise <see langword="false"/>.</returns>
     bool IsAuthenticated();
 
-    /// <summary>
-    /// Determines whether this instance is administrator.
-    /// </summary>
-    /// <returns>true when the condition is met; otherwise, false.</returns>
+    /// <summary>Returns <see langword="true"/> when the current caller is an administrator.</summary>
+    /// <returns><see langword="true"/> when the caller is an administrator; otherwise <see langword="false"/>.</returns>
     bool IsAdministrator();
 
-    /// <summary>
-    /// Gets the role names.
-    /// </summary>
-    /// <returns>The role names.</returns>
+    /// <summary>Returns the current caller's role names. The list is empty when the caller has none.</summary>
+    /// <returns>Role names for the current caller.</returns>
     IReadOnlyList<string> GetRoleNames();
 }

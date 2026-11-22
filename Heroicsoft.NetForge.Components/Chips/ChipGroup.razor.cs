@@ -6,25 +6,25 @@ namespace Heroicsoft.NetForge.Components.Chips;
 public partial class ChipGroup
 {
     /// <summary>
-    /// Gets or sets the child content.
+    /// The chips. <see langword="null"/> renders an empty row.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra classes on the row. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
     /// <summary>
-    /// Gets or sets the style.
+    /// Inline style on the row. <see langword="null"/> omits it.
     /// </summary>
     [Parameter]
     public string? Style { get; set; }
 
     /// <summary>
-    /// Gets or sets the role.
+    /// ARIA role of the row. <see langword="null"/> omits it.
     /// </summary>
     [Parameter]
     public string? Role { get; set; }

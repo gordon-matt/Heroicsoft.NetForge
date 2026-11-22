@@ -7,84 +7,84 @@ namespace Heroicsoft.NetForge.Components.Forms;
 public partial class SearchField
 {
     /// <summary>
-    /// Gets or sets the value.
+    /// Text in the box. <see langword="null"/> shows an empty field.
     /// </summary>
     [Parameter]
     public string? Value { get; set; }
 
     /// <summary>
-    /// Gets or sets the value changed.
+    /// Raised on each keystroke with the field text. The argument is <see langword="null"/> when the input event has no value.
     /// </summary>
     [Parameter]
     public EventCallback<string?> ValueChanged { get; set; }
 
     /// <summary>
-    /// Gets or sets the placeholder.
+    /// Placeholder text. Also the accessible name when <see cref="AriaLabel"/> is <see langword="null"/>.
     /// </summary>
     [Parameter]
     public string? Placeholder { get; set; }
 
     /// <summary>
-    /// Gets or sets the aria label.
+    /// Accessible name of the field. <see langword="null"/> uses <see cref="Placeholder"/>, then <c>Search</c>.
     /// </summary>
     [Parameter]
     public string? AriaLabel { get; set; }
 
     /// <summary>
-    /// Gets or sets the identifier.
+    /// <c>id</c> of the input. <see langword="null"/> omits it.
     /// </summary>
     [Parameter]
     public string? Id { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra classes on the search wrapper. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
     /// <summary>
-    /// Gets or sets the input class.
+    /// Classes on the input. <see langword="null"/> omits them.
     /// </summary>
     [Parameter]
     public string? InputClass { get; set; }
 
     /// <summary>
-    /// Gets or sets the autocomplete.
+    /// <c>autocomplete</c> on the input. Defaults to <c>off</c>.
     /// </summary>
     [Parameter]
     public string Autocomplete { get; set; } = "off";
 
     /// <summary>
-    /// Gets or sets the submit text.
+    /// Label of the button after the field. <see langword="null"/> or empty hides the button.
     /// </summary>
     [Parameter]
     public string? SubmitText { get; set; }
 
     /// <summary>
-    /// Gets or sets the callback raised for the submit event.
+    /// Raised with no argument when the form is submitted. A delegate makes the control a form and cancels the browser submit. Without a delegate the control is a label and the button does not submit.
     /// </summary>
     [Parameter]
     public EventCallback OnSubmit { get; set; }
 
     /// <summary>
-    /// Gets or sets the callback raised for the key down event.
+    /// Raised with the key event when a key goes down in the field.
     /// </summary>
     [Parameter]
     public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
 
     /// <summary>
-    /// Gets or sets the callback raised for the key up event.
+    /// Raised with the key event when a key goes up in the field.
     /// </summary>
     [Parameter]
     public EventCallback<KeyboardEventArgs> OnKeyUp { get; set; }
 
     /// <summary>
-    /// Gets or sets the trailing.
+    /// Markup after the input, such as a shortcut hint. <see langword="null"/> renders nothing.
     /// </summary>
     [Parameter]
     public RenderFragment? Trailing { get; set; }
 
-    /// <summary>Marks the input so the slash key focuses it.</summary>
+    /// <summary>Marks the input so the slash key focuses it. Defaults to <see langword="false"/>.</summary>
     [Parameter]
     public bool Shortcut { get; set; }
 

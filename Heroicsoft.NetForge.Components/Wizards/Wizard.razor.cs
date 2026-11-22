@@ -11,43 +11,43 @@ public partial class Wizard
     private readonly List<WizardStep> steps = [];
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// The <see cref="WizardStep"/> components. Only the active step's panel is visible.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
-    /// Gets or sets the orientation.
+    /// Where the step list sits. Defaults to <see cref="WizardOrientation.Vertical"/>, down the side. <see cref="WizardOrientation.Horizontal"/> places it across the top.
     /// </summary>
     [Parameter]
     public WizardOrientation Orientation { get; set; } = WizardOrientation.Vertical;
 
     /// <summary>
-    /// Gets or sets the finish text.
+    /// Label of the button on the last step. Defaults to <c>Finish</c>. Earlier steps show Next.
     /// </summary>
     [Parameter]
     public string FinishText { get; set; } = "Finish";
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is busy.
+    /// Disables the step list and the Previous, Next, Finish, and Cancel buttons, and ignores navigation. Defaults to <see langword="false"/>.
     /// </summary>
     [Parameter]
     public bool Busy { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is show cancel.
+    /// Shows a Cancel button when <see cref="OnCancel"/> has a delegate. Defaults to <see langword="false"/>, which hides it.
     /// </summary>
     [Parameter]
     public bool ShowCancel { get; set; }
 
     /// <summary>
-    /// Gets or sets the callback raised for the cancel event.
+    /// Raised with no argument when Cancel is clicked. The button is hidden when this callback has no delegate.
     /// </summary>
     [Parameter]
     public EventCallback OnCancel { get; set; }
 
     /// <summary>
-    /// Gets or sets the callback raised for the finished event.
+    /// Raised with no argument when Finish is clicked, after the current step allows the move. Does not fire when <see cref="Busy"/> is <see langword="true"/> or the step's leaving callback returns <see langword="false"/>.
     /// </summary>
     [Parameter]
     public EventCallback OnFinished { get; set; }
@@ -60,7 +60,10 @@ public partial class Wizard
         return steps.Count - 1;
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Asks for another render after the first one, so steps that registered during that render appear in the step list.
+    /// </summary>
+    /// <param name="firstRender"><see langword="true"/> on the render that first builds the step list.</param>
     protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)

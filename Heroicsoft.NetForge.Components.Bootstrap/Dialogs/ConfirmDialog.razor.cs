@@ -3,8 +3,10 @@ using Heroicsoft.NetForge.Components.Dialogs;
 namespace Heroicsoft.NetForge.Components.Bootstrap.Dialogs;
 
 /// <summary>
-/// Represents the confirm dialog.
+/// Renders a centered Bootstrap modal that asks the user to confirm or cancel.
+/// Nothing is on screen until <see cref="ShowAsync"/> is called. Cancel and the close button answer no.
 /// </summary>
+/// <remarks>The backdrop does not close the dialog.</remarks>
 public partial class ConfirmDialog : IConfirmDialog
 {
     private bool isVisible;
@@ -19,6 +21,20 @@ public partial class ConfirmDialog : IConfirmDialog
     /// Shows the dialog and completes when the user answers. Awaiting the answer keeps the
     /// caller's logic in one place rather than split across an event handler.
     /// </summary>
+    /// <param name="title">Text in the modal header.</param>
+    /// <param name="message">Paragraph in the modal body.</param>
+    /// <param name="confirmLabel">Label of the confirm button. Defaults to <c>OK</c>.</param>
+    /// <param name="isDestructive">
+    /// When <see langword="true"/>, the confirm button uses <c>btn-danger</c>. When <see langword="false"/>,
+    /// the default, it uses <c>btn-primary</c>.
+    /// </param>
+    /// <param name="detail">
+    /// Secondary sentence under <paramref name="message"/>. <see langword="null"/> omits it.
+    /// </param>
+    /// <returns>
+    /// A task that completes with <see langword="true"/> when the confirm button is clicked, or
+    /// <see langword="false"/> when Cancel or the close button is clicked.
+    /// </returns>
     public Task<bool> ShowAsync(
         string title,
         string message,

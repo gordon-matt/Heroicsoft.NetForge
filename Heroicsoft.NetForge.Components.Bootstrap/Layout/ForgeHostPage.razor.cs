@@ -8,7 +8,9 @@ using Microsoft.Extensions.Options;
 namespace Heroicsoft.NetForge.Components.Bootstrap.Layout;
 
 /// <summary>
-/// Represents the forge host page.
+/// Renders the HTML document for a Bootstrap app: the Bootswatch stylesheet for the area's configured
+/// theme, Bootstrap Icons, forge styles, the Blazor script, and the Bootstrap bundle. A startup script
+/// then applies the theme saved in this browser.
 /// </summary>
 public partial class ForgeHostPage
 {
@@ -16,47 +18,51 @@ public partial class ForgeHostPage
     private IOptions<ForgeBootstrapOptions> UiOptions { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the title.
+    /// Text of the document <c>title</c>. Required.
     /// </summary>
     [Parameter, EditorRequired]
     public string Title { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the icon href.
+    /// Address of the favicon. <see langword="null"/> or blank omits the icon link.
     /// </summary>
     [Parameter]
     public string? IconHref { get; set; }
 
-    /// <summary>App stylesheet href, usually <c>@Assets["css/site.css"]</c> from the host.</summary>
+    /// <summary>
+    /// App stylesheet href, usually <c>@Assets["css/site.css"]</c> from the host.
+    /// <see langword="null"/> or blank omits the extra stylesheet.
+    /// </summary>
     [Parameter]
     public string? AppStylesheet { get; set; }
 
     /// <summary>
-    /// Gets or sets the page render mode.
+    /// Render mode of <see cref="Microsoft.AspNetCore.Components.Web.HeadOutlet"/>.
+    /// <see langword="null"/> uses interactive server rendering.
     /// </summary>
     [Parameter]
     public IComponentRenderMode? PageRenderMode { get; set; }
 
     /// <summary>
-    /// Gets or sets the additional head.
+    /// Markup at the end of <c>head</c>, before the import map. <see langword="null"/> adds nothing.
     /// </summary>
     [Parameter]
     public RenderFragment? AdditionalHead { get; set; }
 
     /// <summary>
-    /// Gets or sets the additional body.
+    /// Markup at the end of <c>body</c>, after the forge script. <see langword="null"/> adds nothing.
     /// </summary>
     [Parameter]
     public RenderFragment? AdditionalBody { get; set; }
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// Markup at the start of <c>body</c>, usually the router. <see langword="null"/> leaves the body to the scripts.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
-    /// Pins this document to an area. Null follows the route, or the first path segment when that
+    /// Pins this document to an area. <see langword="null"/> follows the route, or the first path segment when that
     /// name is listed in <see cref="ForgeBootstrapOptions.Areas"/>. An empty string is the public site.
     /// Set this when a library is mounted somewhere other than <c>/{area}</c>, for example
     /// IdentityNexus at <c>/identity</c> while it should use the Admin theme.
@@ -83,7 +89,7 @@ public partial class ForgeHostPage
 
     private string StorageKey => ThemeStorage.KeyFor(Ui.ThemeStorageKey, ResolvedArea);
 
-    /// <summary>Null leaves the attribute off the script, so the script follows the URL.</summary>
+    /// <summary><see langword="null"/> leaves the attribute off the script, so the script follows the URL.</summary>
     private string? PinnedArea => Area is null ? null : ThemeStorage.NormalizeArea(Area);
 
     private string? AreasAttribute => ThemeStorage.AreasAttribute(Ui.Areas);

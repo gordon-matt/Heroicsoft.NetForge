@@ -14,13 +14,13 @@ public abstract class NetForgeMenuNodeView : ComponentBase, IDisposable
     private bool disposed;
 
     /// <summary>
-    /// Gets or sets the item.
+    /// The link or submenu this node draws. Required.
     /// </summary>
     [Parameter, EditorRequired]
     public ForgeNavItem Item { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the path.
+    /// Current path and query. A change closes an open top-bar dropdown, and opens a side branch that contains the page. Defaults to <c>/</c>.
     /// </summary>
     [Parameter]
     public string Path { get; set; } = "/";
@@ -46,42 +46,30 @@ public abstract class NetForgeMenuNodeView : ComponentBase, IDisposable
     /// </summary>
     protected bool UsesMenuBar => Top && !InDropdown && MenuBar is not null;
 
-    /// <summary>
-    /// Gets a value indicating whether this instance is open.
-    /// </summary>
+    /// <summary><see langword="true"/> while this node's children are showing.</summary>
     protected bool Open => UsesMenuBar ? MenuBar!.IsOpen(barId) : open;
 
-    /// <summary>
-    /// Gets a value indicating whether this instance has children.
-    /// </summary>
+    /// <summary><see langword="true"/> when the item has child links.</summary>
     protected bool HasChildren => Item.Children is { Count: > 0 };
 
-    /// <summary>
-    /// Gets a value indicating whether this instance has href.
-    /// </summary>
+    /// <summary><see langword="true"/> when the item has an address. A side branch with an address shows that link beside a separate expand button.</summary>
     protected bool HasHref => !string.IsNullOrWhiteSpace(Item.Href);
 
-    /// <summary>
-    /// Gets a value indicating whether this instance is current.
-    /// </summary>
+    /// <summary><see langword="true"/> when this link is the current page.</summary>
     protected bool Current => ForgeNavMatch.IsCurrent(Item, Path);
 
-    /// <summary>
-    /// Gets a value indicating whether this instance is branch current.
-    /// </summary>
+    /// <summary><see langword="true"/> when this link or a nested child is the current page.</summary>
     protected bool BranchCurrent => ForgeNavMatch.IsInBranch(Item, Path);
 
-    /// <summary>
-    /// Gets the tip.
-    /// </summary>
+    /// <summary>Hover text. The item tooltip when it is set; otherwise the title.</summary>
     protected string Tip => string.IsNullOrWhiteSpace(Item.Tooltip) ? Item.Title : Item.Tooltip;
 
-    /// <summary>
-    /// Gets the expand label.
-    /// </summary>
+    /// <summary>Accessible name of the side-branch expand button: <c>Expand</c> plus the item title.</summary>
     protected string ExpandLabel => "Expand " + Item.Title;
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Opens a side branch that contains the current page and closes the others. Closes a top-bar dropdown that is open when the path changes.
+    /// </summary>
     protected override void OnParametersSet()
     {
         if (!string.Equals(appliedPath, Path, StringComparison.Ordinal))
@@ -125,9 +113,7 @@ public abstract class NetForgeMenuNodeView : ComponentBase, IDisposable
         open = !open;
     }
 
-    /// <summary>
-    /// Closes the value.
-    /// </summary>
+    /// <summary>Hides this node's children. A top-bar item also disarms the shared bar when this item was the open one.</summary>
     protected void Close()
     {
         if (UsesMenuBar)
@@ -165,9 +151,7 @@ public abstract class NetForgeMenuNodeView : ComponentBase, IDisposable
         }
     }
 
-    /// <summary>
-    /// Releases the resources used by this instance.
-    /// </summary>
+    /// <summary>Stops redrawing for the shared bar and closes this item's dropdown if it is the open one.</summary>
     public void Dispose()
     {
         disposed = true;

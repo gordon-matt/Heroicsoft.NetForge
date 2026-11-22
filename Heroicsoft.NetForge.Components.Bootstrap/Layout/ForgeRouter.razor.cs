@@ -4,48 +4,52 @@ using Microsoft.AspNetCore.Components;
 namespace Heroicsoft.NetForge.Components.Bootstrap.Layout;
 
 /// <summary>
-/// Represents the forge router.
+/// Renders the app router with authorization. A signed-in user who lacks the role sees
+/// <see cref="Heroicsoft.NetForge.Components.Bootstrap.Status.AccessDenied"/>. A signed-out user is
+/// sent to sign in. While authorization is running, <see cref="Heroicsoft.NetForge.Components.Bootstrap.Status.AuthorizingMessage"/>
+/// shows <see cref="AuthorizingText"/>. After navigation, focus moves to <see cref="FocusSelector"/>.
 /// </summary>
 public partial class ForgeRouter
 {
     /// <summary>
-    /// Gets or sets the app assembly.
+    /// Assembly whose routable components are discovered. Required.
     /// </summary>
     [Parameter, EditorRequired]
     public Assembly AppAssembly { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the additional assemblies.
+    /// More assemblies to scan for routes. <see langword="null"/> scans only <see cref="AppAssembly"/>.
     /// </summary>
     [Parameter]
     public IEnumerable<Assembly>? AdditionalAssemblies { get; set; }
 
     /// <summary>
-    /// Gets or sets the not found page.
+    /// Component shown when no route matches. Required.
     /// </summary>
     [Parameter, EditorRequired]
     public Type NotFoundPage { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the default layout.
+    /// Layout applied to pages that do not declare one. Defaults to <see cref="ShellLayout"/>.
     /// </summary>
     [Parameter]
     public Type DefaultLayout { get; set; } = typeof(ShellLayout);
 
     /// <summary>
-    /// Gets or sets the focus selector.
+    /// CSS selector focused after each navigation. Defaults to <c>h1</c>.
     /// </summary>
     [Parameter]
     public string FocusSelector { get; set; } = "h1";
 
     /// <summary>
-    /// Gets or sets the authorizing text.
+    /// Sentence beside the spinner while authorization is in progress. Defaults to <c>Checking your access…</c>.
     /// </summary>
     [Parameter]
     public string AuthorizingText { get; set; } = "Checking your access…";
 
     /// <summary>
-    /// Gets or sets the not authorized.
+    /// Replaces the default unauthorized content. <see langword="null"/> shows an access-denied page for a
+    /// signed-in user and redirects a signed-out user to sign in.
     /// </summary>
     [Parameter]
     public RenderFragment? NotAuthorized { get; set; }

@@ -13,16 +13,25 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Heroicsoft.NetForge.Authentication;
 
-/// <summary>
-/// Provides extension methods for service collections.
-/// </summary>
+/// <summary>Registers NetForge authentication and the first-run setup gate.</summary>
 public static class ServiceCollectionExtensions
 {
     /// <summary>
     /// Wires up whichever authentication provider <c>Authentication:Provider</c> names, and
     /// returns which one it was so <c>Program.cs</c> can decide whether Identity's Razor Pages
-    /// need mapping.
+    /// need mapping. A blank name selects <see cref="AuthProvider.Identity"/>. The name is matched
+    /// without case. Throws <see cref="InvalidOperationException"/> when the name is not
+    /// <see cref="AuthProviderNames.Identity"/>, <see cref="AuthProviderNames.Keycloak"/>, or
+    /// <see cref="AuthProviderNames.None"/>, and when Keycloak is selected without an authority.
     /// </summary>
+    /// <param name="services">Service collection that receives authentication, controllers, and the user-context service.</param>
+    /// <param name="configuration">Application configuration. The <c>Authentication</c> section is bound before <paramref name="configure"/> runs.</param>
+    /// <param name="configure">Changes applied after configuration binding. May be <see langword="null"/>.</param>
+    /// <typeparam name="TUser">Identity user type. Used when the provider is <see cref="AuthProvider.Identity"/>.</typeparam>
+    /// <typeparam name="TRole">Identity role type. Used when the provider is <see cref="AuthProvider.Identity"/>.</typeparam>
+    /// <typeparam name="TContext">Entity Framework context for the Identity stores. Used when the provider is <see cref="AuthProvider.Identity"/>.</typeparam>
+    /// <returns>The provider that was registered.</returns>
+    /// <exception cref="InvalidOperationException">The provider name is unrecognized, or Keycloak is selected and its authority is blank.</exception>
     /// <remarks>
     /// Blazor hosts should also call <c>AddCascadingAuthenticationState</c>. When that provider
     /// is registered, <see cref="IUserContextService"/> reads the circuit. Otherwise it reads
@@ -85,7 +94,7 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Registers the setup gate. The app must also register <see cref="Abstractions.Setup.ISetupStatus"/>
+    /// Registers the setup gate. The app must also register <see cref="Heroicsoft.NetForge.Abstractions.Setup.ISetupStatus"/>
     /// and call <see cref="UseNetForgeSetupGate"/> after authentication and before endpoints.
     /// </summary>
     public static IServiceCollection AddNetForgeSetupGate(
@@ -105,10 +114,11 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Uses the net forge setup gate.
+    /// Adds <see cref="SetupRedirectMiddleware"/> to the pipeline. Place it after authentication
+    /// and before endpoint routing.
     /// </summary>
-    /// <param name="app">The app.</param>
-    /// <returns>The net forge setup gate.</returns>
+    /// <param name="app">Application pipeline.</param>
+    /// <returns><paramref name="app"/>, so further middleware can be chained.</returns>
     public static IApplicationBuilder UseNetForgeSetupGate(this IApplicationBuilder app) =>
         app.UseMiddleware<SetupRedirectMiddleware>();
 

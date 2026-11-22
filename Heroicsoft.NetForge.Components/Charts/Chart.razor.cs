@@ -24,7 +24,7 @@ public partial class Chart : IAsyncDisposable
     private IJSRuntime Js { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the config.
+    /// Chart.js configuration object. Required. A change in its JSON redraws the chart; an identical configuration does not.
     /// </summary>
     [Parameter, EditorRequired]
     public object Config { get; set; } = default!;
@@ -40,7 +40,10 @@ public partial class Chart : IAsyncDisposable
         _ => 300,
     };
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Draws or redraws the chart when <see cref="Config"/> serializes to something different from the last draw.
+    /// </summary>
+    /// <param name="firstRender">Ignored. Redraws depend on the configuration, not on whether this is the first render.</param>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         // Chart.js redraws are expensive, and Blazor re-renders on unrelated state changes, so
@@ -59,9 +62,8 @@ public partial class Chart : IAsyncDisposable
     }
 
     /// <summary>
-    /// Releases the resources used by this instance.
+    /// Destroys the chart on the page when one was drawn. Does nothing if the chart was never rendered, and ignores a disconnected circuit.
     /// </summary>
-    /// <returns>A task that represents the asynchronous operation.</returns>
     public async ValueTask DisposeAsync()
     {
         if (!isRendered)

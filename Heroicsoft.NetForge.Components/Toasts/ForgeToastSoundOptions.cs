@@ -10,56 +10,40 @@ public sealed class ForgeToastSoundOptions
     /// <summary>Static-asset base for the bundled sounds (<c>{tone}/1.mp3</c> to <c>3.mp3</c>).</summary>
     public const string SoundsBasePath = "_content/Heroicsoft.NetForge.Components/sounds";
 
-    /// <summary>
-    /// The info sound1.
-    /// </summary>
+    /// <summary>Bundled info sound used by <see cref="Info"/> unless the host replaces it.</summary>
     public static readonly string InfoSound1 = $"{SoundsBasePath}/info/1.mp3";
-    /// <summary>
-    /// The info sound2.
-    /// </summary>
+
+    /// <summary>Alternative bundled info sound. Assign it to <see cref="Info"/> to use it.</summary>
     public static readonly string InfoSound2 = $"{SoundsBasePath}/info/2.mp3";
-    /// <summary>
-    /// The info sound3.
-    /// </summary>
+
+    /// <summary>Alternative bundled info sound. Assign it to <see cref="Info"/> to use it.</summary>
     public static readonly string InfoSound3 = $"{SoundsBasePath}/info/3.mp3";
 
-    /// <summary>
-    /// The success sound1.
-    /// </summary>
+    /// <summary>Bundled success sound used by <see cref="Success"/> unless the host replaces it.</summary>
     public static readonly string SuccessSound1 = $"{SoundsBasePath}/success/1.mp3";
-    /// <summary>
-    /// The success sound2.
-    /// </summary>
+
+    /// <summary>Alternative bundled success sound. Assign it to <see cref="Success"/> to use it.</summary>
     public static readonly string SuccessSound2 = $"{SoundsBasePath}/success/2.mp3";
-    /// <summary>
-    /// The success sound3.
-    /// </summary>
+
+    /// <summary>Alternative bundled success sound. Assign it to <see cref="Success"/> to use it.</summary>
     public static readonly string SuccessSound3 = $"{SoundsBasePath}/success/3.mp3";
 
-    /// <summary>
-    /// The warning sound1.
-    /// </summary>
+    /// <summary>Bundled warning sound used by <see cref="Warning"/> unless the host replaces it.</summary>
     public static readonly string WarningSound1 = $"{SoundsBasePath}/warning/1.mp3";
-    /// <summary>
-    /// The warning sound2.
-    /// </summary>
+
+    /// <summary>Alternative bundled warning sound. Assign it to <see cref="Warning"/> to use it.</summary>
     public static readonly string WarningSound2 = $"{SoundsBasePath}/warning/2.mp3";
-    /// <summary>
-    /// The warning sound3.
-    /// </summary>
+
+    /// <summary>Alternative bundled warning sound. Assign it to <see cref="Warning"/> to use it.</summary>
     public static readonly string WarningSound3 = $"{SoundsBasePath}/warning/3.mp3";
 
-    /// <summary>
-    /// The error sound1.
-    /// </summary>
+    /// <summary>Bundled error sound used by <see cref="Error"/> unless the host replaces it.</summary>
     public static readonly string ErrorSound1 = $"{SoundsBasePath}/error/1.mp3";
-    /// <summary>
-    /// The error sound2.
-    /// </summary>
+
+    /// <summary>Alternative bundled error sound. Assign it to <see cref="Error"/> to use it.</summary>
     public static readonly string ErrorSound2 = $"{SoundsBasePath}/error/2.mp3";
-    /// <summary>
-    /// The error sound3.
-    /// </summary>
+
+    /// <summary>Alternative bundled error sound. Assign it to <see cref="Error"/> to use it.</summary>
     public static readonly string ErrorSound3 = $"{SoundsBasePath}/error/3.mp3";
 
     /// <summary>Plays a sound when a toast is shown. False unless the host turns it on.</summary>
@@ -77,7 +61,7 @@ public sealed class ForgeToastSoundOptions
     /// <summary>Sound for <c>danger</c> (error) toasts.</summary>
     public string? Error { get; set; } = ErrorSound1;
 
-    /// <summary>The sound for a toast level, or null when sounds are off or none is set for it.</summary>
+    /// <summary>The sound for a toast level, or <see langword="null"/> when sounds are off or none is set for it.</summary>
     public string? SoundFor(string level)
     {
         if (!EnableSounds)

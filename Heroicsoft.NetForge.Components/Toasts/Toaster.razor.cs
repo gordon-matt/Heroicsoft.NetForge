@@ -5,7 +5,7 @@ using Microsoft.JSInterop;
 namespace Heroicsoft.NetForge.Components.Toasts;
 
 /// <summary>
-/// Represents the toaster.
+/// Renders the toasts from <see cref="ToastService"/> and plays a sound when <see cref="ForgeToastSoundOptions"/> has one for the tone.
 /// </summary>
 public partial class Toaster : IDisposable
 {
@@ -18,7 +18,7 @@ public partial class Toaster : IDisposable
     [Inject]
     private IOptions<ForgeToastSoundOptions> SoundOptions { get; set; } = default!;
 
-    /// <inheritdoc/>
+    /// <summary>Subscribes so a new or dismissed toast redraws this list, and a new toast can play a sound.</summary>
     protected override void OnInitialized()
     {
         ToastService.Changed += OnToastsChanged;
@@ -56,9 +56,7 @@ public partial class Toaster : IDisposable
         _ => "info",
     };
 
-    /// <summary>
-    /// Releases the resources used by this instance.
-    /// </summary>
+    /// <summary>Stops redrawing and playing sounds for later toasts.</summary>
     public void Dispose()
     {
         ToastService.Changed -= OnToastsChanged;

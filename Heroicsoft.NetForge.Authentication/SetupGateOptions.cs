@@ -4,7 +4,8 @@ namespace Heroicsoft.NetForge.Authentication;
 public sealed class SetupGateOptions
 {
     /// <summary>
-    /// Gets or sets the setup path.
+    /// Path that browser navigations are sent to while setup is incomplete. Defaults to <c>/setup</c>.
+    /// Keep this path in <see cref="ExemptPrefixes"/> so the wizard is not redirected to itself.
     /// </summary>
     public string SetupPath { get; set; } = "/setup";
 

@@ -6,13 +6,13 @@ namespace Heroicsoft.NetForge.Components.Cards;
 public partial class CardGrid
 {
     /// <summary>
-    /// Gets or sets the child content.
+    /// The cards. <see langword="null"/> renders an empty grid.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra classes on the grid. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }

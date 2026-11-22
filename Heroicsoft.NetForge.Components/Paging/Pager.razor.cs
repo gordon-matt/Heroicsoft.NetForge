@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 namespace Heroicsoft.NetForge.Components.Paging;
 
 /// <summary>
-/// Represents the pager.
+/// Renders the result range and, when there is more than one page, first, previous, numbered, next, and last buttons. Hidden when <see cref="TotalCount"/> is zero.
 /// </summary>
 public partial class Pager
 {
@@ -12,43 +12,43 @@ public partial class Pager
     private static readonly int[] DefaultPageSizes = [12, 24, 48, 96];
 
     /// <summary>
-    /// Gets or sets the page number.
+    /// The page whose buttons and range are shown. Required. Defaults to 1. A click that lands on this page does not raise <see cref="PageNumberChanged"/>.
     /// </summary>
     [Parameter, EditorRequired]
     public int PageNumber { get; set; } = 1;
 
     /// <summary>
-    /// Gets or sets the page size.
+    /// Items per page, used for the range and the page count. Required. Defaults to 24.
     /// </summary>
     [Parameter, EditorRequired]
     public int PageSize { get; set; } = 24;
 
     /// <summary>
-    /// Gets or sets the total count.
+    /// Number of items. Required. Zero hides the pager. Otherwise the range reads as the first and last item on this page of this total.
     /// </summary>
     [Parameter, EditorRequired]
     public int TotalCount { get; set; }
 
     /// <summary>
-    /// Gets or sets the page number changed.
+    /// Raised with the destination page when a page button is clicked and that page is not <see cref="PageNumber"/>. The page is clamped to the available pages.
     /// </summary>
     [Parameter]
     public EventCallback<int> PageNumberChanged { get; set; }
 
     /// <summary>
-    /// Gets or sets the page size changed.
+    /// Raised with the chosen size when the per-page list changes to a number. The list is hidden when this callback has no delegate. A value that is not an integer is ignored.
     /// </summary>
     [Parameter]
     public EventCallback<int> PageSizeChanged { get; set; }
 
     /// <summary>
-    /// Gets or sets the page sizes.
+    /// Choices in the per-page list. <see langword="null"/> or empty uses 12, 24, 48, and 96.
     /// </summary>
     [Parameter]
     public IReadOnlyList<int>? PageSizes { get; set; }
 
     /// <summary>
-    /// Gets or sets the aria label.
+    /// Accessible name of the page navigation. Defaults to <c>Pagination</c>.
     /// </summary>
     [Parameter]
     public string AriaLabel { get; set; } = "Pagination";

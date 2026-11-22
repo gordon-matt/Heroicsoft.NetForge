@@ -14,6 +14,7 @@ public static class NetForgeAssetEndpoints
     /// </summary>
     /// <param name="endpoints">The endpoint route builder.</param>
     /// <returns>The same route builder.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="endpoints"/> is <see langword="null"/>.</exception>
     public static IEndpointRouteBuilder MapNetForgeAssets(this IEndpointRouteBuilder endpoints)
     {
         ArgumentNullException.ThrowIfNull(endpoints);

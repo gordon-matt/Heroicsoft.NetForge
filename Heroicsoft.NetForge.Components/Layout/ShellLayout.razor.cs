@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 namespace Heroicsoft.NetForge.Components.Layout;
 
 /// <summary>
-/// Represents the shell layout.
+/// The app's layout. Renders <see cref="AppShell"/> from <see cref="ForgeShellOptions"/>, reloads sections when the sidebar is refreshed, and navigates when the shell search is submitted.
 /// </summary>
 public partial class ShellLayout : IDisposable
 {
@@ -86,7 +86,7 @@ public partial class ShellLayout : IDisposable
         builder.CloseComponent();
     };
 
-    /// <inheritdoc/>
+    /// <summary>Reads the shell options, finds the shared menu, and subscribes to sidebar refresh and navigation.</summary>
     protected override void OnInitialized()
     {
         options = ShellOptions.Value;
@@ -99,7 +99,7 @@ public partial class ShellLayout : IDisposable
         Navigation.LocationChanged += OnLocationChanged;
     }
 
-    /// <inheritdoc/>
+    /// <summary>Loads sections from <see cref="IShellNavigation"/> when that service is registered. Does nothing when it is not.</summary>
     protected override Task OnInitializedAsync() => LoadSectionsAsync();
 
     private void OnSidebarChanged() => _ = InvokeAsync(LoadSectionsAsync);
@@ -152,9 +152,7 @@ public partial class ShellLayout : IDisposable
     private string CurrentTerm() =>
         ForgeSearchUrl.ReadTerm(SearchFormat, Navigation.ToAbsoluteUri(Navigation.Uri));
 
-    /// <summary>
-    /// Releases the resources used by this instance.
-    /// </summary>
+    /// <summary>Stops reloading sections and the search term, and cancels a section load that is still running.</summary>
     public void Dispose()
     {
         SidebarRefresh.Changed -= OnSidebarChanged;

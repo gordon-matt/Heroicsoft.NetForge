@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components.Routing;
 namespace Heroicsoft.NetForge.Components.Layout;
 
 /// <summary>
-/// Represents the app shell.
+/// Renders the sidebar or top navigation, the top bar, the page body, an optional version footer, and the dialog host.
 /// </summary>
 public partial class AppShell : IDisposable
 {
@@ -20,13 +20,13 @@ public partial class AppShell : IDisposable
     private bool sidebarOpen;
 
     /// <summary>
-    /// Gets or sets the brand.
+    /// Name shown when there is no logo and no <see cref="BrandContent"/>. Also the alt text of the logo. <see langword="null"/> or whitespace hides the text.
     /// </summary>
     [Parameter]
     public string? Brand { get; set; }
 
     /// <summary>
-    /// Gets or sets the brand href.
+    /// Address of the brand link. Defaults to <c>/</c>.
     /// </summary>
     [Parameter]
     public string BrandHref { get; set; } = "/";
@@ -39,31 +39,31 @@ public partial class AppShell : IDisposable
     public bool EnhanceBrandNavigation { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the logo URL.
+    /// Image shown as the brand. <see langword="null"/> falls through to the brand text when <see cref="BrandContent"/> is <see langword="null"/>.
     /// </summary>
     [Parameter]
     public string? LogoUrl { get; set; }
 
     /// <summary>
-    /// Gets or sets the logo dark URL.
+    /// Image used in the dark theme. <see langword="null"/> uses <see cref="LogoUrl"/> for both themes. When set, both images are rendered and the stylesheet swaps them.
     /// </summary>
     [Parameter]
     public string? LogoDarkUrl { get; set; }
 
     /// <summary>
-    /// Gets or sets the mark URL.
+    /// Compact mark shown beside the logo, including when the sidebar is collapsed to an icon rail. <see langword="null"/> hides it.
     /// </summary>
     [Parameter]
     public string? MarkUrl { get; set; }
 
     /// <summary>
-    /// Gets or sets the brand content.
+    /// Replaces the logo and brand text. <see langword="null"/> uses the logo or the name.
     /// </summary>
     [Parameter]
     public RenderFragment? BrandContent { get; set; }
 
     /// <summary>
-    /// Gets or sets the sections.
+    /// Links in the generated sidebar, or in the top bar when <see cref="NavigationPlacement"/> is <see cref="ForgeNavigationPlacement.Topbar"/>. A custom <see cref="Sidebar"/> replaces the generated sidebar, so these links are not drawn there. Defaults to an empty list.
     /// </summary>
     [Parameter]
     public IReadOnlyList<ForgeNavSection> Sections { get; set; } = [];
@@ -96,13 +96,13 @@ public partial class AppShell : IDisposable
     public RenderFragment? SidebarFooter { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is show search.
+    /// Shows the search box when <see cref="TopbarCenter"/> is <see langword="null"/>. Defaults to <see langword="false"/>, which hides it.
     /// </summary>
     [Parameter]
     public bool ShowSearch { get; set; }
 
     /// <summary>
-    /// Gets or sets the search placeholder.
+    /// Placeholder and accessible name of the search box. Defaults to <c>Search</c>.
     /// </summary>
     [Parameter]
     public string SearchPlaceholder { get; set; } = "Search";
@@ -112,7 +112,7 @@ public partial class AppShell : IDisposable
     public string SearchText { get; set; } = "";
 
     /// <summary>
-    /// Gets or sets the callback raised for the search event.
+    /// Raised with the trimmed search term when the search form is submitted and when the box is cleared.
     /// </summary>
     [Parameter]
     public EventCallback<string> OnSearch { get; set; }
@@ -124,7 +124,7 @@ public partial class AppShell : IDisposable
     public RenderFragment? TopbarCenter { get; set; }
 
     /// <summary>
-    /// Gets or sets the topbar end.
+    /// Markup at the end of the top bar, before the user menu. <see langword="null"/> renders nothing.
     /// </summary>
     [Parameter]
     public RenderFragment? TopbarEnd { get; set; }
@@ -141,36 +141,36 @@ public partial class AppShell : IDisposable
     public bool ShowThemePicker { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is show user menu.
+    /// Shows the signed-in user's menu, or a Sign in link when nobody is signed in. Defaults to <see langword="true"/>.
     /// </summary>
     [Parameter]
     public bool ShowUserMenu { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the user menu items.
+    /// Extra links in the user menu. An item with roles is hidden unless the user is in one of them. <see langword="null"/> or empty adds no links beyond Sign out.
     /// </summary>
     [Parameter]
     public IReadOnlyList<ForgeNavItem>? UserMenuItems { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is show version.
+    /// Shows the version footer. Defaults to <see langword="true"/>.
     /// </summary>
     [Parameter]
     public bool ShowVersion { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the version.
+    /// Text after <c>v</c> in the footer. <see langword="null"/> uses the running assembly's informational version.
     /// </summary>
     [Parameter]
     public string? Version { get; set; }
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// The page body, inside the main region. <see langword="null"/> leaves that region empty.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    /// <inheritdoc/>
+    /// <summary>Starts closing the off-canvas sidebar when navigation changes the address.</summary>
     protected override void OnInitialized() => Navigation.LocationChanged += OnLocationChanged;
 
     private void ToggleSidebar()
@@ -197,8 +197,6 @@ public partial class AppShell : IDisposable
         _ = InvokeAsync(StateHasChanged);
     }
 
-    /// <summary>
-    /// Releases the resources used by this instance.
-    /// </summary>
+    /// <summary>Stops closing the off-canvas sidebar on later navigations.</summary>
     public void Dispose() => Navigation.LocationChanged -= OnLocationChanged;
 }

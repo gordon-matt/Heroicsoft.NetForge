@@ -7,31 +7,32 @@ namespace Heroicsoft.NetForge.Components.Bootstrap.Chips;
 public partial class Chip
 {
     /// <summary>
-    /// Gets or sets the href.
+    /// When set, the chip is an anchor to this address. <see langword="null"/> renders a button instead.
     /// </summary>
     [Parameter]
     public string? Href { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is selected.
+    /// When <see langword="true"/>, the chip uses <c>btn-primary</c>. When <see langword="false"/>,
+    /// the default, it uses <c>btn-outline-secondary</c>.
     /// </summary>
     [Parameter]
     public bool Selected { get; set; }
 
     /// <summary>
-    /// Gets or sets the callback raised for the click event.
+    /// Invoked when the chip is clicked. A link chip still navigates to <see cref="Href"/>.
     /// </summary>
     [Parameter]
     public EventCallback<MouseEventArgs> OnClick { get; set; }
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// Label inside the chip. <see langword="null"/> leaves the chip empty.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra CSS classes after <c>btn btn-sm</c> and the selected or outline class. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }

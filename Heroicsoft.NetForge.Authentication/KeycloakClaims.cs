@@ -5,14 +5,20 @@ namespace Heroicsoft.NetForge.Authentication;
 
 /// <summary>
 /// Copies Keycloak's nested role claims onto <see cref="ClaimTypes.Role"/> so
-/// <c>IsInRole</c> works, and makes sure the stable user id is available as NameIdentifier.
+/// <c>IsInRole</c> works, and makes sure the stable user id is available as
+/// <see cref="ClaimTypes.NameIdentifier"/>.
 /// </summary>
 public static class KeycloakClaims
 {
     /// <summary>
-    /// Maps the roles.
+    /// Copies role names from <c>realm_access</c> and <c>resource_access</c> onto
+    /// <paramref name="principal"/>. Nested objects are searched, so per-client roles are included.
+    /// A claim that is not JSON is ignored, and an empty role name is skipped. Roles already
+    /// present are not added again. Each role is written as the identity's role claim type, and
+    /// also as <see cref="ClaimTypes.Role"/> when that type is different. Does nothing when
+    /// <paramref name="principal"/> has no <see cref="ClaimsIdentity"/>.
     /// </summary>
-    /// <param name="principal">The principal.</param>
+    /// <param name="principal">Principal to update. May be <see langword="null"/>.</param>
     public static void MapRoles(ClaimsPrincipal? principal)
     {
         if (principal?.Identity is not ClaimsIdentity identity)
@@ -53,9 +59,12 @@ public static class KeycloakClaims
     }
 
     /// <summary>
-    /// Keycloak's stable user id is <c>sub</c>. Copied onto NameIdentifier when inbound claim
-    /// mapping did not, so a user's data is still theirs on the next sign-in.
+    /// Copies Keycloak's stable user id, <c>sub</c>, onto <see cref="ClaimTypes.NameIdentifier"/>
+    /// when inbound claim mapping did not, so a user's data is still theirs on the next sign-in.
+    /// Does nothing when that claim is already present, when <c>sub</c> is missing or empty, or
+    /// when <paramref name="principal"/> has no <see cref="ClaimsIdentity"/>.
     /// </summary>
+    /// <param name="principal">Principal to update. May be <see langword="null"/>.</param>
     public static void EnsureNameIdentifier(ClaimsPrincipal? principal)
     {
         if (principal?.Identity is not ClaimsIdentity identity
@@ -71,11 +80,13 @@ public static class KeycloakClaims
     }
 
     /// <summary>
-    /// Gets the rewrite origin.
+    /// Returns <paramref name="url"/> with its scheme, host, and port replaced by
+    /// <paramref name="publicOrigin"/>. The rest of the URL is kept. Returns <paramref name="url"/>
+    /// unchanged when either value is missing or not an absolute URI.
     /// </summary>
-    /// <param name="url">The URL.</param>
-    /// <param name="publicOrigin">The public origin.</param>
-    /// <returns>The rewrite origin.</returns>
+    /// <param name="url">Absolute URL to rewrite, such as an OIDC redirect URI.</param>
+    /// <param name="publicOrigin">Browser-facing origin that supplies the scheme, host, and port.</param>
+    /// <returns>The rewritten URL, or <paramref name="url"/> when it cannot be rewritten.</returns>
     public static string? RewriteOrigin(string? url, string publicOrigin) => string.IsNullOrWhiteSpace(url) || !Uri.TryCreate(url, UriKind.Absolute, out var uri)
             ? url
             : Uri.TryCreate(publicOrigin, UriKind.Absolute, out var origin)

@@ -3,33 +3,25 @@ namespace Heroicsoft.NetForge.Drawing;
 /// <summary>Raster formats the processor can identify and encode.</summary>
 public enum RasterFormat
 {
-    /// <summary>
-    /// The unknown value.
-    /// </summary>
+    /// <summary>The container was not recognized. Encoding this value writes a PNG.</summary>
     Unknown = 0,
-    /// <summary>
-    /// The jpeg value.
-    /// </summary>
+
+    /// <summary>A JPEG image.</summary>
     Jpeg,
-    /// <summary>
-    /// The png value.
-    /// </summary>
+
+    /// <summary>A PNG image.</summary>
     Png,
-    /// <summary>
-    /// The gif value.
-    /// </summary>
+
+    /// <summary>A GIF image.</summary>
     Gif,
-    /// <summary>
-    /// The webp value.
-    /// </summary>
+
+    /// <summary>A WebP image.</summary>
     Webp,
-    /// <summary>
-    /// The bmp value.
-    /// </summary>
+
+    /// <summary>A BMP image.</summary>
     Bmp,
-    /// <summary>
-    /// The tiff value.
-    /// </summary>
+
+    /// <summary>A TIFF image. Identifying a TIFF works. Encoding this value writes PNG bytes and still reports TIFF.</summary>
     Tiff,
 }
 
@@ -39,16 +31,14 @@ public enum RasterFormat
 /// </summary>
 public static class ImageFormats
 {
-    /// <summary>
-    /// The default max pixels constant.
-    /// </summary>
+    /// <summary>The decode ceiling used when a call does not pass its own. One hundred million pixels.</summary>
     public const long DefaultMaxPixels = 100_000_000;
 
     /// <summary>
-    /// Creates a value from the extension.
+    /// Maps a file extension to a raster format. The leading dot is optional and case is ignored.
     /// </summary>
-    /// <param name="extension">The extension.</param>
-    /// <returns>The extension.</returns>
+    /// <param name="extension">An extension such as <c>.jpg</c> or <c>png</c>. <see langword="null"/> is unknown.</param>
+    /// <returns>The matching format, or <see cref="RasterFormat.Unknown"/>.</returns>
     public static RasterFormat FromExtension(string? extension)
     {
         string normalized = (extension ?? string.Empty).Trim().ToLowerInvariant();
@@ -66,10 +56,10 @@ public static class ImageFormats
     }
 
     /// <summary>
-    /// Converts the value to the extension.
+    /// Returns the file extension for <paramref name="format"/>, including the leading dot.
     /// </summary>
-    /// <param name="format">The format.</param>
-    /// <returns>The extension.</returns>
+    /// <param name="format">The raster format.</param>
+    /// <returns><c>.jpg</c>, <c>.png</c>, <c>.gif</c>, <c>.webp</c>, <c>.bmp</c>, <c>.tif</c>, or <c>.img</c> for <see cref="RasterFormat.Unknown"/>.</returns>
     public static string ToExtension(RasterFormat format) => format switch
     {
         RasterFormat.Jpeg => ".jpg",
@@ -82,10 +72,10 @@ public static class ImageFormats
     };
 
     /// <summary>
-    /// Converts the value to the content type.
+    /// Returns the MIME type for <paramref name="format"/>.
     /// </summary>
-    /// <param name="format">The format.</param>
-    /// <returns>The content type.</returns>
+    /// <param name="format">The raster format.</param>
+    /// <returns>An image media type, or <c>application/octet-stream</c> for <see cref="RasterFormat.Unknown"/>.</returns>
     public static string ToContentType(RasterFormat format) => format switch
     {
         RasterFormat.Jpeg => "image/jpeg",

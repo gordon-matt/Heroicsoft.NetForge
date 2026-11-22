@@ -19,15 +19,11 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
     [CascadingParameter]
     protected NetForgeMenuBar? SharedBar { get; set; }
 
-    /// <summary>
-    /// Gets or sets the catalog.
-    /// </summary>
+    /// <summary>The menus built for this app. <c>Name</c> selects one.</summary>
     [Inject]
     protected INetForgeMenuCatalog Catalog { get; set; } = default!;
 
-    /// <summary>
-    /// Gets or sets the navigation.
-    /// </summary>
+    /// <summary>Supplies the current address for <see cref="Path"/> and reloads the menu when it changes.</summary>
     [Inject]
     protected NavigationManager Navigation { get; set; } = default!;
 
@@ -35,7 +31,7 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
     private IOptions<ForgeUiOptions> UiOptions { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the authentication state.
+    /// The signed-in user, used to hide links. <see langword="null"/> treats the visitor as anonymous, so role-restricted links are hidden and unrestricted links stay.
     /// </summary>
     [CascadingParameter]
     protected Task<AuthenticationState>? AuthenticationState { get; set; }
@@ -53,36 +49,28 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
     public NetForgeMenuPlacement? Placement { get; set; }
 
     /// <summary>
-    /// Gets or sets the aria label.
+    /// Accessible name of the navigation element. Defaults to <c>Navigation</c>. Omitted when <see cref="Landmark"/> is <see langword="false"/>.
     /// </summary>
     [Parameter]
     public string AriaLabel { get; set; } = "Navigation";
 
     /// <summary>
-    /// False when this menu already sits inside another navigation landmark, such as the shell sidebar.
-    /// The element stays, without a second "Navigation" label.
+    /// <see langword="false"/> when this menu already sits inside another navigation landmark, such as the shell sidebar.
+    /// The element stays, without a second "Navigation" label. Defaults to <see langword="true"/>.
     /// </summary>
     [Parameter]
     public bool Landmark { get; set; } = true;
 
-    /// <summary>
-    /// Gets a value indicating whether this instance is top.
-    /// </summary>
+    /// <summary><see langword="true"/> when this menu is drawing the top-bar slot.</summary>
     protected bool IsTop => ResolvedPlacement == NetForgeMenuPlacement.Topbar;
 
-    /// <summary>
-    /// Gets or sets a value indicating whether this instance is defined.
-    /// </summary>
+    /// <summary><see langword="false"/> when the named menu was never built, so the component renders nothing.</summary>
     protected bool Defined { get; private set; }
 
-    /// <summary>
-    /// Gets or sets the resolved placement.
-    /// </summary>
+    /// <summary><c>Placement</c> when it is set; otherwise the active shared-menu placement. The sidebar until the first load finishes.</summary>
     protected NetForgeMenuPlacement ResolvedPlacement { get; private set; } = NetForgeMenuPlacement.Sidebar;
 
-    /// <summary>
-    /// Gets or sets the sections.
-    /// </summary>
+    /// <summary>Groups for this slot after role filtering and the active-group split. Empty renders nothing.</summary>
     protected IReadOnlyList<ForgeNavSection> Sections { get; private set; } = [];
 
     /// <summary>Site path plus query, so a menu hosted under another app's base href still matches root links.</summary>
@@ -94,10 +82,10 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
     /// <summary>False when the shell top bar owns the bar and draws the backdrop.</summary>
     protected bool OwnsBar => SharedBar is null;
 
-    /// <inheritdoc/>
+    /// <summary>Reloads the menu and closes the open dropdown when the address changes.</summary>
     protected override void OnInitialized() => Navigation.LocationChanged += OnLocationChanged;
 
-    /// <inheritdoc/>
+    /// <summary>Subscribes to the menu bar that is in effect, so a dropdown opened elsewhere in the bar redraws this menu.</summary>
     protected override void OnParametersSet()
     {
         if (ReferenceEquals(subscribed, Bar))
@@ -114,14 +102,14 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
         subscribed.Changed += OnBarChanged;
     }
 
-    /// <inheritdoc/>
+    /// <summary>Loads the named menu for the current user and address.</summary>
     protected override async Task OnParametersSetAsync() => await LoadAsync();
 
     /// <summary>
-    /// Gets the section item.
+    /// Returns a top-bar item whose children are the section's links and whose title is the section heading. It has no address and no icon.
     /// </summary>
-    /// <param name="section">The section.</param>
-    /// <returns>The section item.</returns>
+    /// <param name="section">The group to present as one dropdown.</param>
+    /// <returns>The synthetic item.</returns>
     protected static ForgeNavItem SectionItem(ForgeNavSection section) =>
         new()
         {
@@ -178,9 +166,7 @@ public abstract class NetForgeMenuView : ComponentBase, IDisposable
             StateHasChanged();
         });
 
-    /// <summary>
-    /// Releases the resources used by this instance.
-    /// </summary>
+    /// <summary>Stops reloading the menu on navigation and stops listening to the menu bar.</summary>
     public void Dispose()
     {
         Navigation.LocationChanged -= OnLocationChanged;

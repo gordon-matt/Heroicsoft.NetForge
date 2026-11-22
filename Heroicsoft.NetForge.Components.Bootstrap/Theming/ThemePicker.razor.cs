@@ -6,7 +6,9 @@ using Microsoft.JSInterop;
 namespace Heroicsoft.NetForge.Components.Bootstrap.Theming;
 
 /// <summary>
-/// Represents the theme picker.
+/// Renders a Bootstrap modal that lists Bootswatch light and dark themes on separate tabs.
+/// Clicking a name previews it immediately. OK stores that choice in this browser. Cancel, Escape,
+/// and the backdrop restore the previously saved theme. A saved theme shows a Saved badge.
 /// </summary>
 public partial class ThemePicker : IAsyncDisposable
 {
@@ -27,7 +29,12 @@ public partial class ThemePicker : IAsyncDisposable
 
     private ForgeBootstrapOptions Ui => UiOptions.Value;
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// On the first render, registers the modal dismiss handler and loads the theme stored for the current area.
+    /// </summary>
+    /// <param name="firstRender">
+    /// When <see langword="true"/>, wires the dismiss callback and reads the stored theme. Later renders do nothing.
+    /// </param>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender)
@@ -120,9 +127,11 @@ public partial class ThemePicker : IAsyncDisposable
     }
 
     /// <summary>
-    /// Handles the theme modal dismissed event.
+    /// Restores the saved theme when the modal closes without OK, including Escape and the backdrop.
     /// </summary>
-    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <returns>
+    /// A task that completes when the saved theme has been put back, or immediately when OK just closed the modal.
+    /// </returns>
     [JSInvokable]
     public async Task OnThemeModalDismissed()
     {
@@ -140,9 +149,9 @@ public partial class ThemePicker : IAsyncDisposable
     }
 
     /// <summary>
-    /// Releases the resources used by this instance.
+    /// Releases the callback reference passed to the theme modal script.
     /// </summary>
-    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <returns>A completed task.</returns>
     public ValueTask DisposeAsync()
     {
         dotNetRef?.Dispose();

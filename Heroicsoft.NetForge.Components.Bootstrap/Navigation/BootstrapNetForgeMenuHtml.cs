@@ -11,14 +11,31 @@ namespace Heroicsoft.NetForge.Components.Bootstrap.Navigation;
 public static class BootstrapNetForgeMenuHtml
 {
     /// <summary>
-    /// Renders the value.
+    /// Writes Bootstrap navigation for the sections of <paramref name="menu"/> that belong in the chosen slot.
+    /// <see cref="NetForgeMenuPlacement.Topbar"/> is a collapsible row of links and dropdowns.
+    /// Any other slot is a vertical nav whose groups disclose their children, expanded when the current path is inside the group.
+    /// The current link uses <c>active</c> and <c>aria-current="page"</c>. External links open in a new tab.
+    /// A count or badge is drawn at the trailing edge, and a tag icon replaces the Bootstrap icon with a dot.
     /// </summary>
-    /// <param name="menu">The menu.</param>
-    /// <param name="user">The user.</param>
-    /// <param name="requestPath">The request path.</param>
-    /// <param name="placement">The placement.</param>
-    /// <param name="mainPlacement">The main placement.</param>
-    /// <returns>The i HTML content.</returns>
+    /// <param name="menu">The menu to render. An undefined menu produces empty HTML.</param>
+    /// <param name="user">
+    /// The visitor. Sections and links this user cannot see, from <see cref="ForgeNavSection.Roles"/>,
+    /// <see cref="ForgeNavItem.Roles"/>, and <see cref="ForgeNavItem.IsVisible"/>, are omitted.
+    /// </param>
+    /// <param name="requestPath">
+    /// Address compared with each link, including the query, to mark the current page and to choose the active group.
+    /// </param>
+    /// <param name="placement">
+    /// Slot whose markup to write. <see langword="null"/> uses <paramref name="mainPlacement"/>, then the menu's own placement.
+    /// <see cref="NetForgeMenuPlacement.Topbar"/> writes the top bar. Any other value writes the sidebar.
+    /// </param>
+    /// <param name="mainPlacement">
+    /// The host's main shared-menu slot. <see langword="null"/> includes every section when none is pinned to a side,
+    /// and otherwise only the sections for <paramref name="placement"/> or the menu's own placement.
+    /// When set, a group pinned to the top bar or the sidebar stays in that slot. An included group that is not
+    /// the current page is reduced to one link.
+    /// </param>
+    /// <returns>The navigation HTML, or empty HTML when the menu is undefined or no section remains.</returns>
     public static IHtmlContent Render(
         NetForgeMenuModel menu,
         ClaimsPrincipal user,

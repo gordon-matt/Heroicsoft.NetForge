@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Components;
 namespace Heroicsoft.NetForge.Components.Bootstrap.Status;
 
 /// <summary>
-/// Represents the authorizing message.
+/// Renders a small spinner and a sentence, centered, while authorization is in progress.
 /// </summary>
 public partial class AuthorizingMessage
 {
     /// <summary>
-    /// Gets or sets the message.
+    /// Sentence after the spinner. Defaults to <c>Checking your access…</c>.
     /// </summary>
     [Parameter]
     public string Message { get; set; } = "Checking your access…";

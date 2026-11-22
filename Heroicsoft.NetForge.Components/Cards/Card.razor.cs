@@ -6,49 +6,49 @@ namespace Heroicsoft.NetForge.Components.Cards;
 public partial class Card
 {
     /// <summary>
-    /// Gets or sets the title.
+    /// Heading text. <see langword="null"/> or empty hides the heading unless <see cref="TitleEnd"/> is set.
     /// </summary>
     [Parameter]
     public string? Title { get; set; }
 
     /// <summary>
-    /// Gets or sets the href.
+    /// When set, the title is a link to this address. <see langword="null"/> leaves the title as text.
     /// </summary>
     [Parameter]
     public string? Href { get; set; }
 
     /// <summary>
-    /// Gets or sets the description.
+    /// Paragraph under the title. <see langword="null"/> hides it.
     /// </summary>
     [Parameter]
     public string? Description { get; set; }
 
     /// <summary>
-    /// Gets or sets the title end.
+    /// Markup after the title, inside the heading. <see langword="null"/> renders nothing.
     /// </summary>
     [Parameter]
     public RenderFragment? TitleEnd { get; set; }
 
     /// <summary>
-    /// Gets or sets the meta.
+    /// Start of the meta row. The row is hidden when this and <see cref="Actions"/> are both <see langword="null"/>.
     /// </summary>
     [Parameter]
     public RenderFragment? Meta { get; set; }
 
     /// <summary>
-    /// Gets or sets the actions.
+    /// End of the meta row. <see langword="null"/> hides the actions. The row still shows when <see cref="Meta"/> is set.
     /// </summary>
     [Parameter]
     public RenderFragment? Actions { get; set; }
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// Markup between the description and the meta row. <see langword="null"/> renders nothing there.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra classes on the card. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }

@@ -6,13 +6,13 @@ namespace Heroicsoft.NetForge.Components.Bootstrap.Cards;
 public partial class CardGrid
 {
     /// <summary>
-    /// Gets or sets the child content.
+    /// Cards or other markup inside the <c>bf-card-grid</c> wrapper. <see langword="null"/> leaves the grid empty.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra CSS classes on the grid wrapper. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }

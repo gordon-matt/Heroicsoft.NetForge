@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Components;
 namespace Heroicsoft.NetForge.Components.Bootstrap.Dialogs;
 
 /// <summary>
-/// Represents the forge dialog host.
+/// Renders the toast stack, <see cref="ConfirmDialog"/>, and <see cref="PromptDialog"/>, and attaches
+/// those dialogs so a page can show them through the shared dialog service.
 /// </summary>
 public partial class ForgeDialogHost
 {
@@ -14,7 +15,10 @@ public partial class ForgeDialogHost
     private ConfirmDialog confirmDialog = default!;
     private PromptDialog promptDialog = default!;
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Attaches the confirm and prompt dialogs after every render so a later call can show them.
+    /// </summary>
+    /// <param name="firstRender">Ignored. The dialogs are attached on every render.</param>
     protected override void OnAfterRender(bool firstRender)
     {
         Dialogs.Attach(confirmDialog);

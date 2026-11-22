@@ -6,13 +6,13 @@ namespace Heroicsoft.NetForge.Components.Tables;
 public partial class Table
 {
     /// <summary>
-    /// Gets or sets the child content.
+    /// The table head and body. <see langword="null"/> renders an empty table.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra classes after <c>nf-table</c>. <see langword="null"/> or whitespace leaves only <c>nf-table</c>.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }

@@ -5,8 +5,9 @@ namespace Heroicsoft.NetForge.Components.Tags;
 
 /// <summary>
 /// Selected values as chips, plus a text field that suggests matches and can commit a new name.
-/// The parent resolves that name into a real item and adds it to <see cref="Selected"/>.
+/// The parent resolves that name into a real item and adds it to <c>Selected</c>.
 /// </summary>
+/// <typeparam name="TItem">The reference type shown on a chip and returned by search.</typeparam>
 public partial class TagPicker<TItem> : IDisposable
     where TItem : class
 {
@@ -21,25 +22,25 @@ public partial class TagPicker<TItem> : IDisposable
     public bool AllowCreate { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the chip class.
+    /// Extra classes on each selected chip. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? ChipClass { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra classes on the picker. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
     /// <summary>
-    /// Gets or sets the identifier.
+    /// <c>id</c> of the text field. <see langword="null"/> omits it.
     /// </summary>
     [Parameter]
     public string? Id { get; set; }
 
     /// <summary>
-    /// Gets or sets the label.
+    /// Word used in the placeholder and the empty message, lowercased. Required. Defaults to <c>Item</c>, so the empty state reads <c>No item yet.</c>
     /// </summary>
     [Parameter, EditorRequired]
     public string Label { get; set; } = "Item";
@@ -49,33 +50,33 @@ public partial class TagPicker<TItem> : IDisposable
     public Func<TItem, string> NameOf { get; set; } = _ => string.Empty;
 
     /// <summary>
-    /// Called with the chosen name. The parent adds the resolved item to <see cref="Selected"/>.
+    /// Called with the chosen name. The parent adds the resolved item to <c>Selected</c>.
+    /// A blank name, or a name already selected ignoring case, clears the field and does not call this.
+    /// Enter, a suggestion, and Create pass the trimmed name.
     /// </summary>
     [Parameter, EditorRequired]
     public Func<string, Task> OnAddAsync { get; set; } = _ => Task.CompletedTask;
 
     /// <summary>
-    /// Gets or sets the callback raised for the changed event.
+    /// Raised with no argument after a name is added or a chip is removed. Does not fire when the typed name is blank or already selected.
     /// </summary>
     [Parameter]
     public EventCallback OnChanged { get; set; }
 
-    /// <summary>Suggestions for the current text. Called as the user types.</summary>
+    /// <summary>Suggestions for the current text. Called as the user types, after a short delay, and again when the field is focused. Already selected names are hidden, and at most 10 suggestions are shown.</summary>
     [Parameter, EditorRequired]
     public Func<string, Task<IReadOnlyList<TItem>>> SearchAsync { get; set; } =
         _ => Task.FromResult<IReadOnlyList<TItem>>([]);
 
     /// <summary>
-    /// Gets or sets the selected.
+    /// Chips currently shown. Required. Removing a chip removes the item from this list. Adding is done in <c>OnAddAsync</c>. Defaults to an empty list.
     /// </summary>
     [Parameter, EditorRequired]
     public IList<TItem> Selected { get; set; } = [];
 
     private string Placeholder => $"Add {Label.ToLowerInvariant()}…";
 
-    /// <summary>
-    /// Releases the resources used by this instance.
-    /// </summary>
+    /// <summary>Cancels a pending suggestion search and the delayed hide of the suggestion list.</summary>
     public void Dispose()
     {
         blurCts?.Cancel();

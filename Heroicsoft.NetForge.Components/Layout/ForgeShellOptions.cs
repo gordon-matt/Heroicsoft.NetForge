@@ -10,27 +10,27 @@ namespace Heroicsoft.NetForge.Components.Layout;
 public sealed class ForgeShellOptions
 {
     /// <summary>
-    /// Gets or sets the brand.
+    /// Name used for the shell brand. <see langword="null"/> or whitespace leaves the brand as the logo, or blank when there is no logo.
     /// </summary>
     public string? Brand { get; set; }
 
     /// <summary>
-    /// Gets or sets the brand href.
+    /// Where the brand link goes. Defaults to <c>/</c>. <see cref="ForgeBrand.Home"/> roots it so a library document cannot keep the click inside the library.
     /// </summary>
     public string BrandHref { get; set; } = "/";
 
     /// <summary>
-    /// Gets or sets the logo URL.
+    /// Brand image for the light theme. <see langword="null"/> shows <see cref="Brand"/> instead.
     /// </summary>
     public string? LogoUrl { get; set; }
 
     /// <summary>
-    /// Gets or sets the logo dark URL.
+    /// Brand image for the dark theme. <see langword="null"/> uses <see cref="LogoUrl"/>.
     /// </summary>
     public string? LogoDarkUrl { get; set; }
 
     /// <summary>
-    /// Gets or sets the mark URL.
+    /// Compact image for the collapsed sidebar. <see langword="null"/> hides it.
     /// </summary>
     public string? MarkUrl { get; set; }
 
@@ -41,17 +41,17 @@ public sealed class ForgeShellOptions
     public string? SearchUrlFormat { get; set; }
 
     /// <summary>
-    /// Gets or sets the search placeholder.
+    /// Placeholder of the shell search box. Defaults to <c>Search</c>.
     /// </summary>
     public string SearchPlaceholder { get; set; } = "Search";
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is show theme picker.
+    /// Shows the light or dark toggle. Defaults to <see langword="true"/>. <see langword="false"/> hides it.
     /// </summary>
     public bool ShowThemePicker { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is show user menu.
+    /// Shows the user menu, or a Sign in link when nobody is signed in. Defaults to <see langword="true"/>. <see langword="false"/> hides both.
     /// </summary>
     public bool ShowUserMenu { get; set; } = true;
 
@@ -59,12 +59,12 @@ public sealed class ForgeShellOptions
     public List<ForgeNavItem> UserMenuItems { get; set; } = [];
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is show version.
+    /// Shows the version footer. Defaults to <see langword="true"/>. <see langword="false"/> hides it.
     /// </summary>
     public bool ShowVersion { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the version.
+    /// Text in the version footer. <see langword="null"/> uses the running assembly's informational version.
     /// </summary>
     public string? Version { get; set; }
 
@@ -76,7 +76,7 @@ public sealed class ForgeShellOptions
     public ForgeNavigationPlacement NavigationPlacement { get; set; } = ForgeNavigationPlacement.Sidebar;
 
     /// <summary>
-    /// Gets or sets the sections.
+    /// Host links drawn by the shell. An empty list shows none. A registered <see cref="IShellNavigation"/> replaces this list.
     /// </summary>
     public List<ForgeNavSection> Sections { get; set; } = [];
 
@@ -109,12 +109,9 @@ public sealed class ForgeShellOptions
 /// <summary>Where the shell draws <see cref="ForgeShellOptions.Sections"/>.</summary>
 public enum ForgeNavigationPlacement
 {
-    /// <summary>
-    /// The sidebar value.
-    /// </summary>
+    /// <summary>The links run down the sidebar. This is the default, and the shell still renders a sidebar.</summary>
     Sidebar = 0,
-    /// <summary>
-    /// The topbar value.
-    /// </summary>
+
+    /// <summary>The links run across the top bar, and the shell does not render a sidebar.</summary>
     Topbar = 1,
 }

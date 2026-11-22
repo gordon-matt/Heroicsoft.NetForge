@@ -3,36 +3,37 @@ using Microsoft.AspNetCore.Components;
 namespace Heroicsoft.NetForge.Components.Bootstrap.Layout;
 
 /// <summary>
-/// Represents the page header.
+/// Renders the page title row: an <c>h1</c>, an optional description, optional body content, and actions aligned to the end.
 /// </summary>
 public partial class PageHeader
 {
     /// <summary>
-    /// Gets or sets the title.
+    /// Text of the <c>h1</c>. Required.
     /// </summary>
     [Parameter, EditorRequired]
     public string Title { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the icon.
+    /// Bootstrap Icons class drawn before the title in <c>text-primary</c>. A value without a <c>bi-</c> or
+    /// <c>bi </c> prefix gets <c>bi-</c> prepended. <see langword="null"/> omits the icon.
     /// </summary>
     [Parameter]
     public string? Icon { get; set; }
 
     /// <summary>
-    /// Gets or sets the description.
+    /// Secondary sentence under the title. <see langword="null"/> omits it.
     /// </summary>
     [Parameter]
     public string? Description { get; set; }
 
     /// <summary>
-    /// Gets or sets the actions.
+    /// Markup aligned to the end of the header. <see langword="null"/> omits that group.
     /// </summary>
     [Parameter]
     public RenderFragment? Actions { get; set; }
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// Markup under the description, still in the title column. <see langword="null"/> draws nothing there.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }

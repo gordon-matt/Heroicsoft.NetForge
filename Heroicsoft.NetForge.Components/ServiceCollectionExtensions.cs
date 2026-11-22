@@ -8,9 +8,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Heroicsoft.NetForge.Components;
 
-/// <summary>
-/// Provides extension methods for service collections.
-/// </summary>
+/// <summary>Registers the NetForge component services on <see cref="IServiceCollection"/>.</summary>
 public static class ServiceCollectionExtensions
 {
     /// <summary>
@@ -18,6 +16,9 @@ public static class ServiceCollectionExtensions
     /// components read. Scoped to the circuit, so one user's toasts never appear on another's screen.
     /// The Bootstrap package calls this too and adds its own options on top.
     /// </summary>
+    /// <param name="services">The collection that receives the registrations.</param>
+    /// <param name="configure">Sets <see cref="ForgeUiOptions"/>. <see langword="null"/> registers the options with their defaults.</param>
+    /// <returns>The same collection, so calls can be chained.</returns>
     public static IServiceCollection AddNetForgeComponents(
         this IServiceCollection services,
         Action<ForgeUiOptions>? configure = null)
@@ -50,6 +51,9 @@ public static class ServiceCollectionExtensions
     /// Turns on and configures toast sounds (egalink-toasty style). Sounds stay off unless this is
     /// called with <see cref="ForgeToastSoundOptions.EnableSounds"/> set to true.
     /// </summary>
+    /// <param name="services">The collection that receives the configuration.</param>
+    /// <param name="configure">Sets the sound options, including turning sounds on.</param>
+    /// <returns>The same collection, so calls can be chained.</returns>
     public static IServiceCollection ConfigureNetForgeToastSounds(
         this IServiceCollection services,
         Action<ForgeToastSoundOptions> configure)

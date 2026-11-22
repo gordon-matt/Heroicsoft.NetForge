@@ -10,7 +10,7 @@ public sealed class NetForgeMenuBar
     /// <summary>Raised when the open item or the armed state changes, so every top-level item can redraw.</summary>
     public event Action? Changed;
 
-    /// <summary>The open top-level item, or null when no dropdown panel is showing.</summary>
+    /// <summary>The open top-level item, or <see langword="null"/> when no dropdown panel is showing.</summary>
     public object? OpenItem { get; private set; }
 
     /// <summary>

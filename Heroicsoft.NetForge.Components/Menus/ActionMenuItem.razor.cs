@@ -9,31 +9,31 @@ public partial class ActionMenuItem
     private ActionMenu? Parent { get; set; }
 
     /// <summary>
-    /// Gets or sets the text.
+    /// Label used when <see cref="ChildContent"/> is <see langword="null"/>. <see langword="null"/> leaves the label empty.
     /// </summary>
     [Parameter]
     public string? Text { get; set; }
 
     /// <summary>
-    /// Gets or sets the icon.
+    /// Icon before the label. <see langword="null"/> or empty hides it.
     /// </summary>
     [Parameter]
     public string? Icon { get; set; }
 
     /// <summary>
-    /// Gets or sets the href.
+    /// When set, and the item is not disabled, the item is a link to this address and a click closes the menu. <see langword="null"/>, empty, or <see cref="Disabled"/> renders a button.
     /// </summary>
     [Parameter]
     public string? Href { get; set; }
 
     /// <summary>
-    /// Gets or sets the target.
+    /// <c>target</c> of the link, such as <c>_blank</c>. <see langword="null"/> omits it. Ignored when the item is a button.
     /// </summary>
     [Parameter]
     public string? Target { get; set; }
 
     /// <summary>
-    /// Gets or sets the callback raised for the click event.
+    /// Raised with no argument when the button is clicked, after the menu closes. A link does not raise it.
     /// </summary>
     [Parameter]
     public EventCallback OnClick { get; set; }
@@ -43,19 +43,19 @@ public partial class ActionMenuItem
     public bool Danger { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is disabled.
+    /// Forces a disabled button even when <see cref="Href"/> is set. Defaults to <see langword="false"/>.
     /// </summary>
     [Parameter]
     public bool Disabled { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra classes on the item. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// Replaces <see cref="Text"/>. <see langword="null"/> uses <see cref="Text"/>.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }

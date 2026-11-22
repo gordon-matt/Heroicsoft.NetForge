@@ -6,7 +6,7 @@ namespace Heroicsoft.NetForge.Components.Theming;
 
 /// <summary>
 /// Turns <see cref="ForgeUiOptions.AccentColor"/> and <see cref="ForgeUiOptions.AccentColorDark"/>
-/// into the CSS that overrides the stylesheet's default indigo. <c>ForgeHostPage</c> emits it in a
+/// into the CSS that overrides the stylesheet's default indigo. <see cref="Heroicsoft.NetForge.Components.Layout.ForgeHostPage"/> emits it in a
 /// <c>style</c> element; apps with their own host page can call <see cref="Build"/> directly.
 /// </summary>
 public static partial class ForgeAccentCss
@@ -18,10 +18,13 @@ public static partial class ForgeAccentCss
     public const string LightText = "#ffffff";
 
     /// <summary>
-    /// Returns <c>:root{--nf-accent:...}[data-theme=dark]{--nf-accent:...}</c>, or null when no
+    /// Returns <c>:root{--nf-accent:...}[data-theme=dark]{--nf-accent:...}</c>, or <see langword="null"/> when no
     /// accent is configured. Values that are not a plain colour are ignored rather than emitted:
     /// the result goes into a style element, so anything that could close it or add rules is refused.
     /// </summary>
+    /// <param name="options">Accent colours to emit. A missing or unsafe colour is skipped.</param>
+    /// <returns>The override rules, or <see langword="null"/> when no accent is configured.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="options"/> is <see langword="null"/>.</exception>
     public static string? Build(ForgeUiOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);

@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 namespace Heroicsoft.NetForge.Components.Layout;
 
 /// <summary>
-/// Represents the forge host page.
+/// Renders the HTML document: the theme script, the NetForge stylesheet, an optional accent and app stylesheet, and the Blazor host.
 /// </summary>
 public partial class ForgeHostPage
 {
@@ -16,13 +16,13 @@ public partial class ForgeHostPage
     private IOptions<ForgeUiOptions> UiOptions { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the title.
+    /// Document title. Required. The default is empty.
     /// </summary>
     [Parameter, EditorRequired]
     public string Title { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the icon href.
+    /// Favicon address. <see langword="null"/> or whitespace omits the icon link.
     /// </summary>
     [Parameter]
     public string? IconHref { get; set; }
@@ -32,25 +32,25 @@ public partial class ForgeHostPage
     public string? AppStylesheet { get; set; }
 
     /// <summary>
-    /// Gets or sets the page render mode.
+    /// Render mode of the head outlet. <see langword="null"/> uses interactive server.
     /// </summary>
     [Parameter]
     public IComponentRenderMode? PageRenderMode { get; set; }
 
     /// <summary>
-    /// Gets or sets the additional head.
+    /// Extra head content, after the stylesheets. <see langword="null"/> renders nothing.
     /// </summary>
     [Parameter]
     public RenderFragment? AdditionalHead { get; set; }
 
     /// <summary>
-    /// Gets or sets the additional body.
+    /// Extra content after the NetForge script. <see langword="null"/> renders nothing.
     /// </summary>
     [Parameter]
     public RenderFragment? AdditionalBody { get; set; }
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// The document body, before the Blazor and NetForge scripts. <see langword="null"/> leaves the body to those scripts.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }

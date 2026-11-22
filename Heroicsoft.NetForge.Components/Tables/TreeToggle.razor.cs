@@ -6,13 +6,13 @@ namespace Heroicsoft.NetForge.Components.Tables;
 public partial class TreeToggle
 {
     /// <summary>
-    /// Gets or sets the row.
+    /// The row this cell belongs to. Required. Supplies the depth, whether there are children, and the toggle.
     /// </summary>
     [Parameter, EditorRequired]
     public ITreeTableRow Row { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// Text or markup after the expander. <see langword="null"/> leaves that span empty.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }

@@ -5,18 +5,28 @@ namespace Heroicsoft.NetForge.Video;
 
 /// <summary>
 /// Finds ffmpeg and ffprobe, downloading an official build when the app asked for that and
-/// nothing local is complete. Calls <see cref="FFmpeg.SetExecutablesPath(string)"/> so the rest
+/// nothing local is complete. Calls <see cref="FFmpeg.SetExecutablesPath"/> so the rest
 /// of Xabe (and this library) share one directory.
 /// </summary>
 public static class FfmpegBootstrap
 {
     /// <summary>
-    /// Ensures the value.
+    /// Selects a directory that contains ffmpeg, downloads the official build when <paramref name="options"/> allow it,
+    /// and points Xabe at that directory.
+    /// Returns <see langword="null"/> without changing Xabe's directory when no local tools are complete and a download
+    /// is not requested, when the download fails, or when the files still do not satisfy
+    /// <see cref="FfmpegBootstrapOptions.RequireFfprobe"/>.
     /// </summary>
-    /// <param name="options">The options.</param>
-    /// <param name="logger">The logger.</param>
-    /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the ffmpeg location.</returns>
+    /// <param name="options">Where to look, where to download, and whether ffprobe is required.</param>
+    /// <param name="logger">Receives the directory that was selected, or why resolution stopped.</param>
+    /// <param name="cancellationToken">Cancels the download.</param>
+    /// <returns>The location now in use, or <see langword="null"/> when this call did not select one.</returns>
+    /// <remarks>
+    /// <see cref="Resolve"/> runs first and does not look in <see cref="FfmpegBootstrapOptions.DownloadDirectory"/>.
+    /// That directory is probed here, and an official build is downloaded into it only when it is still incomplete.
+    /// A download failure is logged and returned as <see langword="null"/>. Creating the download directory is outside that catch.
+    /// </remarks>
+    /// <exception cref="OperationCanceledException">The download was canceled. A partial download may remain on disk.</exception>
     public static async Task<FfmpegLocation?> EnsureAsync(
         FfmpegBootstrapOptions options,
         ILogger logger,
@@ -74,7 +84,18 @@ public static class FfmpegBootstrap
         return resolved;
     }
 
-    /// <summary>Looks on disk only. Does not download and does not change Xabe's static path.</summary>
+    /// <summary>
+    /// Looks on disk only. Does not download and does not change Xabe's static path.
+    /// Returns the first candidate <see cref="Probe"/> accepts.
+    /// </summary>
+    /// <param name="options">The paths to try, in order, and whether ffprobe is required.</param>
+    /// <returns>The first complete location, or <see langword="null"/>.</returns>
+    /// <remarks>
+    /// The order is <c>/usr/bin</c> when <see cref="FfmpegBootstrapOptions.PreferLinuxSystemDirectory"/> is set on Linux,
+    /// then <see cref="FfmpegBootstrapOptions.ConfiguredPath"/>, then the well-known locations when
+    /// <see cref="FfmpegBootstrapOptions.SearchWellKnownLocations"/> is set, then the application base directory
+    /// and the working directory when <see cref="FfmpegBootstrapOptions.SearchApplicationDirectories"/> is set.
+    /// </remarks>
     public static FfmpegLocation? Resolve(FfmpegBootstrapOptions options)
     {
         foreach (string? candidate in Candidates(options))
@@ -96,17 +117,30 @@ public static class FfmpegBootstrap
     }
 
     /// <summary>
-    /// Uses the value.
+    /// Points Xabe at <paramref name="location"/> by setting its executables directory to <see cref="FfmpegLocation.Directory"/>.
     /// </summary>
-    /// <param name="location">The location.</param>
+    /// <param name="location">Directory to use. The binaries are not checked again, and nothing is downloaded.</param>
     public static void Use(FfmpegLocation location) => FFmpeg.SetExecutablesPath(location.Directory);
 
     /// <summary>
-    /// Gets the probe.
+    /// Checks <paramref name="path"/> for ffmpeg and, when <paramref name="requireFfprobe"/> is <see langword="true"/>, for ffprobe.
+    /// Does not download and does not change Xabe's directory.
     /// </summary>
-    /// <param name="path">The path.</param>
-    /// <param name="requireFfprobe">The require ffprobe.</param>
-    /// <returns>The probe.</returns>
+    /// <param name="path">
+    /// A tools directory, or an existing file whose parent directory is checked.
+    /// <see langword="null"/>, empty, and whitespace return <see langword="null"/>.
+    /// </param>
+    /// <param name="requireFfprobe">
+    /// When <see langword="true"/>, ffprobe must sit beside ffmpeg.
+    /// When <see langword="false"/>, ffmpeg alone is enough and <see cref="FfmpegLocation.FfprobePath"/> is that ffmpeg file.
+    /// </param>
+    /// <returns>
+    /// The directory and binary paths, or <see langword="null"/> when the directory is missing, ffmpeg is missing,
+    /// or ffprobe is required and missing.
+    /// </returns>
+    /// <remarks>
+    /// Windows looks for <c>ffmpeg.exe</c> and <c>ffprobe.exe</c>. Other operating systems look for <c>ffmpeg</c> and <c>ffprobe</c>.
+    /// </remarks>
     public static FfmpegLocation? Probe(string path, bool requireFfprobe)
     {
         if (string.IsNullOrWhiteSpace(path))

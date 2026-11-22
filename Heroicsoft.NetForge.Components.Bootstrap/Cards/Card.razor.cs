@@ -6,49 +6,51 @@ namespace Heroicsoft.NetForge.Components.Bootstrap.Cards;
 public partial class Card
 {
     /// <summary>
-    /// Gets or sets the title.
+    /// Heading text. When <see cref="Href"/> is set, the text is a link; otherwise it is plain text.
+    /// The heading row is omitted when this is empty and <see cref="TitleEnd"/> is not set.
     /// </summary>
     [Parameter]
     public string? Title { get; set; }
 
     /// <summary>
-    /// Gets or sets the href.
+    /// Address of the title link. <see langword="null"/> renders <see cref="Title"/> as text.
     /// </summary>
     [Parameter]
     public string? Href { get; set; }
 
     /// <summary>
-    /// Gets or sets the description.
+    /// Secondary paragraph under the title. <see langword="null"/> omits it.
     /// </summary>
     [Parameter]
     public string? Description { get; set; }
 
     /// <summary>
-    /// Gets or sets the title end.
+    /// Markup after the title, inside the heading. <see langword="null"/> draws nothing there.
     /// </summary>
     [Parameter]
     public RenderFragment? TitleEnd { get; set; }
 
     /// <summary>
-    /// Gets or sets the meta.
+    /// Markup at the start of the footer row. <see langword="null"/> leaves that side empty.
+    /// The row is omitted when this and <see cref="Actions"/> are both not set.
     /// </summary>
     [Parameter]
     public RenderFragment? Meta { get; set; }
 
     /// <summary>
-    /// Gets or sets the actions.
+    /// Markup aligned to the end of the footer row. <see langword="null"/> omits that group.
     /// </summary>
     [Parameter]
     public RenderFragment? Actions { get; set; }
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// Markup between the description and the footer row. <see langword="null"/> draws nothing there.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra CSS classes on the <c>card h-100</c> article. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }

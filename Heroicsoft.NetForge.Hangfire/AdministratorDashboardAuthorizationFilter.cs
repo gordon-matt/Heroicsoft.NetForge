@@ -11,14 +11,15 @@ namespace Heroicsoft.NetForge.Hangfire;
 /// jobs, so an explicit filter is required rather than optional. Pass an instance:
 /// <c>Authorization = [new AdministratorDashboardAuthorizationFilter()]</c>.
 /// </remarks>
+/// <param name="role">The role required to open the dashboard. The default is <see cref="WellKnownRoles.Administrator"/>.</param>
 public sealed class AdministratorDashboardAuthorizationFilter(string role = WellKnownRoles.Administrator)
     : IDashboardAuthorizationFilter
 {
     /// <summary>
-    /// Authorizes the value.
+    /// Returns whether the current user is authenticated and in the role passed to the constructor.
     /// </summary>
-    /// <param name="context">The context.</param>
-    /// <returns>true when the condition is met; otherwise, false.</returns>
+    /// <param name="context">The dashboard request.</param>
+    /// <returns><see langword="true"/> when the user is signed in and has that role.</returns>
     public bool Authorize(DashboardContext context)
     {
         var httpContext = context.GetHttpContext();

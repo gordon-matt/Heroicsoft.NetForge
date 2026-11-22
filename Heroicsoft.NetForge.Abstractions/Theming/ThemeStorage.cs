@@ -15,8 +15,8 @@ public static class ThemeStorage
     public const string DefaultKey = "netforge.theme";
 
     /// <summary>
-    /// <paramref name="baseKey"/> for the default area, or <c>{baseKey}.{area}</c> for a named area.
-    /// "Admin" and "admin" are the same area. A missing base key becomes <see cref="DefaultKey"/>.
+    /// Returns <paramref name="baseKey"/> for the default area, or <c>{baseKey}.{area}</c> for a named area.
+    /// "Admin" and "admin" are the same area. A blank base key becomes <see cref="DefaultKey"/>.
     /// </summary>
     public static string KeyFor(string? baseKey, string? area)
     {
@@ -25,13 +25,13 @@ public static class ThemeStorage
         return name.Length == 0 ? key : key + "." + name;
     }
 
-    /// <summary>Empty string for the default area. Otherwise the trimmed, lower-case area name.</summary>
+    /// <summary>Returns an empty string for the default area. Otherwise returns the trimmed, lower-case area name.</summary>
     public static string NormalizeArea(string? area) =>
         string.IsNullOrWhiteSpace(area) ? "" : area.Trim().ToLowerInvariant();
 
     /// <summary>
-    /// Which area this request belongs to. <paramref name="explicitArea"/> wins, and an explicit
-    /// empty string pins the page to the default area. Otherwise a route value or the first path
+    /// Returns the area this request belongs to. <paramref name="explicitArea"/> wins, and an explicit
+    /// blank value pins the page to the default area. Otherwise a route value or the first path
     /// segment is used when it is one of <paramref name="namedAreas"/>. An area that is not listed,
     /// including Identity, stays on the default area so it shares that theme.
     /// </summary>
@@ -59,8 +59,9 @@ public static class ThemeStorage
     }
 
     /// <summary>
-    /// The configured default for <paramref name="area"/>, or <paramref name="fallback"/> when that
-    /// area has none. Used for the colour scheme (light, dark, system) and for a Bootswatch name.
+    /// Returns the configured default for <paramref name="area"/>, or <paramref name="fallback"/> when that
+    /// area has none. A blank area always uses <paramref name="fallback"/>, and a blank configured value
+    /// is skipped. Used for the color scheme (light, dark, system) and for a Bootswatch name.
     /// </summary>
     public static string ValueFor(string? area, IReadOnlyDictionary<string, string?>? areas, string fallback)
     {
@@ -80,10 +81,12 @@ public static class ThemeStorage
     }
 
     /// <summary>
-    /// JSON object of area name to default, for the <c>data-theme-areas</c> attribute on
-    /// <c>theme-init.js</c>. Null when there is nothing to advertise, so a page with no named
-    /// areas keeps today's single key. An area with a null default is included with an empty
+    /// Returns the JSON object of area name to default, for the <c>data-theme-areas</c> attribute on
+    /// <c>theme-init.js</c>. Returns <see langword="null"/> when there is nothing to advertise, so a page with no named
+    /// areas keeps today's single key. An area with a <see langword="null"/> default is included with an empty
     /// value: it still has its own key, and the script falls back to the app default.
+    /// Other values are trimmed and written in lower case. A key that is blank after trimming is skipped,
+    /// and a repeated area keeps the last value.
     /// </summary>
     public static string? AreasAttribute(IReadOnlyDictionary<string, string?>? areas)
     {

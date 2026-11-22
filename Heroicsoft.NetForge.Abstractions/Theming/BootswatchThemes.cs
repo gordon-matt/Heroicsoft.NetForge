@@ -7,14 +7,10 @@ namespace Heroicsoft.NetForge.Abstractions.Theming;
 /// </summary>
 public static class BootswatchThemes
 {
-    /// <summary>
-    /// The default constant.
-    /// </summary>
+    /// <summary>Theme used when a stored name is missing or unknown. The value is <c>flatly</c>.</summary>
     public const string Default = "flatly";
 
-    /// <summary>
-    /// The all.
-    /// </summary>
+    /// <summary>Bootswatch theme names the shell can select, in display order.</summary>
     public static readonly IReadOnlyList<string> All =
     [
         "brite", "cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal", "litera", "lumen",
@@ -34,27 +30,32 @@ public static class BootswatchThemes
         };
 
     /// <summary>
-    /// Determines whether this instance is dark color scheme.
+    /// Returns <see langword="true"/> when <paramref name="theme"/> is in <see cref="DarkColorScheme"/>.
+    /// The comparison ignores case. Returns <see langword="false"/> when <paramref name="theme"/> is
+    /// <see langword="null"/> or empty.
     /// </summary>
-    /// <param name="theme">The theme.</param>
-    /// <returns>true when the condition is met; otherwise, false.</returns>
+    /// <param name="theme">Theme name to test.</param>
+    /// <returns><see langword="true"/> when the theme uses a dark color scheme.</returns>
     public static bool IsDarkColorScheme(string? theme) =>
         !string.IsNullOrEmpty(theme) && DarkColorScheme.Contains(theme);
 
-    /// <summary>
-    /// Gets the dark themes.
-    /// </summary>
+    /// <summary>Names from <see cref="All"/> that are in <see cref="DarkColorScheme"/>, in the same order.</summary>
     public static IEnumerable<string> DarkThemes => All.Where(DarkColorScheme.Contains);
 
-    /// <summary>
-    /// Gets the light themes.
-    /// </summary>
+    /// <summary>Names from <see cref="All"/> that are outside <see cref="DarkColorScheme"/>, in the same order.</summary>
     public static IEnumerable<string> LightThemes => All.Where(theme => !DarkColorScheme.Contains(theme));
 
     /// <summary>
-    /// Accepts a stored theme name. Returns false when <paramref name="raw"/> is missing or not
-    /// in <see cref="All"/>, and leaves <paramref name="normalized"/> as the fallback.
+    /// Accepts a stored theme name. Returns <see langword="false"/> when <paramref name="raw"/> is
+    /// missing or not in <see cref="All"/>, and sets <paramref name="normalized"/> to
+    /// <paramref name="fallback"/> lowercased when that fallback is in <see cref="All"/>.
+    /// Otherwise <paramref name="normalized"/> is <see cref="Default"/>. On success,
+    /// <paramref name="normalized"/> is <paramref name="raw"/> trimmed and lowercased.
     /// </summary>
+    /// <param name="raw">Stored theme name. <see langword="null"/> or whitespace is rejected.</param>
+    /// <param name="normalized">Accepted theme, or the fallback described above.</param>
+    /// <param name="fallback">Name to use when <paramref name="raw"/> is rejected. <see langword="null"/> or an unknown name selects <see cref="Default"/>.</param>
+    /// <returns><see langword="true"/> when <paramref name="raw"/> is a known theme.</returns>
     public static bool TryNormalize(string? raw, out string normalized, string? fallback = null)
     {
         normalized = fallback is not null && All.Contains(fallback, StringComparer.OrdinalIgnoreCase)
@@ -77,11 +78,12 @@ public static class BootswatchThemes
     }
 
     /// <summary>
-    /// Gets the stylesheet href.
+    /// Substitutes <paramref name="theme"/> for <c>{0}</c> in <paramref name="format"/>, using the
+    /// invariant culture. The default format is <c>lib/bootswatch/dist/{0}/bootstrap.min.css</c>.
     /// </summary>
-    /// <param name="theme">The theme.</param>
-    /// <param name="format">The format.</param>
-    /// <returns>The stylesheet href.</returns>
+    /// <param name="theme">Theme name inserted into the path.</param>
+    /// <param name="format">Composite format whose <c>{0}</c> placeholder is the theme name.</param>
+    /// <returns>The stylesheet path.</returns>
     public static string StylesheetHref(string theme, string format = "lib/bootswatch/dist/{0}/bootstrap.min.css") =>
         string.Format(System.Globalization.CultureInfo.InvariantCulture, format, theme);
 }

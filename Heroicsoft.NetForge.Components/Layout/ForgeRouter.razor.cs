@@ -4,42 +4,42 @@ using Microsoft.AspNetCore.Components;
 namespace Heroicsoft.NetForge.Components.Layout;
 
 /// <summary>
-/// Represents the forge router.
+/// Renders the router, moves focus after navigation, shows <see cref="Heroicsoft.NetForge.Components.Status.AuthorizingMessage"/> while authorizing, and sends anonymous users to sign-in or signed-in users to <see cref="Heroicsoft.NetForge.Components.Status.AccessDenied"/>.
 /// </summary>
 public partial class ForgeRouter
 {
     /// <summary>
-    /// Gets or sets the app assembly.
+    /// Assembly whose routes are discovered. Required.
     /// </summary>
     [Parameter, EditorRequired]
     public Assembly AppAssembly { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the additional assemblies.
+    /// More assemblies to scan for routes. <see langword="null"/> scans only <see cref="AppAssembly"/>.
     /// </summary>
     [Parameter]
     public IEnumerable<Assembly>? AdditionalAssemblies { get; set; }
 
     /// <summary>
-    /// Gets or sets the not found page.
+    /// Page shown when no route matches. Required.
     /// </summary>
     [Parameter, EditorRequired]
     public Type NotFoundPage { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the default layout.
+    /// Layout for pages that do not declare one. Defaults to <see cref="ShellLayout"/>.
     /// </summary>
     [Parameter]
     public Type DefaultLayout { get; set; } = typeof(ShellLayout);
 
     /// <summary>
-    /// Gets or sets the focus selector.
+    /// Element focused after navigation. Defaults to <c>h1</c>.
     /// </summary>
     [Parameter]
     public string FocusSelector { get; set; } = "h1";
 
     /// <summary>
-    /// Gets or sets the authorizing text.
+    /// Message shown while authorization is in progress. Defaults to <c>Checking your access.</c>
     /// </summary>
     [Parameter]
     public string AuthorizingText { get; set; } = "Checking your access.";

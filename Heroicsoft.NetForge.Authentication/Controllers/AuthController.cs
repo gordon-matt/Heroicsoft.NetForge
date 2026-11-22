@@ -12,15 +12,18 @@ namespace Heroicsoft.NetForge.Authentication.Controllers;
 /// supplied by <c>Microsoft.AspNetCore.Identity.UI</c>, and under "None" there is nothing to
 /// sign into, so these endpoints only do anything in Keycloak mode.
 /// </summary>
+/// <param name="authProvider">Active auth mode. The actions redirect home when it is not Keycloak.</param>
 [Route("auth")]
 [AllowAnonymous]
 public sealed class AuthController(IAuthProviderService authProvider) : Controller
 {
     /// <summary>
-    /// Gets the login.
+    /// Starts a Keycloak sign-in and returns the browser to <paramref name="returnUrl"/> when that
+    /// URL is local. Redirects to <c>/</c> when the provider is not <see cref="AuthProvider.Keycloak"/>,
+    /// and uses <c>/</c> when <paramref name="returnUrl"/> is missing or not a local URL.
     /// </summary>
-    /// <param name="returnUrl">The return URL.</param>
-    /// <returns>The login.</returns>
+    /// <param name="returnUrl">Address to open after sign-in. Absolute and other non-local URLs are ignored.</param>
+    /// <returns>A challenge for the OpenID Connect scheme, or a redirect to <c>/</c>.</returns>
     [HttpGet("login")]
     public IActionResult Login([FromQuery] string? returnUrl) => authProvider.Provider != AuthProvider.Keycloak
         ? Redirect("/")
@@ -29,9 +32,11 @@ public sealed class AuthController(IAuthProviderService authProvider) : Controll
             OpenIdConnectDefaults.AuthenticationScheme);
 
     /// <summary>
-    /// Gets the logout.
+    /// Signs out the application cookie and the OpenID Connect session, then redirects to <c>/</c>.
+    /// Redirects to <c>/</c> without signing out when the provider is not <see cref="AuthProvider.Keycloak"/>.
+    /// The request must include a valid antiforgery token.
     /// </summary>
-    /// <returns>The logout.</returns>
+    /// <returns>A sign-out of both schemes, or a redirect to <c>/</c>.</returns>
     [HttpPost("logout")]
     [ValidateAntiForgeryToken]
     public IActionResult Logout()

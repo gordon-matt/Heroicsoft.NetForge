@@ -7,7 +7,10 @@ using Microsoft.AspNetCore.Components.Web;
 namespace Heroicsoft.NetForge.Components.Bootstrap.Layout;
 
 /// <summary>
-/// Represents the forge nav menu.
+/// Renders one <see cref="ForgeNavSection"/> in the top bar. With no heading, the items are
+/// <see cref="ForgeNavLink"/> entries. With a heading, they sit in a dropdown that opens on click
+/// or mouse hover and closes on Escape, when the address changes, or when another menu in the bar opens.
+/// The heading button uses <c>active</c> when any item in the section matches the current address.
 /// </summary>
 public partial class ForgeNavMenu : IDisposable
 {
@@ -15,7 +18,12 @@ public partial class ForgeNavMenu : IDisposable
     private NavigationManager Navigation { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the section.
+    /// The links to render. A blank <see cref="ForgeNavSection.Heading"/> renders each item as a
+    /// <see cref="ForgeNavLink"/>. Any other heading renders a <c>dropdown</c> titled with that heading.
+    /// Items whose <see cref="ForgeNavItem.Roles"/> is set are omitted for users outside those roles.
+    /// In a dropdown, a parent with an address is a link and its children are further items in the same menu.
+    /// A parent with no address is a <c>dropdown-header</c>. Only that first level of children is listed.
+    /// The current item uses <c>active</c> and <c>aria-current="page"</c>.
     /// </summary>
     [Parameter, EditorRequired]
     public ForgeNavSection Section { get; set; } = default!;
@@ -41,7 +49,10 @@ public partial class ForgeNavMenu : IDisposable
             ? item.Icon
             : $"bi-{item.Icon}";
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Subscribes to address changes when <see cref="Section"/> has a heading, so the dropdown can
+    /// close and refresh its active state after navigation.
+    /// </summary>
     protected override void OnInitialized()
     {
         if (!string.IsNullOrWhiteSpace(Section.Heading))
@@ -50,7 +61,9 @@ public partial class ForgeNavMenu : IDisposable
         }
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Subscribes once to the shared top-bar menu state when this section is rendered inside that bar.
+    /// </summary>
     protected override void OnParametersSet()
     {
         if (!UsesBar || subscribed)
@@ -102,7 +115,7 @@ public partial class ForgeNavMenu : IDisposable
         });
 
     /// <summary>
-    /// Releases the resources used by this instance.
+    /// Stops listening for address changes and, when this menu joined the shared top-bar state, stops listening for that bar to open or close.
     /// </summary>
     public void Dispose()
     {

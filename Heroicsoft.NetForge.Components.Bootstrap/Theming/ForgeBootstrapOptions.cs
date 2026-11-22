@@ -13,13 +13,14 @@ public sealed class ForgeBootstrapOptions
     public string ThemeStorageKey { get; set; } = ThemeStorage.DefaultKey;
 
     /// <summary>
-    /// Gets or sets the default theme.
+    /// Bootswatch theme used until a visitor chooses one, and the fallback for an area whose
+    /// <see cref="Areas"/> value is <see langword="null"/>. Defaults to <see cref="BootswatchThemes.Default"/>.
     /// </summary>
     public string DefaultTheme { get; set; } = BootswatchThemes.Default;
 
     /// <summary>
     /// Areas that keep their own saved Bootswatch theme. The key is the area name (<c>Admin</c>).
-    /// The value is that area's default theme until the visitor chooses, or null to use
+    /// The value is that area's default theme until the visitor chooses, or <see langword="null"/> to use
     /// <see cref="DefaultTheme"/>. The default area is not listed. A route or path is only treated
     /// as one of these areas when the name is present here.
     /// </summary>
@@ -29,12 +30,14 @@ public sealed class ForgeBootstrapOptions
     public string StylesheetFormat { get; set; } = "lib/bootswatch/dist/{0}/bootstrap.min.css";
 
     /// <summary>
-    /// Gets or sets the bootstrap script path.
+    /// Path of the Bootstrap bundle script the host page emits. Defaults to
+    /// <c>lib/bootstrap/dist/js/bootstrap.bundle.min.js</c>.
     /// </summary>
     public string BootstrapScriptPath { get; set; } = "lib/bootstrap/dist/js/bootstrap.bundle.min.js";
 
     /// <summary>
-    /// Gets or sets the icons stylesheet path.
+    /// Path of the Bootstrap Icons stylesheet the host page emits. Defaults to
+    /// <c>lib/bootstrap-icons/font/bootstrap-icons.min.css</c>.
     /// </summary>
     public string IconsStylesheetPath { get; set; } = "lib/bootstrap-icons/font/bootstrap-icons.min.css";
 }

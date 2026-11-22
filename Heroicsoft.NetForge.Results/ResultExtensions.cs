@@ -14,10 +14,13 @@ namespace Heroicsoft.NetForge.Results;
 public static class ResultExtensions
 {
     /// <summary>
-    /// Determines whether this instance is success status.
+    /// Returns whether <paramref name="result"/> completed without an error status.
     /// </summary>
-    /// <param name="result">The result.</param>
-    /// <returns>true when the condition is met; otherwise, false.</returns>
+    /// <param name="result">The result to test.</param>
+    /// <returns>
+    /// <see langword="true"/> when the status is <see cref="ResultStatus.Ok"/>, <see cref="ResultStatus.Created"/>,
+    /// or <see cref="ResultStatus.NoContent"/>.
+    /// </returns>
     public static bool IsSuccessStatus(this IResult result) =>
         result.Status is ResultStatus.Ok or ResultStatus.Created or ResultStatus.NoContent;
 
@@ -26,6 +29,14 @@ public static class ResultExtensions
     /// status, error messages and validation errors across. Throws on a success, since there
     /// would be no value to carry.
     /// </summary>
+    /// <typeparam name="TTo">The value type of the returned result. No value is produced.</typeparam>
+    /// <param name="result">The failed result to copy.</param>
+    /// <returns>A failed result of <typeparamref name="TTo"/> with the same status and messages.</returns>
+    /// <exception cref="InvalidOperationException"><paramref name="result"/> is a success status.</exception>
+    /// <remarks>
+    /// <see cref="ResultStatus.Invalid"/> copies validation errors. Every other recognized failure copies
+    /// <see cref="IResult.Errors"/>. An unrecognized status becomes <see cref="ResultStatus.Error"/>.
+    /// </remarks>
     public static Result<TTo> To<TTo>(this IResult result)
     {
         if (result.IsSuccessStatus())
@@ -50,7 +61,16 @@ public static class ResultExtensions
         };
     }
 
-    /// <summary>Same as <see cref="To{TTo}"/> but for the non-generic <see cref="Result"/>.</summary>
+    /// <summary>
+    /// Copies <paramref name="result"/> to a non-generic <see cref="Result"/>.
+    /// A success status becomes <see cref="Result.Success()"/>. A failure keeps its status and messages.
+    /// </summary>
+    /// <param name="result">The result to copy.</param>
+    /// <returns>A non-generic result with the same outcome.</returns>
+    /// <remarks>
+    /// <see cref="ResultStatus.Invalid"/> copies validation errors. Every other recognized failure copies
+    /// <see cref="IResult.Errors"/>. An unrecognized status becomes <see cref="ResultStatus.Error"/>.
+    /// </remarks>
     public static Result ToVoid(this IResult result)
     {
         if (result.IsSuccessStatus())
@@ -74,10 +94,18 @@ public static class ResultExtensions
     }
 
     /// <summary>
-    /// The message to surface to a user, falling back to a status-appropriate default so the UI
+    /// Returns the message to surface to a user, falling back to a status-appropriate default so the UI
     /// never renders an empty alert. Pass <paramref name="notFound"/> when the generic wording
     /// would be less clear than naming the thing that disappeared.
     /// </summary>
+    /// <param name="result">The result whose message is shown.</param>
+    /// <param name="notFound">Text used for <see cref="ResultStatus.NotFound"/> when the result has no message of its own.</param>
+    /// <returns>The first error, otherwise the first validation message, otherwise a sentence for the status.</returns>
+    /// <remarks>
+    /// The status sentences are: not found uses <paramref name="notFound"/> or "That item no longer exists.";
+    /// forbidden, unauthorized, conflict, invalid, and unavailable each have their own sentence.
+    /// Every other status, including success, uses "Something went wrong. Please try again."
+    /// </remarks>
     public static string GetDisplayMessage(this IResult result, string? notFound = null)
     {
         string? first = result.Errors?.FirstOrDefault();

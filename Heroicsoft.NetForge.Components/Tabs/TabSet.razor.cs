@@ -10,7 +10,7 @@ public partial class TabSet
     private string? activeId;
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// The <see cref="Tab"/> components. The buttons are built from the tabs that register. <see langword="null"/> shows no tabs.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
@@ -20,7 +20,7 @@ public partial class TabSet
     public string? ActiveTab { get; set; }
 
     /// <summary>
-    /// Gets or sets the active tab changed.
+    /// Raised with the selected tab's key when the user selects a different enabled tab. Does not fire when the tab is disabled or already active.
     /// </summary>
     [Parameter]
     public EventCallback<string?> ActiveTabChanged { get; set; }
@@ -33,21 +33,24 @@ public partial class TabSet
     public bool KeepPanelsMounted { get; set; }
 
     /// <summary>
-    /// Gets or sets the aria label.
+    /// Accessible name of the tab list. <see langword="null"/> omits it.
     /// </summary>
     [Parameter]
     public string? AriaLabel { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra classes on the tab set. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
-    /// <inheritdoc/>
+    /// <summary>Copies <c>ActiveTab</c> into the tab that is shown.</summary>
     protected override void OnParametersSet() => activeId = ActiveTab;
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Renders again after the first pass when tabs registered during child content, so the tab buttons appear.
+    /// </summary>
+    /// <param name="firstRender"><see langword="true"/> when the tab list may still be empty because children have not registered.</param>
     protected override void OnAfterRender(bool firstRender)
     {
         // Tabs register while the child content renders, after this component has drawn its list.

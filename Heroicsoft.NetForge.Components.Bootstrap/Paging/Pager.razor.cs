@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Components;
 namespace Heroicsoft.NetForge.Components.Bootstrap.Paging;
 
 /// <summary>
-/// Represents the pager.
+/// Renders a result range, and when there is more than one page a small pagination bar: first, previous,
+/// up to five page numbers, next, and last. A page-size list appears when <see cref="PageSizeChanged"/> has a
+/// handler. A non-positive <see cref="TotalCount"/> renders nothing.
 /// </summary>
 public partial class Pager
 {
@@ -13,43 +15,47 @@ public partial class Pager
     private static readonly int[] DefaultPageSizes = [12, 24, 48, 96];
 
     /// <summary>
-    /// Gets or sets the page number.
+    /// The current page, starting at 1. That button uses <c>active</c>. First and previous are
+    /// disabled on page 1; next and last are disabled on the final page. Required.
     /// </summary>
     [Parameter, EditorRequired]
     public int PageNumber { get; set; } = 1;
 
     /// <summary>
-    /// Gets or sets the page size.
+    /// How many results one page holds. Used for the range text and the selected size. The property
+    /// initializer is 24. Required.
     /// </summary>
     [Parameter, EditorRequired]
     public int PageSize { get; set; } = 24;
 
     /// <summary>
-    /// Gets or sets the total count.
+    /// How many results exist. A positive count shows the first and last index on this page and the
+    /// total. A non-positive count renders nothing. Required.
     /// </summary>
     [Parameter, EditorRequired]
     public int TotalCount { get; set; }
 
     /// <summary>
-    /// Gets or sets the page number changed.
+    /// Invoked with the chosen page when a page button is used and that page is not already current.
+    /// The page is clamped to the pages that exist.
     /// </summary>
     [Parameter]
     public EventCallback<int> PageNumberChanged { get; set; }
 
     /// <summary>
-    /// Gets or sets the page size changed.
+    /// Invoked with the newly selected page size. When no handler is set, the per-page list is hidden.
     /// </summary>
     [Parameter]
     public EventCallback<int> PageSizeChanged { get; set; }
 
     /// <summary>
-    /// Gets or sets the page sizes.
+    /// Options in the per-page list. <see langword="null"/> or empty uses 12, 24, 48, and 96.
     /// </summary>
     [Parameter]
     public IReadOnlyList<int>? PageSizes { get; set; }
 
     /// <summary>
-    /// Gets or sets the aria label.
+    /// Accessible name of the pagination <c>nav</c>. Defaults to <c>Pagination</c>.
     /// </summary>
     [Parameter]
     public string AriaLabel { get; set; } = "Pagination";

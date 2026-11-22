@@ -11,7 +11,12 @@ public static class AppVersion
     private static readonly Lazy<string> CurrentLazy = new(Resolve);
 
     /// <summary>
-    /// Gets the current.
+    /// Version of the entry assembly, or of the assembly that contains <see cref="AppVersion"/> when
+    /// there is no entry assembly. Prefers the informational version with the <c>+</c> metadata
+    /// removed, then the assembly version in three parts, then <c>0.0.0</c>. When the assembly
+    /// file's UTC write time is after the Unix epoch, that time is appended as <c>+yyyyMMdd.HHmm</c>.
+    /// The suffix is omitted when the write time is not after the Unix epoch, and an
+    /// <see cref="IOException"/> while reading it is ignored.
     /// </summary>
     public static string Current => CurrentLazy.Value;
 

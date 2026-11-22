@@ -6,25 +6,25 @@ namespace Heroicsoft.NetForge.Components.Bootstrap.Chips;
 public partial class ChipGroup
 {
     /// <summary>
-    /// Gets or sets the child content.
+    /// Chips or other markup in the row. <see langword="null"/> leaves the row empty.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra CSS classes on the <c>d-flex flex-wrap gap-2</c> row. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
     /// <summary>
-    /// Gets or sets the style.
+    /// Inline style on the row. <see langword="null"/> sets none.
     /// </summary>
     [Parameter]
     public string? Style { get; set; }
 
     /// <summary>
-    /// Gets or sets the role.
+    /// ARIA role on the row. <see langword="null"/> omits the attribute.
     /// </summary>
     [Parameter]
     public string? Role { get; set; }

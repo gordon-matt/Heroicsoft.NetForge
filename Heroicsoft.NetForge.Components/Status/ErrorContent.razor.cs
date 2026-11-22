@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 namespace Heroicsoft.NetForge.Components.Status;
 
 /// <summary>
-/// Represents the error content.
+/// Renders an error heading, a message, a log reference when one is available, and a link home, and sets the browser tab title.
 /// </summary>
 public partial class ErrorContent
 {
@@ -20,31 +20,31 @@ public partial class ErrorContent
     private HttpContext? HttpContext { get; set; }
 
     /// <summary>
-    /// Gets or sets the title.
+    /// Heading. Defaults to <c>Something went wrong</c>.
     /// </summary>
     [Parameter]
     public string Title { get; set; } = "Something went wrong";
 
     /// <summary>
-    /// Gets or sets the message.
+    /// Paragraph under the heading. Defaults to a note that the error was logged and trying again often works.
     /// </summary>
     [Parameter]
     public string Message { get; set; } = "The error has been logged. Trying again often works.";
 
     /// <summary>
-    /// Gets or sets the home href.
+    /// Address of the home link. Defaults to <c>/</c>.
     /// </summary>
     [Parameter]
     public string HomeHref { get; set; } = "/";
 
     /// <summary>
-    /// Gets or sets the home label.
+    /// Text of the home link. Defaults to <c>Back home</c>.
     /// </summary>
     [Parameter]
     public string HomeLabel { get; set; } = "Back home";
 
     /// <summary>
-    /// Gets or sets the home icon.
+    /// Icon inside the home link. Defaults to <c>home</c>.
     /// </summary>
     [Parameter]
     public string HomeIcon { get; set; } = "home";
@@ -55,13 +55,15 @@ public partial class ErrorContent
 
     /// <summary>
     /// The correlation id an administrator can search the log for. Taken from the ambient activity
-    /// first, because <c>HttpContext</c> is null once the page is rendering interactively, then
+    /// first, because <see cref="HttpContext"/> is null once the page is rendering interactively, then
     /// from the request when this renders during the initial server pass.
     /// </summary>
     protected override void OnInitialized() =>
         requestId = Activity.Current?.Id ?? HttpContext?.TraceIdentifier;
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Fills <see cref="PageTitleText"/> when it is <see langword="null"/>: <c>Error - {brand}</c> when the shell brand is set, otherwise <c>Error</c>.
+    /// </summary>
     protected override void OnParametersSet() =>
         PageTitleText ??= string.IsNullOrWhiteSpace(ShellOptions.Value.Brand)
             ? "Error"

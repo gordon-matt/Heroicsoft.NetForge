@@ -4,14 +4,14 @@ namespace Heroicsoft.NetForge.Components.Dialogs;
 public interface IConfirmDialog
 {
     /// <summary>
-    /// Gets the show.
+    /// Shows the confirm dialog and completes when the user answers.
     /// </summary>
-    /// <param name="title">The title.</param>
-    /// <param name="message">The message.</param>
-    /// <param name="confirmLabel">The confirm label.</param>
-    /// <param name="isDestructive">The is destructive.</param>
-    /// <param name="detail">The detail.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result is true when the condition is met; otherwise, false.</returns>
+    /// <param name="title">Dialog heading.</param>
+    /// <param name="message">Main paragraph.</param>
+    /// <param name="confirmLabel">Text of the confirm button. Defaults to <c>OK</c>.</param>
+    /// <param name="isDestructive">Styles the confirm button as a destructive action.</param>
+    /// <param name="detail">Second paragraph under the message. <see langword="null"/> omits it.</param>
+    /// <returns><see langword="true"/> when the user confirms; <see langword="false"/> when the user cancels.</returns>
     Task<bool> ShowAsync(
         string title,
         string message,
@@ -24,16 +24,16 @@ public interface IConfirmDialog
 public interface IPromptDialog
 {
     /// <summary>
-    /// Gets the show.
+    /// Shows the prompt and completes with the trimmed text, or <see langword="null"/> when the user cancels. Blank text cannot be submitted.
     /// </summary>
-    /// <param name="title">The title.</param>
-    /// <param name="label">The label.</param>
-    /// <param name="initialValue">The initial value.</param>
-    /// <param name="confirmLabel">The confirm label.</param>
-    /// <param name="selectFileNameStem">The select file name stem.</param>
-    /// <param name="description">The description.</param>
-    /// <param name="maxLength">The max length.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the string.</returns>
+    /// <param name="title">Dialog heading.</param>
+    /// <param name="label">Label of the text field.</param>
+    /// <param name="initialValue">Text the field opens with. <see langword="null"/> is an empty field. Defaults to empty.</param>
+    /// <param name="confirmLabel">Text of the confirm button. Defaults to <c>OK</c>.</param>
+    /// <param name="selectFileNameStem">When <see langword="true"/>, the initial selection stops before the file extension.</param>
+    /// <param name="description">Paragraph under the heading. <see langword="null"/> omits it.</param>
+    /// <param name="maxLength">Maximum characters the field accepts. Defaults to 256.</param>
+    /// <returns>The trimmed text, or <see langword="null"/> when cancelled.</returns>
     Task<string?> ShowAsync(
         string title,
         string label,
@@ -60,14 +60,15 @@ public sealed class DialogService
     public void Attach(IPromptDialog dialog) => prompt = dialog;
 
     /// <summary>
-    /// Gets the confirm.
+    /// Shows the confirm dialog and completes when the user answers.
     /// </summary>
-    /// <param name="title">The title.</param>
-    /// <param name="message">The message.</param>
-    /// <param name="confirmLabel">The confirm label.</param>
-    /// <param name="isDestructive">The is destructive.</param>
-    /// <param name="detail">The detail.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result is true when the condition is met; otherwise, false.</returns>
+    /// <param name="title">Dialog heading.</param>
+    /// <param name="message">Main paragraph.</param>
+    /// <param name="confirmLabel">Text of the confirm button. Defaults to <c>OK</c>.</param>
+    /// <param name="isDestructive">Styles the confirm button as a destructive action.</param>
+    /// <param name="detail">Second paragraph under the message. <see langword="null"/> omits it.</param>
+    /// <returns><see langword="true"/> when the user confirms; <see langword="false"/> when the user cancels.</returns>
+    /// <exception cref="InvalidOperationException">The dialog host is not mounted.</exception>
     public Task<bool> ConfirmAsync(
         string title,
         string message,
@@ -77,16 +78,17 @@ public sealed class DialogService
         Require(confirm).ShowAsync(title, message, confirmLabel, isDestructive, detail);
 
     /// <summary>
-    /// Gets the prompt.
+    /// Shows the prompt and completes with the trimmed text, or <see langword="null"/> when the user cancels. Blank text cannot be submitted.
     /// </summary>
-    /// <param name="title">The title.</param>
-    /// <param name="label">The label.</param>
-    /// <param name="initialValue">The initial value.</param>
-    /// <param name="confirmLabel">The confirm label.</param>
-    /// <param name="selectFileNameStem">The select file name stem.</param>
-    /// <param name="description">The description.</param>
-    /// <param name="maxLength">The max length.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the string.</returns>
+    /// <param name="title">Dialog heading.</param>
+    /// <param name="label">Label of the text field.</param>
+    /// <param name="initialValue">Text the field opens with. <see langword="null"/> is an empty field. Defaults to empty.</param>
+    /// <param name="confirmLabel">Text of the confirm button. Defaults to <c>OK</c>.</param>
+    /// <param name="selectFileNameStem">When <see langword="true"/>, the initial selection stops before the file extension.</param>
+    /// <param name="description">Paragraph under the heading. <see langword="null"/> omits it.</param>
+    /// <param name="maxLength">Maximum characters the field accepts. Defaults to 256.</param>
+    /// <returns>The trimmed text, or <see langword="null"/> when cancelled.</returns>
+    /// <exception cref="InvalidOperationException">The dialog host is not mounted.</exception>
     public Task<string?> PromptAsync(
         string title,
         string label,

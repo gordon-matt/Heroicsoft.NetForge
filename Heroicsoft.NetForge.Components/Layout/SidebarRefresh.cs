@@ -6,13 +6,9 @@ namespace Heroicsoft.NetForge.Components.Layout;
 /// </summary>
 public sealed class SidebarRefresh
 {
-    /// <summary>
-    /// Occurs when changed.
-    /// </summary>
+    /// <summary>Raised by <see cref="NotifyChanged"/> so the shell layout reloads its sections.</summary>
     public event Action? Changed;
 
-    /// <summary>
-    /// Notifies the changed.
-    /// </summary>
+    /// <summary>Raises <see cref="Changed"/>. Pages call this after a write that the sidebar is showing.</summary>
     public void NotifyChanged() => Changed?.Invoke();
 }

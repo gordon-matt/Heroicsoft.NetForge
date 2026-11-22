@@ -12,14 +12,14 @@ namespace Heroicsoft.NetForge.Components.Navigation;
 public static class NetForgeMenuHtml
 {
     /// <summary>
-    /// Renders the value.
+    /// Renders <paramref name="menu"/> as HTML. An undefined menu, or a slot with no visible sections, returns empty markup. Top-bar placement uses a disclosure menu; sidebar placement uses a vertical list. Links opt out of enhanced navigation.
     /// </summary>
-    /// <param name="menu">The menu.</param>
-    /// <param name="user">The user.</param>
-    /// <param name="requestPath">The request path.</param>
-    /// <param name="placement">The placement.</param>
-    /// <param name="mainPlacement">The main placement.</param>
-    /// <returns>The i HTML content.</returns>
+    /// <param name="menu">The built menu.</param>
+    /// <param name="user">The user whose roles hide links.</param>
+    /// <param name="requestPath">The current path and query, used to mark the active group and the current link.</param>
+    /// <param name="placement">The slot to draw. <see langword="null"/> uses <paramref name="mainPlacement"/>, then the menu's own placement.</param>
+    /// <param name="mainPlacement">Where the group that contains the current page should sit. <see langword="null"/> draws groups by the placement they were given, without moving the active group.</param>
+    /// <returns>The menu markup, or empty markup when there is nothing to show.</returns>
     public static IHtmlContent Render(
         NetForgeMenuModel menu,
         ClaimsPrincipal user,

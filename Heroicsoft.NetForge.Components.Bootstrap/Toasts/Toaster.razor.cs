@@ -6,7 +6,9 @@ using Microsoft.JSInterop;
 namespace Heroicsoft.NetForge.Components.Bootstrap.Toasts;
 
 /// <summary>
-/// Represents the toaster.
+/// Renders the current toasts in a fixed stack at the top end of the page. Each toast uses
+/// <c>text-bg-</c> plus its level, a Bootstrap icon for that level, and a close button.
+/// Success, danger, and warning have their own icons; any other level uses the info icon.
 /// </summary>
 public partial class Toaster : IDisposable
 {
@@ -19,7 +21,10 @@ public partial class Toaster : IDisposable
     [Inject]
     private IOptions<ForgeToastSoundOptions> SoundOptions { get; set; } = default!;
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Subscribes to toast changes so the stack re-renders, and plays the configured sound when a toast is shown.
+    /// A missing script or a disconnected circuit stays silent.
+    /// </summary>
     protected override void OnInitialized()
     {
         ToastService.Changed += OnToastsChanged;
@@ -58,7 +63,7 @@ public partial class Toaster : IDisposable
     };
 
     /// <summary>
-    /// Releases the resources used by this instance.
+    /// Stops listening for toasts to appear or change.
     /// </summary>
     public void Dispose()
     {

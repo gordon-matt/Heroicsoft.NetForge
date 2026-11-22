@@ -6,31 +6,23 @@ namespace Heroicsoft.NetForge.Abstractions.Auth;
 /// </summary>
 public interface IAuthProviderService
 {
-    /// <summary>
-    /// Gets the provider.
-    /// </summary>
+    /// <summary>Auth mode the host was started with.</summary>
     AuthProvider Provider { get; }
 
     /// <summary>
-    /// Gets the keycloak authority.
+    /// Keycloak authority URL, or <see langword="null"/> when the host did not configure one.
     /// </summary>
     string? KeycloakAuthority { get; }
 
-    /// <summary>
-    /// Gets a value indicating whether this instance is keycloak.
-    /// </summary>
+    /// <summary><see langword="true"/> when <see cref="Provider"/> is <see cref="AuthProvider.Keycloak"/>.</summary>
     bool IsKeycloak { get; }
 
-    /// <summary>
-    /// Gets a value indicating whether this instance is identity.
-    /// </summary>
+    /// <summary><see langword="true"/> when <see cref="Provider"/> is <see cref="AuthProvider.Identity"/>.</summary>
     bool IsIdentity { get; }
 
-    /// <summary>
-    /// Gets a value indicating whether this instance is none.
-    /// </summary>
+    /// <summary><see langword="true"/> when <see cref="Provider"/> is <see cref="AuthProvider.None"/>.</summary>
     bool IsNone { get; }
 
-    /// <summary>Keycloak account console, or null when Keycloak is not the active provider.</summary>
+    /// <summary>Keycloak account console, or <see langword="null"/> when Keycloak is not the active provider.</summary>
     string? KeycloakAccountUrl { get; }
 }

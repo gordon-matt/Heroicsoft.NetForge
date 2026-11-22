@@ -5,7 +5,7 @@ using Microsoft.JSInterop;
 namespace Heroicsoft.NetForge.Components.Dialogs;
 
 /// <summary>
-/// Represents the confirm dialog.
+/// Renders a modal that asks the user to confirm or cancel. Escape and a backdrop click count as cancel.
 /// </summary>
 public partial class ConfirmDialog : IConfirmDialog, IDisposable
 {
@@ -25,7 +25,14 @@ public partial class ConfirmDialog : IConfirmDialog, IDisposable
     /// <summary>
     /// Shows the dialog and completes when the user answers. Awaiting the answer keeps the
     /// caller's logic in one place rather than split across an event handler.
+    /// A later call completes the previous task with <see langword="false"/>.
     /// </summary>
+    /// <param name="title">Dialog heading.</param>
+    /// <param name="message">Main paragraph.</param>
+    /// <param name="confirmLabel">Text of the confirm button. Defaults to <c>OK</c>.</param>
+    /// <param name="isDestructive">Styles the confirm button as danger and moves focus to Cancel, so Enter does not confirm.</param>
+    /// <param name="detail">Second paragraph. <see langword="null"/> omits it.</param>
+    /// <returns><see langword="true"/> when the user confirms; <see langword="false"/> when the user cancels, dismisses the dialog, or a newer call replaces it.</returns>
     public Task<bool> ShowAsync(
         string title,
         string message,
@@ -51,7 +58,10 @@ public partial class ConfirmDialog : IConfirmDialog, IDisposable
         return completion.Task;
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Moves focus to Cancel when the dialog is destructive, otherwise to the confirm button. A failure to focus leaves the dialog usable.
+    /// </summary>
+    /// <param name="firstRender">Ignored. Focus runs only after the dialog opens.</param>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!shouldFocus)
@@ -88,7 +98,7 @@ public partial class ConfirmDialog : IConfirmDialog, IDisposable
     }
 
     /// <summary>
-    /// Releases the resources used by this instance.
+    /// Completes a pending answer with <see langword="false"/> when the dialog is removed while it is still open.
     /// </summary>
     public void Dispose() => completion?.TrySetResult(false);
 }

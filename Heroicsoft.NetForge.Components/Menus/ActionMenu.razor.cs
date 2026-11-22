@@ -23,7 +23,7 @@ public partial class ActionMenu
     public string Label { get; set; } = "Actions";
 
     /// <summary>
-    /// Gets or sets the icon.
+    /// Icon on the trigger when <see cref="Trigger"/> is <see langword="null"/>. Defaults to <c>dots</c>.
     /// </summary>
     [Parameter]
     public string Icon { get; set; } = "dots";
@@ -37,30 +37,30 @@ public partial class ActionMenu
     public string? TriggerClass { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is disabled.
+    /// Disables the trigger. Defaults to <see langword="false"/>. Does not close a list that is already open.
     /// </summary>
     [Parameter]
     public bool Disabled { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra classes on the menu wrapper. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// The commands, rendered only while the list is open. <see langword="null"/> opens an empty list.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
-    /// Gets a value indicating whether this instance is open.
+    /// <see langword="true"/> while the command list is showing.
     /// </summary>
     public bool IsOpen => open;
 
     /// <summary>
-    /// Closes the value.
+    /// Hides the command list. Does nothing when it is already hidden.
     /// </summary>
     public void Close()
     {
@@ -71,7 +71,10 @@ public partial class ActionMenu
         }
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Positions the open list against the viewport. If the page script has no <c>placeMenu</c>, the list stays under the button.
+    /// </summary>
+    /// <param name="firstRender">Ignored. Placement runs after the list opens, not only on the first render.</param>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!placePending)

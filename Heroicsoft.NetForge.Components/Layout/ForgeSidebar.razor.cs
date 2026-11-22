@@ -4,48 +4,48 @@ using Microsoft.AspNetCore.Components;
 namespace Heroicsoft.NetForge.Components.Layout;
 
 /// <summary>
-/// Represents the forge sidebar.
+/// Renders the brand and the sidebar links, with the shared menu before or after the host sections.
 /// </summary>
 public partial class ForgeSidebar
 {
     /// <summary>
-    /// Gets or sets the brand.
+    /// Name shown when there is no logo and no <see cref="BrandContent"/>. Also the alt text of the logo. <see langword="null"/> or whitespace hides the text.
     /// </summary>
     [Parameter]
     public string? Brand { get; set; }
 
     /// <summary>
-    /// Gets or sets the brand href.
+    /// Address of the brand link. Defaults to <c>/</c>.
     /// </summary>
     [Parameter]
     public string BrandHref { get; set; } = "/";
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is enhance brand navigation.
+    /// <see langword="false"/> makes the brand link a full page load. Defaults to <see langword="true"/>, which leaves enhanced navigation on.
     /// </summary>
     [Parameter]
     public bool EnhanceBrandNavigation { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the logo URL.
+    /// Image shown as the brand. <see langword="null"/> falls through to the brand text when <see cref="BrandContent"/> is <see langword="null"/>.
     /// </summary>
     [Parameter]
     public string? LogoUrl { get; set; }
 
     /// <summary>
-    /// Gets or sets the logo dark URL.
+    /// Image used in the dark theme. <see langword="null"/> uses <see cref="LogoUrl"/> for both themes.
     /// </summary>
     [Parameter]
     public string? LogoDarkUrl { get; set; }
 
     /// <summary>
-    /// Gets or sets the mark URL.
+    /// Compact mark shown beside the logo. <see langword="null"/> hides it.
     /// </summary>
     [Parameter]
     public string? MarkUrl { get; set; }
 
     /// <summary>
-    /// Gets or sets the sections.
+    /// Host sections under the brand. A section with roles is shown only to users in those roles. Defaults to an empty list.
     /// </summary>
     [Parameter]
     public IReadOnlyList<ForgeNavSection> Sections { get; set; } = [];
@@ -59,7 +59,7 @@ public partial class ForgeSidebar
     public bool SharedMenuAfterSections { get; set; }
 
     /// <summary>
-    /// Gets or sets the brand content.
+    /// Replaces the logo and brand text. <see langword="null"/> uses the logo or the name.
     /// </summary>
     [Parameter]
     public RenderFragment? BrandContent { get; set; }

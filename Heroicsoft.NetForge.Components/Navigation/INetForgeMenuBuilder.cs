@@ -49,9 +49,7 @@ public interface INetForgeMenuBuilder
 /// <summary>The target of <c>AddMenu</c>. Libraries extend this to add their own links.</summary>
 public interface INetForgeMenuGroupBuilder
 {
-    /// <summary>
-    /// Gets the services.
-    /// </summary>
+    /// <summary>The application services, the same provider as <see cref="INetForgeMenuBuilder.Services"/>.</summary>
     IServiceProvider Services { get; }
 
     /// <summary>A link the host describes itself. A library extension method is the same shape.</summary>

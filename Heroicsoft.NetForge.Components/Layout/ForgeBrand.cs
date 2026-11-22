@@ -30,24 +30,24 @@ public static class ForgeBrand
     }
 
     /// <summary>
-    /// Gets the logo.
+    /// Root-relative or absolute form of <see cref="ForgeShellOptions.LogoUrl"/>. <see langword="null"/> when the host set no logo.
     /// </summary>
-    /// <param name="options">The options.</param>
-    /// <returns>The logo.</returns>
+    /// <param name="options">Shell branding to read.</param>
+    /// <returns>The logo address, or <see langword="null"/>.</returns>
     public static string? Logo(ForgeShellOptions options) => Url(options.LogoUrl);
 
     /// <summary>
-    /// Gets the logo dark.
+    /// Root-relative or absolute form of <see cref="ForgeShellOptions.LogoDarkUrl"/>. <see langword="null"/> when the host set no dark logo.
     /// </summary>
-    /// <param name="options">The options.</param>
-    /// <returns>The logo dark.</returns>
+    /// <param name="options">Shell branding to read.</param>
+    /// <returns>The dark-theme logo address, or <see langword="null"/>.</returns>
     public static string? LogoDark(ForgeShellOptions options) => Url(options.LogoDarkUrl);
 
     /// <summary>
-    /// Gets the mark.
+    /// Root-relative or absolute form of <see cref="ForgeShellOptions.MarkUrl"/>. <see langword="null"/> when the host set no mark.
     /// </summary>
-    /// <param name="options">The options.</param>
-    /// <returns>The mark.</returns>
+    /// <param name="options">Shell branding to read.</param>
+    /// <returns>The mark address, or <see langword="null"/>.</returns>
     public static string? Mark(ForgeShellOptions options) => Url(options.MarkUrl);
 
     /// <summary>Brand text. Empty when the host has not set <see cref="ForgeShellOptions.Brand"/>.</summary>

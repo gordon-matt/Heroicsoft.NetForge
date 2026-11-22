@@ -13,16 +13,10 @@ public sealed class NetForgeMenuCatalog : INetForgeMenuCatalog
         Names = menus.Keys.ToList();
     }
 
-    /// <summary>
-    /// Gets the names.
-    /// </summary>
+    /// <inheritdoc/>
     public IReadOnlyCollection<string> Names { get; }
 
-    /// <summary>
-    /// Gets the value.
-    /// </summary>
-    /// <param name="name">The name.</param>
-    /// <returns>The net forge menu.</returns>
+    /// <inheritdoc/>
     public NetForgeMenuModel Get(string? name)
     {
         string key = string.IsNullOrWhiteSpace(name) ? NetForgeMenus.DefaultName : name.Trim();

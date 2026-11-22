@@ -15,23 +15,23 @@ public partial class MarkdownEditor
     private bool previewing;
     private Task<IJSObjectReference>? module;
 
-    /// <summary>The Markdown source.</summary>
+    /// <summary>The Markdown source. Defaults to empty.</summary>
     [Parameter]
     public string Value { get; set; } = string.Empty;
 
-    /// <summary>Raised when the source changes.</summary>
+    /// <summary>Raised with the new source when the text area commits a change, when a toolbar button edits it, or when text is inserted.</summary>
     [Parameter]
     public EventCallback<string> ValueChanged { get; set; }
 
-    /// <summary>Rows on the text area.</summary>
+    /// <summary>Rows on the text area. Defaults to 14.</summary>
     [Parameter]
     public int Rows { get; set; } = 14;
 
-    /// <summary>Shown in the empty text area.</summary>
+    /// <summary>Shown in the empty text area. Defaults to a short hint about headings, bold, italic, and paragraphs.</summary>
     [Parameter]
     public string Placeholder { get; set; } = "Write in Markdown: ## for headings, **bold**, _italic_, and blank lines between paragraphs.";
 
-    /// <summary>Accessible name for the text area.</summary>
+    /// <summary>Accessible name for the text area. Defaults to <c>Markdown</c>.</summary>
     [Parameter]
     public string AriaLabel { get; set; } = "Markdown";
 
@@ -47,7 +47,7 @@ public partial class MarkdownEditor
     private IJSRuntime Js { get; set; } = default!;
 
     /// <summary>Inserts text at the caret. A file picker calls this after the author chooses an image.</summary>
-    /// <param name="text">The text to insert.</param>
+    /// <param name="text">Markdown inserted at the caret. Empty text is ignored, and nothing is inserted while the preview is showing.</param>
     public async Task InsertTextAsync(string text)
     {
         if (previewing || string.IsNullOrEmpty(text))

@@ -4,10 +4,13 @@ namespace Heroicsoft.NetForge.Abstractions.Navigation;
 public static class ForgeQuery
 {
     /// <summary>
-    /// Parses the value.
+    /// Splits <paramref name="query"/> into a case-insensitive map of percent-decoded names and values.
+    /// A <see langword="null"/> or empty query returns an empty map. One leading <c>?</c> is ignored.
+    /// A part with no <c>=</c> has an empty value. A repeated name keeps the last value.
     /// </summary>
-    /// <param name="query">The query.</param>
-    /// <returns>The string, string dictionary.</returns>
+    /// <param name="query">Raw query string, with or without a leading <c>?</c>.</param>
+    /// <returns>Decoded names and values. Names are compared without case.</returns>
+    /// <exception cref="UriFormatException">A name or value contains an invalid <c>%</c> escape.</exception>
     public static Dictionary<string, string> Parse(string? query)
     {
         var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);

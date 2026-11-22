@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Components.Web;
 namespace Heroicsoft.NetForge.Components.Layout;
 
 /// <summary>
-/// Represents the forge nav menu.
+/// Renders one nav section in the top bar: a flat list of links when the section has no heading, otherwise a dropdown.
 /// </summary>
 public partial class ForgeNavMenu : IDisposable
 {
@@ -15,7 +15,7 @@ public partial class ForgeNavMenu : IDisposable
     private NavigationManager Navigation { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the section.
+    /// The section to draw. Required. Items with roles are shown only to users in those roles. A heading makes a dropdown. A child with no address and with children becomes a nested menu.
     /// </summary>
     [Parameter, EditorRequired]
     public ForgeNavSection Section { get; set; } = default!;
@@ -38,10 +38,10 @@ public partial class ForgeNavMenu : IDisposable
         ForgeNavMatch.IsCurrent(item, RelativeUrl)
         || item.Children.Any(child => ForgeNavMatch.IsCurrent(child, RelativeUrl)));
 
-    /// <inheritdoc/>
+    /// <summary>Closes the dropdown when the address changes.</summary>
     protected override void OnInitialized() => Navigation.LocationChanged += OnLocationChanged;
 
-    /// <inheritdoc/>
+    /// <summary>Joins the shared menu bar when this section is a top-bar dropdown, so hovering and clicks stay in step with the other menus.</summary>
     protected override void OnParametersSet()
     {
         if (!UsesBar || subscribed)
@@ -125,9 +125,7 @@ public partial class ForgeNavMenu : IDisposable
             StateHasChanged();
         });
 
-    /// <summary>
-    /// Releases the resources used by this instance.
-    /// </summary>
+    /// <summary>Stops closing the dropdown on navigation, and leaves the shared menu bar when this section joined it.</summary>
     public void Dispose()
     {
         Navigation.LocationChanged -= OnLocationChanged;

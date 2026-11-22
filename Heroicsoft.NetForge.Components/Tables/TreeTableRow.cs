@@ -3,28 +3,27 @@ namespace Heroicsoft.NetForge.Components.Tables;
 /// <summary>What <see cref="TreeToggle"/> needs, without the item type.</summary>
 public interface ITreeTableRow
 {
-    /// <summary>
-    /// Gets the depth.
-    /// </summary>
+    /// <summary>Zero-based indent of the row. The toggle uses it as the depth offset.</summary>
     int Depth { get; }
 
     /// <summary>
-    /// Gets a value indicating whether this instance has children.
+    /// <see langword="true"/> when the item has at least one child. <see langword="false"/> shows a spacer instead of the expand button.
     /// </summary>
     bool HasChildren { get; }
 
     /// <summary>
-    /// Gets a value indicating whether this instance is expanded.
+    /// <see langword="true"/> when this row's children are included in the table.
     /// </summary>
     bool IsExpanded { get; }
 
     /// <summary>
-    /// Toggles the value.
+    /// Expands or collapses this row and rebuilds the visible rows.
     /// </summary>
     void Toggle();
 }
 
 /// <summary>One visible row of a <see cref="TreeTable{TItem}"/>.</summary>
+/// <typeparam name="TItem">The data for this row.</typeparam>
 public sealed class TreeTableRow<TItem> : ITreeTableRow
 {
     private readonly TreeTable<TItem> owner;
@@ -38,28 +37,18 @@ public sealed class TreeTableRow<TItem> : ITreeTableRow
         IsExpanded = isExpanded;
     }
 
-    /// <summary>
-    /// Gets the item.
-    /// </summary>
+    /// <summary>The data this row displays.</summary>
     public TItem Item { get; }
 
-    /// <summary>
-    /// Gets the depth.
-    /// </summary>
+    /// <inheritdoc/>
     public int Depth { get; }
 
-    /// <summary>
-    /// Gets a value indicating whether this instance has children.
-    /// </summary>
+    /// <inheritdoc/>
     public bool HasChildren { get; }
 
-    /// <summary>
-    /// Gets a value indicating whether this instance is expanded.
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsExpanded { get; }
 
-    /// <summary>
-    /// Toggles the value.
-    /// </summary>
+    /// <inheritdoc/>
     public void Toggle() => owner.Toggle(Item);
 }

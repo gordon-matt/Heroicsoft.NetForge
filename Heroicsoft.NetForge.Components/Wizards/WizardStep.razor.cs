@@ -12,13 +12,13 @@ public partial class WizardStep : ComponentBase, IDisposable
     private Wizard? Parent { get; set; }
 
     /// <summary>
-    /// Gets or sets the title.
+    /// Label in the step list. Required. The default is empty.
     /// </summary>
     [Parameter, EditorRequired]
     public string Title { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// The step panel. Rendered only while this step is the active one.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
@@ -31,7 +31,10 @@ public partial class WizardStep : ComponentBase, IDisposable
 
     private bool Visible => Parent is not null && Parent.ActiveIndex == Index;
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Registers this step with the parent wizard.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">This step is not inside a <see cref="Wizard"/>.</exception>
     protected override void OnInitialized()
     {
         if (Parent is null)
@@ -43,7 +46,7 @@ public partial class WizardStep : ComponentBase, IDisposable
     }
 
     /// <summary>
-    /// Releases the resources used by this instance.
+    /// Removes this step from the parent wizard and clamps the active index when it would point past the end.
     /// </summary>
     public void Dispose() => Parent?.Unregister(this);
 }

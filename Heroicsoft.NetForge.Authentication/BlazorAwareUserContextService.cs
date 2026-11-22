@@ -5,38 +5,36 @@ using Microsoft.AspNetCore.Components.Authorization;
 namespace Heroicsoft.NetForge.Authentication;
 
 /// <summary>
-/// Resolves the caller from <c>HttpContext</c> when there is one, and from the Blazor
-/// authentication state otherwise. Interactive Blazor Server components run on a SignalR
-/// circuit where <c>HttpContext</c> is null, so an HTTP-only implementation would report every
-/// component interaction as anonymous.
+/// Resolves the caller from <see cref="HttpContext"/> when that user is authenticated, and from
+/// the Blazor authentication state otherwise. Interactive Blazor Server components run on a
+/// SignalR circuit where <see cref="HttpContext"/> is <see langword="null"/>, so an HTTP-only
+/// implementation would report every component interaction as anonymous. If the Blazor user is
+/// not authenticated, or reading the authentication state throws <see cref="InvalidOperationException"/>
+/// or <see cref="ObjectDisposedException"/>, the HTTP user is returned.
 /// </summary>
+/// <param name="httpContextAccessor">Source of the current HTTP principal.</param>
+/// <param name="authenticationStateProvider">Blazor authentication state used when the HTTP user is missing or not authenticated.</param>
+/// <param name="forgeOptions">Supplies <see cref="NetForgeAuthOptions.AdministratorRole"/>.</param>
 public sealed class BlazorAwareUserContextService(
     IHttpContextAccessor httpContextAccessor,
     AuthenticationStateProvider authenticationStateProvider,
     IOptions<NetForgeAuthOptions> forgeOptions) : IUserContextService
 {
-    /// <summary>
-    /// Gets the current user identifier.
-    /// </summary>
-    /// <returns>The current user identifier.</returns>
+    /// <inheritdoc/>
     public string? GetCurrentUserId() => ResolvePrincipal().FindUserId();
 
-    /// <summary>
-    /// Gets the current user name.
-    /// </summary>
-    /// <returns>The current user name.</returns>
+    /// <inheritdoc/>
     public string? GetCurrentUserName() => ResolvePrincipal()?.Identity?.Name;
 
-    /// <summary>
-    /// Determines whether this instance is authenticated.
-    /// </summary>
-    /// <returns>true when the condition is met; otherwise, false.</returns>
+    /// <inheritdoc/>
     public bool IsAuthenticated() => ResolvePrincipal()?.Identity?.IsAuthenticated ?? false;
 
     /// <summary>
-    /// Determines whether this instance is administrator.
+    /// Returns <see langword="true"/> when the current principal is in
+    /// <see cref="NetForgeAuthOptions.AdministratorRole"/>, or a collected role name matches that
+    /// role without case. Returns <see langword="false"/> when there is no principal.
     /// </summary>
-    /// <returns>true when the condition is met; otherwise, false.</returns>
+    /// <returns><see langword="true"/> when the caller has the administrator role.</returns>
     public bool IsAdministrator()
     {
         var user = ResolvePrincipal();
@@ -51,9 +49,11 @@ public sealed class BlazorAwareUserContextService(
     }
 
     /// <summary>
-    /// Gets the role names.
+    /// Returns the current principal's role names. Values that differ only by case are returned once.
+    /// A claim is included when its type is <see cref="ClaimTypes.Role"/>, <c>role</c>, <c>roles</c>,
+    /// or the identity's role claim type. Returns an empty list when there is no principal.
     /// </summary>
-    /// <returns>The role names.</returns>
+    /// <returns>The caller's role names.</returns>
     public IReadOnlyList<string> GetRoleNames()
     {
         var user = ResolvePrincipal();

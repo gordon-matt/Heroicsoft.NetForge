@@ -19,7 +19,7 @@ public partial class Drawer
     public RenderFragment? Actions { get; set; }
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// The scrolling body. <see langword="null"/> leaves the body empty.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
@@ -32,7 +32,7 @@ public partial class Drawer
     public RenderFragment? Footer { get; set; }
 
     /// <summary>
-    /// Gets or sets the callback raised for the close event.
+    /// Raised with no argument when the close button is clicked, when Escape is pressed while the panel is open, and when the scrim is clicked.
     /// </summary>
     [Parameter]
     public EventCallback OnClose { get; set; }
@@ -54,25 +54,25 @@ public partial class Drawer
     public bool Persistent { get; set; }
 
     /// <summary>
-    /// Gets or sets the side.
+    /// Edge the panel grows from. Defaults to <see cref="DrawerSide.End"/>, the right edge in left-to-right layout. <see cref="DrawerSide.Start"/> adds the start-edge style.
     /// </summary>
     [Parameter]
     public DrawerSide Side { get; set; } = DrawerSide.End;
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra classes on the panel. <see langword="null"/> or whitespace adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
     /// <summary>
-    /// Gets or sets the body class.
+    /// Extra classes on the scrolling body. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? BodyClass { get; set; }
 
     /// <summary>
-    /// Gets or sets the aria label.
+    /// Accessible name of the panel. <see langword="null"/> or whitespace uses <see cref="Title"/>, then <c>Panel</c>.
     /// </summary>
     [Parameter]
     public string? AriaLabel { get; set; }

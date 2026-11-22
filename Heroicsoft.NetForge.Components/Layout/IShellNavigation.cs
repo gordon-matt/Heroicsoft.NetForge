@@ -10,6 +10,7 @@ namespace Heroicsoft.NetForge.Components.Layout;
 public interface IShellNavigation
 {
     /// <summary>The shell awaits this on startup and after every sidebar refresh.</summary>
+    /// <param name="cancellationToken">Cancels the load. The shell passes the layout lifetime token.</param>
     Task<IReadOnlyList<ForgeNavSection>> GetSectionsAsync(CancellationToken cancellationToken = default);
 
     /// <summary>Same shape as <see cref="ForgeShellOptions.SearchUrlFormat"/>. Null keeps the options value.</summary>

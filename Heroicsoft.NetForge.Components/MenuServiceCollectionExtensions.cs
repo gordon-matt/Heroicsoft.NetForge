@@ -4,9 +4,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Heroicsoft.NetForge.Components;
 
-/// <summary>
-/// Provides extension methods for menu service collections.
-/// </summary>
+/// <summary>Registers the shared menu catalog and the callbacks that build menus.</summary>
 public static class MenuServiceCollectionExtensions
 {
     /// <summary>
@@ -14,6 +12,9 @@ public static class MenuServiceCollectionExtensions
     /// calls this, and so does <c>AddNetForgeComponents</c>, so the component renders an empty menu
     /// until a host builds one.
     /// </summary>
+    /// <param name="services">The collection that receives the catalog.</param>
+    /// <returns>The same collection, so calls can be chained.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="services"/> is <see langword="null"/>.</exception>
     public static IServiceCollection AddNetForgeMenu(this IServiceCollection services)
     {
         ArgumentNullException.ThrowIfNull(services);
@@ -28,6 +29,10 @@ public static class MenuServiceCollectionExtensions
     }
 
     /// <summary>Builds the unnamed menu. A later call for the same name appends sections.</summary>
+    /// <param name="services">The collection that receives the registration.</param>
+    /// <param name="configure">Adds groups and links. Runs on first use.</param>
+    /// <returns>The same collection, so calls can be chained.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="services"/> or <paramref name="configure"/> is <see langword="null"/>.</exception>
     public static IServiceCollection BuildMenu(
         this IServiceCollection services,
         Action<INetForgeMenuBuilder> configure) =>
@@ -39,6 +44,11 @@ public static class MenuServiceCollectionExtensions
     /// the menu. It does not filter by URL. The callback runs on first use, so extensions can
     /// read <c>IOptions</c> and other singletons. Do not resolve a scoped service from it.
     /// </summary>
+    /// <param name="services">The collection that receives the registration.</param>
+    /// <param name="name">Menu name. <see langword="null"/> or whitespace selects the unnamed menu.</param>
+    /// <param name="configure">Adds groups and links. Runs on first use.</param>
+    /// <returns>The same collection, so calls can be chained.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="services"/> or <paramref name="configure"/> is <see langword="null"/>.</exception>
     public static IServiceCollection BuildMenu(
         this IServiceCollection services,
         string name,
@@ -53,6 +63,10 @@ public static class MenuServiceCollectionExtensions
     }
 
     /// <summary>Registers a library's links so a host can place them by name.</summary>
+    /// <typeparam name="TContributor">The contributor type. A second registration of the same type is ignored.</typeparam>
+    /// <param name="services">The collection that receives the contributor.</param>
+    /// <returns>The same collection, so calls can be chained.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="services"/> is <see langword="null"/>.</exception>
     public static IServiceCollection AddNetForgeMenuContributor<TContributor>(this IServiceCollection services)
         where TContributor : class, INetForgeMenuContributor
     {
@@ -64,6 +78,10 @@ public static class MenuServiceCollectionExtensions
     }
 
     /// <summary>Registers a library's links. A second instance of the same type is ignored.</summary>
+    /// <param name="services">The collection that receives the contributor.</param>
+    /// <param name="contributor">The library links to place later by name.</param>
+    /// <returns>The same collection, so calls can be chained.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="services"/> or <paramref name="contributor"/> is <see langword="null"/>.</exception>
     public static IServiceCollection AddNetForgeMenuContributor(
         this IServiceCollection services,
         INetForgeMenuContributor contributor)

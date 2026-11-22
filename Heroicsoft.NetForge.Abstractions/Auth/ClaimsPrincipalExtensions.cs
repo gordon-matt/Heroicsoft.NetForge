@@ -17,10 +17,13 @@ public static class ClaimsPrincipalExtensions
     ];
 
     /// <summary>
-    /// Finds the user identifier.
+    /// Returns the first non-whitespace user id on <paramref name="principal"/>.
+    /// Looks at <see cref="ClaimTypes.NameIdentifier"/>, then <c>sub</c>, then <c>nameid</c>.
+    /// Returns <see langword="null"/> when <paramref name="principal"/> is <see langword="null"/>
+    /// or none of those claims has a value.
     /// </summary>
-    /// <param name="principal">The principal.</param>
-    /// <returns>The user identifier.</returns>
+    /// <param name="principal">Principal to read. May be <see langword="null"/>.</param>
+    /// <returns>The first matching claim value, or <see langword="null"/>.</returns>
     public static string? FindUserId(this ClaimsPrincipal? principal)
     {
         if (principal is null)

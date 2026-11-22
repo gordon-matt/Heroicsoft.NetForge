@@ -1,35 +1,29 @@
 namespace Heroicsoft.NetForge.Abstractions.Auth;
 
 /// <summary>Immutable snapshot of the auth mode chosen at startup.</summary>
+/// <param name="provider">Auth mode selected when the host started.</param>
+/// <param name="keycloakAuthority">Keycloak authority URL, or <see langword="null"/> when the host did not set one.</param>
 public sealed class AuthProviderService(AuthProvider provider, string? keycloakAuthority) : IAuthProviderService
 {
-    /// <summary>
-    /// Gets the provider.
-    /// </summary>
+    /// <inheritdoc/>
     public AuthProvider Provider { get; } = provider;
 
-    /// <summary>
-    /// Gets the keycloak authority.
-    /// </summary>
+    /// <inheritdoc/>
     public string? KeycloakAuthority { get; } = keycloakAuthority;
 
-    /// <summary>
-    /// Gets a value indicating whether this instance is keycloak.
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsKeycloak => Provider == AuthProvider.Keycloak;
 
-    /// <summary>
-    /// Gets a value indicating whether this instance is identity.
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsIdentity => Provider == AuthProvider.Identity;
 
-    /// <summary>
-    /// Gets a value indicating whether this instance is none.
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsNone => Provider == AuthProvider.None;
 
     /// <summary>
-    /// Gets the keycloak account URL.
+    /// Keycloak account console URL: trailing slashes are removed from <see cref="KeycloakAuthority"/>
+    /// and <c>/account</c> is appended. <see langword="null"/> when <see cref="IsKeycloak"/> is
+    /// <see langword="false"/> or the authority is <see langword="null"/> or blank.
     /// </summary>
     public string? KeycloakAccountUrl =>
         IsKeycloak && !string.IsNullOrWhiteSpace(KeycloakAuthority)

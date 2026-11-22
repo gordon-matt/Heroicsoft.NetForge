@@ -7,31 +7,31 @@ namespace Heroicsoft.NetForge.Components.Chips;
 public partial class Chip
 {
     /// <summary>
-    /// Gets or sets the href.
+    /// When set, the chip is a link to this address. <see langword="null"/> renders a button.
     /// </summary>
     [Parameter]
     public string? Href { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is selected.
+    /// Adds the active style. Defaults to <see langword="false"/>.
     /// </summary>
     [Parameter]
     public bool Selected { get; set; }
 
     /// <summary>
-    /// Gets or sets the callback raised for the click event.
+    /// Raised with the click when the chip is activated, whether it is a link or a button.
     /// </summary>
     [Parameter]
     public EventCallback<MouseEventArgs> OnClick { get; set; }
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// The chip label. <see langword="null"/> renders an empty chip.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra classes after the chip class and the active class. <see langword="null"/> or whitespace adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }

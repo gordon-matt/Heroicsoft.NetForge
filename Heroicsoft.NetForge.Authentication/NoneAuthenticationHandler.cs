@@ -12,6 +12,10 @@ namespace Heroicsoft.NetForge.Authentication;
 /// friction. There is no authentication here at all, by design, so this mode must never be
 /// selected for an instance anyone else can reach.
 /// </remarks>
+/// <param name="options">Scheme options passed to the base handler.</param>
+/// <param name="logger">Logger passed to the base handler.</param>
+/// <param name="encoder">URL encoder passed to the base handler.</param>
+/// <param name="forgeOptions">Supplies the synthetic user's id, name, and roles.</param>
 public sealed class NoneAuthenticationHandler(
     IOptionsMonitor<AuthenticationSchemeOptions> options,
     ILoggerFactory logger,
@@ -19,12 +23,15 @@ public sealed class NoneAuthenticationHandler(
     IOptions<NetForgeAuthOptions> forgeOptions)
     : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
 {
-    /// <summary>
-    /// The scheme name constant.
-    /// </summary>
+    /// <summary>Authentication scheme name <c>None</c>.</summary>
     public const string SchemeName = "None";
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Authenticates the request as the synthetic user from <see cref="NetForgeAuthOptions.None"/>,
+    /// with <see cref="NetForgeAuthOptions.AdministratorRole"/> and <see cref="NetForgeAuthOptions.UserRole"/>.
+    /// The result is always success.
+    /// </summary>
+    /// <returns>A successful ticket for the synthetic administrator.</returns>
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         var configured = forgeOptions.Value;

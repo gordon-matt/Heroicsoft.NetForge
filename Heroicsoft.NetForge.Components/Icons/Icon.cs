@@ -29,9 +29,7 @@ public sealed class Icon : ComponentBase
     [Parameter]
     public string? Title { get; set; }
 
-    /// <summary>
-    /// Gets or sets the additional attributes.
-    /// </summary>
+    /// <summary>Attributes copied onto the <c>svg</c> element, for values this component does not declare.</summary>
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 

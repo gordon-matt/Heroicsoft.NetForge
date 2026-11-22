@@ -9,7 +9,7 @@ public partial class Tab : ComponentBase, IDisposable
     private TabSet? Parent { get; set; }
 
     /// <summary>
-    /// Gets or sets the title.
+    /// Text of the tab button. Required. Also the key when <see cref="Id"/> is <see langword="null"/> or empty. The default is empty.
     /// </summary>
     [Parameter, EditorRequired]
     public string Title { get; set; } = string.Empty;
@@ -18,29 +18,32 @@ public partial class Tab : ComponentBase, IDisposable
     [Parameter]
     public string? Id { get; set; }
 
-    /// <summary>Icon name from <see cref="Icons.IconSet"/>, shown before the title.</summary>
+    /// <summary>Icon name from <see cref="Icons.IconSet"/>, shown before the title. <see langword="null"/> or empty hides the icon.</summary>
     [Parameter]
     public string? Icon { get; set; }
 
-    /// <summary>Short text after the title, for example a count.</summary>
+    /// <summary>Short text after the title, for example a count. <see langword="null"/> or empty hides the badge.</summary>
     [Parameter]
     public string? Badge { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is disabled.
+    /// Disables the tab button and keeps the tab from becoming active. Defaults to <see langword="false"/>.
     /// </summary>
     [Parameter]
     public bool Disabled { get; set; }
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// The panel. Hidden while another tab is active, unless the parent keeps every panel mounted.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
     internal string Key => string.IsNullOrEmpty(Id) ? Title : Id;
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Registers this tab with the parent <see cref="TabSet"/>.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">This tab is not inside a <see cref="TabSet"/>.</exception>
     protected override void OnInitialized()
     {
         if (Parent is null)
@@ -51,8 +54,6 @@ public partial class Tab : ComponentBase, IDisposable
         Parent.Register(this);
     }
 
-    /// <summary>
-    /// Releases the resources used by this instance.
-    /// </summary>
+    /// <summary>Removes this tab from the parent tab set.</summary>
     public void Dispose() => Parent?.Unregister(this);
 }

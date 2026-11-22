@@ -11,23 +11,15 @@ namespace Heroicsoft.NetForge.Components.Charts;
 /// </remarks>
 public static class ChartFormats
 {
-    /// <summary>
-    /// The number constant.
-    /// </summary>
+    /// <summary>Grouped number with up to two fraction digits. Axis ticks use a compact form with no fraction digits.</summary>
     public const string Number = "number";
 
-    /// <summary>
-    /// The integer constant.
-    /// </summary>
+    /// <summary>Whole numbers. Fraction digits are omitted on the tooltip and on the axis.</summary>
     public const string Integer = "integer";
 
-    /// <summary>
-    /// The currency constant.
-    /// </summary>
+    /// <summary>Currency. Pair with <c>nfCurrency</c>. The script uses USD when that code is omitted.</summary>
     public const string Currency = "currency";
 
-    /// <summary>
-    /// The percent constant.
-    /// </summary>
+    /// <summary>Percent. The point value is divided by 100 before formatting, so 25 displays as 25%.</summary>
     public const string Percent = "percent";
 }

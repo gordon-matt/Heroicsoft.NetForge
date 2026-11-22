@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Components.Web;
 namespace Heroicsoft.NetForge.Components.Layout;
 
 /// <summary>
-/// Represents the forge nav link.
+/// Renders one sidebar or top-bar link, including its icon, badge, count, or badge component, and marks it current.
 /// </summary>
 public partial class ForgeNavLink : IDisposable
 {
@@ -15,7 +15,7 @@ public partial class ForgeNavLink : IDisposable
     private NavigationManager Navigation { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the item.
+    /// The link to draw. Required. An external link opens in a new tab. A link with an active query or extra paths tracks the address itself; other links use prefix matching unless the item asks for an exact match.
     /// </summary>
     [Parameter, EditorRequired]
     public ForgeNavItem Item { get; set; } = default!;
@@ -64,7 +64,7 @@ public partial class ForgeNavLink : IDisposable
     private bool IsCurrent =>
         ForgeNavMatch.IsCurrent(Item, Navigation.ToBaseRelativePath(Navigation.Uri));
 
-    /// <inheritdoc/>
+    /// <summary>Subscribes to address changes when the item matches a query or extra paths, so the active style updates.</summary>
     protected override void OnInitialized()
     {
         if (UsesQuery)
@@ -85,8 +85,6 @@ public partial class ForgeNavLink : IDisposable
 
     private void OnLocationChanged(object? sender, LocationChangedEventArgs args) => InvokeAsync(StateHasChanged);
 
-    /// <summary>
-    /// Releases the resources used by this instance.
-    /// </summary>
+    /// <summary>Stops updating the active style from later address changes.</summary>
     public void Dispose() => Navigation.LocationChanged -= OnLocationChanged;
 }

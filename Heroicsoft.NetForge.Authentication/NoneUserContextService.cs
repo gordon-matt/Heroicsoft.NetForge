@@ -7,36 +7,30 @@ namespace Heroicsoft.NetForge.Authentication;
 /// nobody to authenticate there is nobody to withhold anything from, and a mode that locked the
 /// only user out of the admin pages would be useless.
 /// </summary>
+/// <param name="forgeOptions">Supplies the synthetic user id, display name, and role names.</param>
 public sealed class NoneUserContextService(IOptions<NetForgeAuthOptions> forgeOptions) : IUserContextService
 {
-    /// <summary>
-    /// Gets the current user identifier.
-    /// </summary>
-    /// <returns>The current user identifier.</returns>
+    /// <summary>Returns <see cref="NoneAuthOptions.UserId"/> from the authentication options.</summary>
+    /// <returns>The configured synthetic user id.</returns>
     public string? GetCurrentUserId() => forgeOptions.Value.None.UserId;
 
-    /// <summary>
-    /// Gets the current user name.
-    /// </summary>
-    /// <returns>The current user name.</returns>
+    /// <summary>Returns <see cref="NoneAuthOptions.UserName"/> from the authentication options.</summary>
+    /// <returns>The configured synthetic display name.</returns>
     public string? GetCurrentUserName() => forgeOptions.Value.None.UserName;
 
-    /// <summary>
-    /// Determines whether this instance is authenticated.
-    /// </summary>
-    /// <returns>true when the condition is met; otherwise, false.</returns>
+    /// <summary>Returns <see langword="true"/>. Nobody signs in, so the synthetic user is always authenticated.</summary>
+    /// <returns><see langword="true"/>.</returns>
     public bool IsAuthenticated() => true;
 
-    /// <summary>
-    /// Determines whether this instance is administrator.
-    /// </summary>
-    /// <returns>true when the condition is met; otherwise, false.</returns>
+    /// <summary>Returns <see langword="true"/>. The synthetic user is always an administrator.</summary>
+    /// <returns><see langword="true"/>.</returns>
     public bool IsAdministrator() => true;
 
     /// <summary>
-    /// Gets the role names.
+    /// Returns <see cref="NetForgeAuthOptions.AdministratorRole"/> and <see cref="NetForgeAuthOptions.UserRole"/>,
+    /// in that order.
     /// </summary>
-    /// <returns>The role names.</returns>
+    /// <returns>The two configured role names.</returns>
     public IReadOnlyList<string> GetRoleNames() =>
         [forgeOptions.Value.AdministratorRole, forgeOptions.Value.UserRole];
 }

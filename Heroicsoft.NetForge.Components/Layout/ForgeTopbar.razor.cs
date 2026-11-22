@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Components.Web;
 namespace Heroicsoft.NetForge.Components.Layout;
 
 /// <summary>
-/// Represents the forge topbar.
+/// Renders the sidebar toggle or the brand, the top navigation, search, the theme toggle, and the user menu.
 /// </summary>
 public partial class ForgeTopbar : IDisposable
 {
@@ -16,19 +16,19 @@ public partial class ForgeTopbar : IDisposable
     private IAuthProviderService Auth { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the callback raised for the toggle sidebar event.
+    /// Raised with no argument when the sidebar button is clicked. The button is hidden when <see cref="ShowSidebarToggle"/> is <see langword="false"/>.
     /// </summary>
     [Parameter]
     public EventCallback OnToggleSidebar { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is show sidebar toggle.
+    /// Shows the sidebar button. Defaults to <see langword="true"/>. <see langword="false"/> replaces it with the brand link when a logo or brand name is set.
     /// </summary>
     [Parameter]
     public bool ShowSidebarToggle { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the sections.
+    /// Host links shown as a top nav. Empty hides that nav. A section with roles is shown only to users in those roles.
     /// </summary>
     [Parameter]
     public IReadOnlyList<ForgeNavSection> Sections { get; set; } = [];
@@ -46,31 +46,31 @@ public partial class ForgeTopbar : IDisposable
     public bool SharedMenuAfterSections { get; set; }
 
     /// <summary>
-    /// Gets or sets the brand.
+    /// Name shown in the brand link when the sidebar button is hidden and there is no logo. <see langword="null"/> or whitespace hides that text.
     /// </summary>
     [Parameter]
     public string? Brand { get; set; }
 
     /// <summary>
-    /// Gets or sets the brand href.
+    /// Address of that brand link. Defaults to <c>/</c>.
     /// </summary>
     [Parameter]
     public string BrandHref { get; set; } = "/";
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is enhance brand navigation.
+    /// <see langword="false"/> makes the brand link a full page load. Defaults to <see langword="true"/>.
     /// </summary>
     [Parameter]
     public bool EnhanceBrandNavigation { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the logo URL.
+    /// Brand image used when the sidebar button is hidden. <see langword="null"/> falls through to <see cref="Brand"/>.
     /// </summary>
     [Parameter]
     public string? LogoUrl { get; set; }
 
     /// <summary>
-    /// Gets or sets the logo dark URL.
+    /// Dark-theme brand image. <see langword="null"/> uses <see cref="LogoUrl"/> for both themes.
     /// </summary>
     [Parameter]
     public string? LogoDarkUrl { get; set; }
@@ -80,25 +80,25 @@ public partial class ForgeTopbar : IDisposable
     public RenderFragment? CenterContent { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is show search.
+    /// Shows the search box when <see cref="CenterContent"/> is <see langword="null"/>. Defaults to <see langword="false"/>. The box includes a slash shortcut.
     /// </summary>
     [Parameter]
     public bool ShowSearch { get; set; }
 
     /// <summary>
-    /// Gets or sets the search placeholder.
+    /// Placeholder and accessible name of the search box. Defaults to <c>Search</c>.
     /// </summary>
     [Parameter]
     public string SearchPlaceholder { get; set; } = "Search";
 
     /// <summary>
-    /// Gets or sets the search text.
+    /// Text copied into the box when the parent changes it. Defaults to empty. Keystrokes are kept until that value changes.
     /// </summary>
     [Parameter]
     public string SearchText { get; set; } = "";
 
     /// <summary>
-    /// Gets or sets the callback raised for the search event.
+    /// Raised with the trimmed term when the form is submitted and when the box is cleared.
     /// </summary>
     [Parameter]
     public EventCallback<string> OnSearch { get; set; }
@@ -108,13 +108,13 @@ public partial class ForgeTopbar : IDisposable
     public bool ShowThemePicker { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is show user menu.
+    /// Shows the signed-in user's menu, or a Sign in link when nobody is signed in. Defaults to <see langword="true"/>.
     /// </summary>
     [Parameter]
     public bool ShowUserMenu { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the user menu items.
+    /// Links in the user menu. An item with roles is hidden unless the user is in one of them. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public IReadOnlyList<ForgeNavItem>? UserMenuItems { get; set; }
@@ -126,7 +126,7 @@ public partial class ForgeTopbar : IDisposable
             .ToList();
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// Markup in the top bar end, before the user menu. <see langword="null"/> renders nothing.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
@@ -136,7 +136,7 @@ public partial class ForgeTopbar : IDisposable
     private bool menuOpen;
     private bool navOpen;
 
-    /// <inheritdoc/>
+    /// <summary>Copies <c>SearchText</c> into the box when the parent changes it, without wiping keystrokes that match the value already applied.</summary>
     protected override void OnParametersSet()
     {
         if (!string.Equals(SearchText, appliedSearchText, StringComparison.Ordinal))
@@ -157,7 +157,7 @@ public partial class ForgeTopbar : IDisposable
         _ => "/",
     };
 
-    /// <inheritdoc/>
+    /// <summary>Subscribes to the menu bar so an open dropdown redraws this bar.</summary>
     protected override void OnInitialized()
     {
         menuBar.Changed += OnMenuBarChanged;
@@ -191,8 +191,6 @@ public partial class ForgeTopbar : IDisposable
 
     private Task SubmitSearch() => OnSearch.InvokeAsync(searchTerm.Trim());
 
-    /// <summary>
-    /// Releases the resources used by this instance.
-    /// </summary>
+    /// <summary>Stops redrawing when the menu bar changes.</summary>
     public void Dispose() => menuBar.Changed -= OnMenuBarChanged;
 }

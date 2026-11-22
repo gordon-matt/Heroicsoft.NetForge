@@ -4,11 +4,19 @@ namespace Heroicsoft.NetForge.Abstractions.Navigation;
 public static class ForgeNavMatch
 {
     /// <summary>
-    /// Determines whether this instance is current.
+    /// Returns <see langword="true"/> when <paramref name="relativeUrl"/> is this link.
+    /// Returns <see langword="false"/> when <see cref="ForgeNavItem.Href"/> is blank or, ignoring
+    /// leading whitespace, starts with <c>#</c>. The fragment of <paramref name="relativeUrl"/> is ignored.
+    /// The path is compared without case to <see cref="ForgeNavItem.ActivePaths"/> when that list is
+    /// non-empty, and otherwise to the path of <see cref="ForgeNavItem.Href"/>.
+    /// <see cref="ForgeNavItem.MatchAll"/> requires an exact path. Otherwise a path also matches its
+    /// descendants, and an empty path matches every page. Query names and values are compared without
+    /// case, and only when <see cref="ForgeNavItem.ActiveQuery"/> is set. A <see langword="null"/>
+    /// expected value matches a missing or blank parameter. Extra query parameters do not reject the match.
     /// </summary>
-    /// <param name="item">The item.</param>
-    /// <param name="relativeUrl">The relative URL.</param>
-    /// <returns>true when the condition is met; otherwise, false.</returns>
+    /// <param name="item">Link to test.</param>
+    /// <param name="relativeUrl">Current address relative to the app, including its query string.</param>
+    /// <returns><see langword="true"/> when the link is the current page.</returns>
     public static bool IsCurrent(ForgeNavItem item, string relativeUrl)
     {
         // "#" and a blank address are submenu labels. Treating them as a path would light up every page.
@@ -22,7 +30,10 @@ public static class ForgeNavMatch
         return PathMatches(item, path) && QueryMatches(item.ActiveQuery, query);
     }
 
-    /// <summary>The item or any nested child is the current page.</summary>
+    /// <summary>Returns <see langword="true"/> when <paramref name="item"/> or any nested child is the current page.</summary>
+    /// <param name="item">Link to test, including its <see cref="ForgeNavItem.Children"/>.</param>
+    /// <param name="relativeUrl">Current address relative to the app.</param>
+    /// <returns><see langword="true"/> when the link or a descendant is current.</returns>
     public static bool IsInBranch(ForgeNavItem item, string relativeUrl)
     {
         if (IsCurrent(item, relativeUrl))

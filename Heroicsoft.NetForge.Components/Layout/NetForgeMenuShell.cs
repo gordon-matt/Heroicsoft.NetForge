@@ -7,11 +7,11 @@ namespace Heroicsoft.NetForge.Components.Layout;
 public static class NetForgeMenuShell
 {
     /// <summary>
-    /// Finds the value.
+    /// Returns the shared menu named by <see cref="ForgeShellOptions.SharedMenuName"/> when <see cref="ForgeShellOptions.UseSharedMenu"/> is set and that menu was built. Otherwise returns <see langword="null"/>, and the shell keeps its own sections.
     /// </summary>
-    /// <param name="services">The services.</param>
-    /// <param name="options">The options.</param>
-    /// <returns>The net forge menu.</returns>
+    /// <param name="services">The provider that holds <see cref="INetForgeMenuCatalog"/>. A missing catalog is treated as no menu.</param>
+    /// <param name="options">Shell options that name the menu.</param>
+    /// <returns>The built menu, or <see langword="null"/>.</returns>
     public static NetForgeMenuModel? Find(IServiceProvider services, ForgeShellOptions options)
     {
         if (!options.UseSharedMenu)
@@ -31,12 +31,12 @@ public static class NetForgeMenuShell
         menu is { HasSidebarSections: true, HasTopbarSections: true };
 
     /// <summary>
-    /// Gets the placement.
+    /// Chooses sidebar or top bar for a shared menu. A <see langword="null"/> menu keeps <paramref name="fallback"/>. A menu whose <paramref name="main"/> placement is the sidebar, or that has a group pinned to the sidebar, uses the sidebar. Otherwise the top bar.
     /// </summary>
-    /// <param name="menu">The menu.</param>
-    /// <param name="fallback">The fallback.</param>
-    /// <param name="main">The main.</param>
-    /// <returns>The placement.</returns>
+    /// <param name="menu">The shared menu. <see langword="null"/> returns <paramref name="fallback"/>.</param>
+    /// <param name="fallback">Placement used when there is no shared menu.</param>
+    /// <param name="main">Where the active group should sit. Defaults to the top bar.</param>
+    /// <returns>The placement the shell should use.</returns>
     public static ForgeNavigationPlacement Placement(
         NetForgeMenuModel? menu,
         ForgeNavigationPlacement fallback,

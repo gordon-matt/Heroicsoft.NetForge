@@ -7,16 +7,26 @@ namespace Heroicsoft.NetForge.Abstractions.Navigation;
 public static class ForgeSearchUrl
 {
     /// <summary>
-    /// Reads the term.
+    /// Returns the current value of the query parameter that contains <c>{0}</c> in <paramref name="format"/>.
+    /// The value is percent-decoded. Returns an empty string when <paramref name="format"/> does not name
+    /// such a parameter, or when <paramref name="uri"/> does not include it.
     /// </summary>
-    /// <param name="format">The format.</param>
-    /// <param name="uri">The URI.</param>
-    /// <returns>The term.</returns>
+    /// <param name="format">Search format such as <c>/transactions?q={0}</c>.</param>
+    /// <param name="uri">Address whose query string is read.</param>
+    /// <returns>The decoded term, or an empty string.</returns>
     public static string ReadTerm(string? format, Uri uri) => !TryGetKey(format, out string key)
             ? string.Empty
             : ForgeQuery.Parse(uri.Query).TryGetValue(key, out string? value) ? value : string.Empty;
 
-    /// <summary>A null or blank <paramref name="term"/> drops the search parameter and keeps the path.</summary>
+    /// <summary>
+    /// Substitutes the trimmed, percent-encoded term for <c>{0}</c> in <paramref name="format"/>.
+    /// Returns <see langword="null"/> when <paramref name="format"/> is <see langword="null"/>, blank,
+    /// or has no <c>{0}</c>. A <see langword="null"/> or blank term keeps the text before <c>?</c>
+    /// when <paramref name="format"/> has a query string, and otherwise replaces <c>{0}</c> with an empty string.
+    /// </summary>
+    /// <param name="format">Search format that contains <c>{0}</c>.</param>
+    /// <param name="term">Search text. It is trimmed before encoding.</param>
+    /// <returns>The formatted URL, or <see langword="null"/> when <paramref name="format"/> cannot be used.</returns>
     public static string? Build(string? format, string? term)
     {
         if (string.IsNullOrWhiteSpace(format) || !format.Contains("{0}", StringComparison.Ordinal))

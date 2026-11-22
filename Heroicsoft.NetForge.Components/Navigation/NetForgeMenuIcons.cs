@@ -7,10 +7,10 @@ namespace Heroicsoft.NetForge.Components.Navigation;
 public static class NetForgeMenuIcons
 {
     /// <summary>
-    /// Determines whether this instance is font class.
+    /// Returns <see langword="true"/> when <paramref name="icon"/> is a font class such as <c>fa fa-heart</c> or a single <c>fa-</c>, <c>fas</c>, <c>far</c>, <c>fal</c>, or <c>fab</c> token. A Bootstrap class list and a single NetForge name return <see langword="false"/>. <see langword="null"/> or whitespace returns <see langword="false"/>.
     /// </summary>
-    /// <param name="icon">The icon.</param>
-    /// <returns>true when the condition is met; otherwise, false.</returns>
+    /// <param name="icon">The icon string from a menu item.</param>
+    /// <returns><see langword="true"/> when the menu should emit an <c>i</c> element.</returns>
     public static bool IsFontClass(string? icon)
     {
         if (string.IsNullOrWhiteSpace(icon))

@@ -10,7 +10,10 @@ using Microsoft.Extensions.Options;
 namespace Heroicsoft.NetForge.Components.Bootstrap.Layout;
 
 /// <summary>
-/// Represents the shell layout.
+/// Renders <see cref="AppShell"/> from the registered shell options: brand, navigation, search,
+/// theme picker, user menu, version, and the page body. A shared menu is drawn when shell options
+/// turn it on and that menu was built. Search is shown only when a search URL format is configured,
+/// and submitting it navigates to that URL.
 /// </summary>
 public partial class ShellLayout : IDisposable
 {
@@ -80,7 +83,10 @@ public partial class ShellLayout : IDisposable
         builder.CloseComponent();
     };
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Reads shell options, resolves the shared menu and navigation service, and starts listening
+    /// for sidebar refreshes and address changes. The search box is filled from the current address.
+    /// </summary>
     protected override void OnInitialized()
     {
         options = ShellOptions.Value;
@@ -93,7 +99,13 @@ public partial class ShellLayout : IDisposable
         Navigation.LocationChanged += OnLocationChanged;
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Loads sidebar sections from the navigation service when one is registered. Static sections
+    /// from shell options are left as they are.
+    /// </summary>
+    /// <returns>
+    /// A task that completes when those sections have been loaded, or immediately when no navigation service is registered.
+    /// </returns>
     protected override Task OnInitializedAsync() => LoadSectionsAsync();
 
     private void OnSidebarChanged() => _ = InvokeAsync(LoadSectionsAsync);
@@ -147,7 +159,7 @@ public partial class ShellLayout : IDisposable
         ForgeSearchUrl.ReadTerm(SearchFormat, Navigation.ToAbsoluteUri(Navigation.Uri));
 
     /// <summary>
-    /// Releases the resources used by this instance.
+    /// Stops listening for sidebar refreshes and address changes, and cancels an in-flight section load.
     /// </summary>
     public void Dispose()
     {

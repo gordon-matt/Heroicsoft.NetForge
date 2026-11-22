@@ -9,19 +9,19 @@ else if (!string.IsNullOrWhiteSpace(Name))
 
 @code {
     /// <summary>
-    /// Gets or sets the name.
+    /// Icon name. A font class such as <c>fa fa-heart</c> is an <c>i</c> element. Anything else is drawn by <see cref="Icon"/>. <see langword="null"/> or whitespace draws nothing.
     /// </summary>
     [Parameter]
     public string? Name { get; set; }
 
     /// <summary>
-    /// Gets or sets the size.
+    /// Width and height in CSS pixels when the icon is an <see cref="Icon"/>. Defaults to 18. A font icon ignores it.
     /// </summary>
     [Parameter]
     public int Size { get; set; } = 18;
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra classes on an <see cref="Icon"/>. A font icon ignores them. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }

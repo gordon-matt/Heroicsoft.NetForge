@@ -7,109 +7,111 @@ namespace Heroicsoft.NetForge.Components.Bootstrap.Forms;
 public partial class SearchField
 {
     /// <summary>
-    /// Gets or sets the value.
+    /// Text currently shown in the search box. <see langword="null"/> shows an empty box.
     /// </summary>
     [Parameter]
     public string? Value { get; set; }
 
     /// <summary>
-    /// Gets or sets the value changed.
+    /// Invoked with the box text on each keystroke. The argument is <see langword="null"/> when the input event has no value.
     /// </summary>
     [Parameter]
     public EventCallback<string?> ValueChanged { get; set; }
 
     /// <summary>
-    /// Gets or sets the label.
+    /// Text of a <c>form-label</c> above the box. <see langword="null"/> or empty omits the label.
     /// </summary>
     [Parameter]
     public string? Label { get; set; }
 
     /// <summary>
-    /// Gets or sets the label class.
+    /// CSS classes on the label. <see langword="null"/> or empty uses <c>form-label</c>.
     /// </summary>
     [Parameter]
     public string? LabelClass { get; set; }
 
     /// <summary>
-    /// Gets or sets the placeholder.
+    /// Placeholder text. Also the accessible name when <see cref="AriaLabel"/> is <see langword="null"/>.
+    /// When both are <see langword="null"/>, the accessible name is <c>Search</c>.
     /// </summary>
     [Parameter]
     public string? Placeholder { get; set; }
 
     /// <summary>
-    /// Gets or sets the aria label.
+    /// Accessible name of the input. <see langword="null"/> uses <see cref="Placeholder"/>, then <c>Search</c>.
     /// </summary>
     [Parameter]
     public string? AriaLabel { get; set; }
 
     /// <summary>
-    /// Gets or sets the identifier.
+    /// Id of the input and the label's <c>for</c> value. <see langword="null"/> omits the id.
     /// </summary>
     [Parameter]
     public string? Id { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// CSS classes on the outer element. <see langword="null"/> adds none. The outer element is a
+    /// form with <c>role="search"</c> when <see cref="OnSubmit"/> has a delegate, and a div otherwise.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
     /// <summary>
-    /// Gets or sets the input class.
+    /// Extra CSS classes on the <c>form-control</c> input. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? InputClass { get; set; }
 
     /// <summary>
-    /// Gets or sets the group class.
+    /// Extra CSS classes on the <c>input-group</c>. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? GroupClass { get; set; }
 
     /// <summary>
-    /// Gets or sets the icon class.
+    /// Extra CSS classes on the magnifying-glass <c>input-group-text</c>. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? IconClass { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is small.
+    /// When <see langword="true"/>, adds <c>input-group-sm</c>. Defaults to <see langword="false"/>.
     /// </summary>
     [Parameter]
     public bool Small { get; set; }
 
     /// <summary>
-    /// Gets or sets the autocomplete.
+    /// Value of the input <c>autocomplete</c> attribute. Defaults to <c>off</c>.
     /// </summary>
     [Parameter]
     public string Autocomplete { get; set; } = "off";
 
     /// <summary>
-    /// Gets or sets the submit text.
+    /// Label of a <c>btn-primary</c> submit button after the input. <see langword="null"/> or empty omits the button.
     /// </summary>
     [Parameter]
     public string? SubmitText { get; set; }
 
     /// <summary>
-    /// Gets or sets the callback raised for the submit event.
+    /// Invoked when the search form is submitted. When no delegate is set, the box is not wrapped in a form.
     /// </summary>
     [Parameter]
     public EventCallback OnSubmit { get; set; }
 
     /// <summary>
-    /// Gets or sets the callback raised for the key down event.
+    /// Invoked for each keydown in the input.
     /// </summary>
     [Parameter]
     public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
 
     /// <summary>
-    /// Gets or sets the callback raised for the key up event.
+    /// Invoked for each keyup in the input.
     /// </summary>
     [Parameter]
     public EventCallback<KeyboardEventArgs> OnKeyUp { get; set; }
 
     /// <summary>
-    /// Gets or sets the trailing.
+    /// Markup after the input and the submit button, inside the input group. <see langword="null"/> draws nothing.
     /// </summary>
     [Parameter]
     public RenderFragment? Trailing { get; set; }

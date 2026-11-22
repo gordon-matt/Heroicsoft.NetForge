@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Components;
 namespace Heroicsoft.NetForge.Components.Bootstrap.Layout;
 
 /// <summary>
-/// Represents the forge topbar.
+/// Renders the shell header: an optional sidebar toggle or brand, top navigation, an optional
+/// search box, the theme button, caller content, and the user menu.
 /// </summary>
 public partial class ForgeTopbar : IDisposable
 {
@@ -15,97 +16,120 @@ public partial class ForgeTopbar : IDisposable
     private IAuthProviderService Auth { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the callback raised for the toggle sidebar event.
+    /// Invoked when the sidebar toggle button is clicked. That button is shown when
+    /// <see cref="ShowSidebarToggle"/> is <see langword="true"/>.
     /// </summary>
     [Parameter]
     public EventCallback OnToggleSidebar { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is show sidebar toggle.
+    /// When <see langword="true"/>, the default, shows a list-icon button that raises <see cref="OnToggleSidebar"/>.
+    /// When <see langword="false"/>, a brand link is shown instead when <see cref="Brand"/> or <see cref="LogoUrl"/>
+    /// is set, plus a menu button on small screens that expands <see cref="Sections"/>.
     /// </summary>
     [Parameter]
     public bool ShowSidebarToggle { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the sections.
+    /// Navigation groups rendered as a <c>nav bf-topnav</c> of <see cref="ForgeNavMenu"/> items.
+    /// An empty list, the default, draws no host navigation. A section whose <see cref="ForgeNavSection.Roles"/>
+    /// is set is omitted for users outside those roles.
     /// </summary>
     [Parameter]
     public IReadOnlyList<ForgeNavSection> Sections { get; set; } = [];
 
-    /// <summary>Replaces <see cref="Sections"/> when the shell is showing a shared menu across the top.</summary>
+    /// <summary>
+    /// Extra navigation rendered with <see cref="Sections"/>. <see langword="null"/>, the default, draws nothing.
+    /// </summary>
     [Parameter]
     public RenderFragment? Menu { get; set; }
 
-    /// <summary>A menu that stays in the top bar while <see cref="Menu"/> is in the sidebar.</summary>
+    /// <summary>
+    /// A menu that stays in the top bar while <see cref="Menu"/> is in the sidebar.
+    /// <see langword="null"/> draws nothing.
+    /// </summary>
     [Parameter]
     public RenderFragment? TopbarMenu { get; set; }
 
-    /// <summary>Draws <see cref="Menu"/> after <see cref="Sections"/>.</summary>
+    /// <summary>
+    /// Draws <see cref="Menu"/> after <see cref="Sections"/>. Defaults to <see langword="false"/>, which draws the menu first.
+    /// </summary>
     [Parameter]
     public bool SharedMenuAfterSections { get; set; }
 
     /// <summary>
-    /// Gets or sets the brand.
+    /// Text shown in the brand link when neither <see cref="LogoUrl"/> nor <see cref="LogoDarkUrl"/> is set,
+    /// and the image alt text when a logo is set. <see langword="null"/> draws no brand text.
+    /// The brand link appears only when <see cref="ShowSidebarToggle"/> is <see langword="false"/>.
     /// </summary>
     [Parameter]
     public string? Brand { get; set; }
 
     /// <summary>
-    /// Gets or sets the brand href.
+    /// Address of the brand link. Defaults to <c>/</c>.
     /// </summary>
     [Parameter]
     public string BrandHref { get; set; } = "/";
 
     /// <summary>
-    /// Gets or sets the logo URL.
+    /// Light-theme logo in the brand link. <see langword="null"/> omits that image.
     /// </summary>
     [Parameter]
     public string? LogoUrl { get; set; }
 
     /// <summary>
-    /// Gets or sets the logo dark URL.
+    /// Dark-theme logo shown with <see cref="LogoUrl"/>. <see langword="null"/> omits that image.
+    /// When both logo URLs are <see langword="null"/>, <see cref="Brand"/> is shown as text.
     /// </summary>
     [Parameter]
     public string? LogoDarkUrl { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is show search.
+    /// When <see langword="true"/>, shows a search box in the header. Defaults to <see langword="false"/>.
     /// </summary>
     [Parameter]
     public bool ShowSearch { get; set; }
 
     /// <summary>
-    /// Gets or sets the search placeholder.
+    /// Placeholder and accessible name of the search box. Defaults to <c>Search</c>.
     /// </summary>
     [Parameter]
     public string SearchPlaceholder { get; set; } = "Search";
 
     /// <summary>
-    /// Gets or sets the search text.
+    /// Text copied into the search box when it changes. Defaults to empty. The box keeps what the
+    /// user is typing until this value changes.
     /// </summary>
     [Parameter]
     public string SearchText { get; set; } = "";
 
     /// <summary>
-    /// Gets or sets the callback raised for the search event.
+    /// Invoked with the trimmed search text when the search form is submitted, and also when the box is cleared.
     /// </summary>
     [Parameter]
     public EventCallback<string> OnSearch { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is show theme picker.
+    /// When <see langword="true"/>, the default, shows the palette button that opens the theme modal.
     /// </summary>
     [Parameter]
     public bool ShowThemePicker { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is show user menu.
+    /// When <see langword="true"/>, the default, shows the user menu. A signed-in user gets a person-icon
+    /// dropdown. Its last row posts a sign-out form: Keycloak posts to <c>/auth/logout</c>, and any other
+    /// provider posts to the Identity logout page. When the app has no authentication provider, that row
+    /// says the app is running without authentication. A signed-out user gets a Sign in button, addressed
+    /// at Keycloak, Identity, or <c>/</c> for no provider. <see langword="false"/> hides both.
     /// </summary>
     [Parameter]
     public bool ShowUserMenu { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the user menu items.
+    /// Links at the top of the signed-in user dropdown. <see langword="null"/> or empty draws none.
+    /// An item whose <see cref="ForgeNavItem.Roles"/> is set is omitted unless the user is in one of those roles.
+    /// Each item shows <see cref="ForgeNavItem.Title"/>, <see cref="ForgeNavItem.Href"/>, and a Bootstrap icon
+    /// from <see cref="ForgeNavItem.Icon"/>.
     /// </summary>
     [Parameter]
     public IReadOnlyList<ForgeNavItem>? UserMenuItems { get; set; }
@@ -117,7 +141,7 @@ public partial class ForgeTopbar : IDisposable
             .ToList();
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// Markup placed after the theme button and before the user menu. <see langword="null"/> draws nothing.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
@@ -127,7 +151,9 @@ public partial class ForgeTopbar : IDisposable
 
     private bool navOpen;
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Copies <see cref="SearchText"/> into the search box when the supplied text changes.
+    /// </summary>
     protected override void OnParametersSet()
     {
         if (!string.Equals(SearchText, appliedSearchText, StringComparison.Ordinal))
@@ -159,7 +185,9 @@ public partial class ForgeTopbar : IDisposable
         }
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Subscribes to the shared menu bar so an open dropdown can dim the page and close together with the others.
+    /// </summary>
     protected override void OnInitialized()
     {
         menuBar.Changed += OnMenuBarChanged;
@@ -171,7 +199,7 @@ public partial class ForgeTopbar : IDisposable
     private Task SubmitSearch() => OnSearch.InvokeAsync(searchTerm.Trim());
 
     /// <summary>
-    /// Releases the resources used by this instance.
+    /// Stops listening for the shared menu bar to open or close.
     /// </summary>
     public void Dispose() => menuBar.Changed -= OnMenuBarChanged;
 }

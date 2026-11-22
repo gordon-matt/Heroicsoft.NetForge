@@ -14,55 +14,55 @@ public partial class Switch
     private EditContext? EditContext { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is value.
+    /// Whether the switch is on. Defaults to <see langword="false"/>.
     /// </summary>
     [Parameter]
     public bool Value { get; set; }
 
     /// <summary>
-    /// Gets or sets the value changed.
+    /// Raised with the new checked state when the user toggles the switch. When <see cref="ValueExpression"/> is set inside an edit form, the field is also marked changed.
     /// </summary>
     [Parameter]
     public EventCallback<bool> ValueChanged { get; set; }
 
     /// <summary>
-    /// Gets or sets the value expression.
+    /// Field used to notify the surrounding edit form. <see langword="null"/> skips that notification. <c>@bind-Value</c> sets this.
     /// </summary>
     [Parameter]
     public Expression<Func<bool>>? ValueExpression { get; set; }
 
     /// <summary>
-    /// Gets or sets the label.
+    /// Text beside the switch. Ignored when <see cref="ChildContent"/> is set. <see langword="null"/> or empty hides the text unless a description or child content is set.
     /// </summary>
     [Parameter]
     public string? Label { get; set; }
 
     /// <summary>
-    /// Gets or sets the description.
+    /// Hint under the label. <see langword="null"/> or empty hides it.
     /// </summary>
     [Parameter]
     public string? Description { get; set; }
 
     /// <summary>
-    /// Gets or sets the identifier.
+    /// <c>id</c> of the checkbox. <see langword="null"/> omits it.
     /// </summary>
     [Parameter]
     public string? Id { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is disabled.
+    /// Disables the checkbox and marks the control disabled. Defaults to <see langword="false"/>.
     /// </summary>
     [Parameter]
     public bool Disabled { get; set; }
 
     /// <summary>
-    /// Gets or sets the class.
+    /// Extra classes on the switch. <see langword="null"/> adds none.
     /// </summary>
     [Parameter]
     public string? Class { get; set; }
 
     /// <summary>
-    /// Gets or sets the child content.
+    /// Replaces <see cref="Label"/> as the text beside the switch. <see langword="null"/> uses <see cref="Label"/>.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
