@@ -8,6 +8,7 @@ public partial class TabSet
     private readonly string idPrefix = "nf-tabs-" + Guid.NewGuid().ToString("N");
     private readonly List<Tab> tabs = [];
     private string? activeId;
+    private string? followedActiveTab;
 
     /// <summary>
     /// The <see cref="Tab"/> components. The buttons are built from the tabs that register. <see langword="null"/> shows no tabs.
@@ -44,8 +45,20 @@ public partial class TabSet
     [Parameter]
     public string? Class { get; set; }
 
-    /// <summary>Copies <c>ActiveTab</c> into the tab that is shown.</summary>
-    protected override void OnParametersSet() => activeId = ActiveTab;
+    /// <summary>
+    /// Follows <see cref="ActiveTab"/> only when the parent changes it. An unbound value stays null, and
+    /// copying that on every render would close the tab the user opened as soon as a field in the panel changed.
+    /// </summary>
+    protected override void OnParametersSet()
+    {
+        if (string.Equals(ActiveTab, followedActiveTab, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        followedActiveTab = ActiveTab;
+        activeId = ActiveTab;
+    }
 
     /// <summary>
     /// Renders again after the first pass when tabs registered during child content, so the tab buttons appear.

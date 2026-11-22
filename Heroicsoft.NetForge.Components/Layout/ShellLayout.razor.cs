@@ -41,6 +41,7 @@ public partial class ShellLayout : IDisposable
     private IShellNavigation? navigation;
     private NetForgeMenuModel? sharedMenu;
     private IReadOnlyList<ForgeNavSection> sections = [];
+    private IReadOnlyList<ShellToolbarItem> toolbarItems = [];
     private string searchText = string.Empty;
     private int loadVersion;
 
@@ -75,7 +76,7 @@ public partial class ShellLayout : IDisposable
                 builder.CloseComponent();
             };
 
-    private RenderFragment? EndContent => Slot(options.TopbarEndComponent);
+    private RenderFragment? EndContent => ShellToolbarItems.Render(toolbarItems, options.TopbarEndComponent);
 
     private RenderFragment? FooterContent => Slot(options.SidebarFooterComponent);
 
@@ -93,6 +94,7 @@ public partial class ShellLayout : IDisposable
         activeSharedMenuPlacement = UiOptions.Value.ActiveSharedMenuPlacement;
         navigation = Services.GetService<IShellNavigation>();
         sharedMenu = NetForgeMenuShell.Find(Services, options);
+        toolbarItems = ShellToolbarItems.InOrder(Services.GetServices<ShellToolbarItem>());
         sections = navigation is null ? options.Sections : [];
         searchText = CurrentTerm();
         SidebarRefresh.Changed += OnSidebarChanged;

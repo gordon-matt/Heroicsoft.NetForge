@@ -1,5 +1,7 @@
 using Heroicsoft.NetForge.Abstractions.Auth;
 using Heroicsoft.NetForge.Components;
+using Heroicsoft.NetForge.Components.Layout;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Heroicsoft.NetForge.Tests;
@@ -40,4 +42,26 @@ public class NetForgeComponentRegistrationTests
 
         Assert.Equal(AuthProvider.Keycloak, provider.GetRequiredService<IAuthProviderService>().Provider);
     }
+
+    [Fact]
+    public void AddNetForgeToolbarItem_OrdersIconsAndKeepsRegistrationOrderWhenOrdersMatch()
+    {
+        var services = new ServiceCollection();
+        services.AddNetForgeToolbarItem<Later>(20);
+        services.AddNetForgeToolbarItem<FirstTied>();
+        services.AddNetForgeToolbarItem<SecondTied>();
+
+        using var provider = services.BuildServiceProvider();
+        IReadOnlyList<ShellToolbarItem> ordered = ShellToolbarItems.InOrder(provider.GetServices<ShellToolbarItem>());
+
+        Assert.Equal(
+            [typeof(FirstTied), typeof(SecondTied), typeof(Later)],
+            ordered.Select(item => item.ComponentType).ToArray());
+    }
+
+    private sealed class FirstTied : ComponentBase;
+
+    private sealed class SecondTied : ComponentBase;
+
+    private sealed class Later : ComponentBase;
 }

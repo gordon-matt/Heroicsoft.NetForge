@@ -99,7 +99,10 @@ public sealed class ForgeShellOptions
     /// </summary>
     public bool SharedMenuAfterSections { get; set; }
 
-    /// <summary>Component rendered at the end of the top bar, before the user menu. A notification bell, for example.</summary>
+    /// <summary>
+    /// One component rendered at the end of the top bar, after any <see cref="ShellToolbarItem"/> and before the user menu.
+    /// A notification bell, for example. Prefer <c>AddNetForgeToolbarItem</c> when several icons should sit side by side.
+    /// </summary>
     public Type? TopbarEndComponent { get; set; }
 
     /// <summary>Component pinned at the bottom of the generated sidebar.</summary>

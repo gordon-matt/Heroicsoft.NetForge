@@ -3,6 +3,7 @@ using Heroicsoft.NetForge.Components.Dialogs;
 using Heroicsoft.NetForge.Components.Layout;
 using Heroicsoft.NetForge.Components.Theming;
 using Heroicsoft.NetForge.Components.Toasts;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -44,6 +45,24 @@ public static class ServiceCollectionExtensions
         // the host already chose, and a registration added afterwards still wins.
         services.TryAddSingleton<IAuthProviderService>(new AuthProviderService(AuthProvider.None, null));
 
+        return services;
+    }
+
+    /// <summary>
+    /// Draws <typeparamref name="TComponent"/> in the top bar, after the theme toggle and before the user menu.
+    /// Each call adds another icon, so a library and the host can both contribute without replacing
+    /// <see cref="ForgeShellOptions.TopbarEndComponent"/>. That component, when set, is drawn after these icons.
+    /// </summary>
+    /// <typeparam name="TComponent">The icon. It owns its button and anything the button opens.</typeparam>
+    /// <param name="services">The collection that receives the registration.</param>
+    /// <param name="order">Lower values sit closer to the theme toggle. Equal orders keep registration order. Defaults to 0.</param>
+    /// <returns>The same collection, so calls can be chained.</returns>
+    public static IServiceCollection AddNetForgeToolbarItem<TComponent>(
+        this IServiceCollection services,
+        int order = 0)
+        where TComponent : IComponent
+    {
+        services.AddSingleton(new ShellToolbarItem(typeof(TComponent), order));
         return services;
     }
 
